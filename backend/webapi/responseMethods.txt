@@ -1,0 +1,9 @@
+res.download() 	Vous invite à télécharger un fichier.
+res.end() 	Met fin au processus de réponse.
+res.json() 	Envoie une réponse JSON.
+res.jsonp() 	Envoie une réponse JSON avec une prise en charge JSONP.
+res.redirect() 	Redirige une demande.
+res.render() 	Génère un modèle de vue.
+res.send() 	Envoie une réponse de divers types.
+res.sendFile 	Envoie une réponse sous forme de flux d’octets.
+res.sendStatus() 	Définit le code de statut de réponse et envoie sa représentation sous forme de chaîne comme corps de réponse.
