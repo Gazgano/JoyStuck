@@ -1,6 +1,8 @@
 @import 'mixins';
 @import 'colors';
 
-html {
-  color: $blue;
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+* {
+  font-family: 'Roboto', sans-serif;
 }
