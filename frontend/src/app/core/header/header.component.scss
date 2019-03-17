@@ -17,6 +17,7 @@ $searchbar-height: 25px;
 }
 
 .Logo {
+  @include clickable;
   height: 30px;
   margin: 0 auto 0 10px;
 }
