@@ -7,9 +7,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
+  displayDropdown = false;
+
   constructor() { }
 
   ngOnInit() {
+  }
+
+  onUserMenuClick() {
+    this.displayDropdown = !this.displayDropdown;
   }
 
 }

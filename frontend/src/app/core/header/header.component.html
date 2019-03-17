@@ -7,14 +7,19 @@
   <div class="HeaderButton SocialButtons-Message"><i class="far fa-comment"></i></div>
   <div class="HeaderButton SocialButtons-Notification"><i class="far fa-bell"></i></div>
 </div>
-<div class="UserMenu">
+<div class="UserMenu" (click)="onUserMenuClick()">
   <div class="UserMenu-Image" style="width: 30px; height: 30px; border-radius: 15px; background-color: white;"></div>
   <div class="UserMenu-Name">Gazgano</div>
   <div class="UserMenu-Caret"><i class="fas fa-caret-down"></i></div>
-  <div class="UserMenu-Dropdown" *ngIf="false">
-    <a routerLink="">Home</a><br>
-    <a routerLink="/admin">Admin</a><br>
-    <a routerLink="/system">System</a>
+  <div class="UserMenu-Dropdown" *ngIf="displayDropdown">
+    <a class="UserMenu-Dropdown-Link" routerLink="">
+      <div class="UserMenu-Dropdown-Link-Icon"><i class="fas fa-home"></i></div>
+      <div class="UserMenu-Dropdown-Link-Name">Home</div>
+    </a>
+    <a class="UserMenu-Dropdown-Link" routerLink="/admin">
+      <div class="UserMenu-Dropdown-Link-Icon"><i class="fas fa-user-cog"></i></div>
+      <div class="UserMenu-Dropdown-Link-Name">Admin</div>
+    </a>
   </div>
 </div>
 
