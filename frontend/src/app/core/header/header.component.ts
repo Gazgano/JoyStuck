@@ -7,7 +7,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
+  countMessageAlerts = 1;
+  countNotifAlerts = 3;
+  displayDefaultImage = false;
   displayDropdown = false;
+  userName = 'Gazgano';
+  userPicturePath = 'assets/images/gazgano-picture-64px.png';
 
   constructor() { }
 

@@ -4,6 +4,9 @@
 // Layout
 * {
   box-sizing: border-box;
+  &:focus {
+    outline: none;
+  }
 }
 
 html, body {
@@ -23,7 +26,4 @@ a {
 
 input {
   border-radius: 2px;
-  &:focus {
-    outline: none;
-  }
 }
