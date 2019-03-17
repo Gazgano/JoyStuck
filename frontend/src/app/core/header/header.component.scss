@@ -1,0 +1,93 @@
+// Imports
+@import 'colours';
+@import 'mixins';
+@import 'breakpoints';
+
+// Variables
+$header-height: 50px;
+$header-background-color: $rhino;
+$searchbar-height: 25px;
+
+// Style
+:host {
+  align-items: center;
+  background-color: $header-background-color;
+  display: flex;
+  flex: 0 0 $header-height;
+}
+
+.Logo {
+  height: 30px;
+  margin: 0 auto 0 10px;
+}
+
+.SearchBar {
+  display: none;
+  margin: 0 10px;
+  position: relative;
+  width: 50%;
+  input {
+    border: none;
+    height: $searchbar-height;
+    padding-left: 10px;
+    width: 100%;
+    &:focus {
+      border-color: #d8d8d8;
+    }
+  }
+}
+
+.SearchBar-Icon {
+  @include center-everything;
+  background-color: white;
+  color: $header-background-color;
+  font-size: 15px;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: $searchbar-height;
+}
+
+.SocialButtons {
+  color: white;
+  display: flex;
+  height: 100%;
+  margin-left: auto;
+}
+
+.HeaderButton {
+  @include center-everything;
+  @include clickable;
+  @include hover-lightened($header-background-color);
+  font-size: 25px;
+  width: $header-height;
+}
+
+.UserMenu {
+  @include clickable;
+  @include hover-lightened($header-background-color);
+  align-items: center;
+  color: white;
+  display: flex;
+  height: 100%;
+  padding: 0 10px;
+  & > div:not(:first-child) {
+    margin-left: 10px;
+  }
+
+  .UserMenu-Name {
+    display: none;
+  }
+}
+
+// Breakpoints
+@media (min-width: $sm) {
+  .SearchBar {
+    display: block;
+  }
+
+  .UserMenu-Name {
+    display: block;
+  }
+}

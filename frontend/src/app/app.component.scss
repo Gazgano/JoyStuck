@@ -1,0 +1,14 @@
+@import 'colours';
+@import 'mixins';
+
+:host {
+  @include full-size;
+  display: flex;
+  flex-direction: column;
+}
+
+.AppContent {
+  background-color: $alto;
+  flex-grow: 1;
+  overflow: auto;
+}
