@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { HeaderComponent } from './header/header.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -12,7 +13,8 @@ import { HeaderComponent } from './header/header.component';
   imports: [
     BrowserAnimationsModule,
     BrowserModule,
-    RouterModule
+    RouterModule,
+    SharedModule
   ],
   exports: [
     BrowserAnimationsModule,

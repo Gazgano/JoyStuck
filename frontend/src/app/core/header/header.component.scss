@@ -1,3 +1,19 @@
+@import 'mixins';
+@import 'breakpoints';
+
+.Logo {
+  height: 40px;
+  margin-right: auto;
+}
+
+.mat-icon-button .mat-icon {
+  font-size: 30px;
+  height: 30px;
+  line-height: 30px;
+  width: 30px;
+}
+
+/*
 // Imports
 @import 'colours';
 @import 'mixins';
@@ -135,3 +151,4 @@ $searchbar-height: 25px;
     display: block;
   }
 }
+*/
