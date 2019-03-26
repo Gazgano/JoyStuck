@@ -1,4 +1,5 @@
-import { CommonModule } from '@angular/common';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
@@ -9,11 +10,15 @@ import { HeaderComponent } from './header/header.component';
     HeaderComponent
   ],
   imports: [
-    CommonModule,
+    BrowserAnimationsModule,
+    BrowserModule,
     RouterModule
   ],
   exports: [
-    HeaderComponent
+    BrowserAnimationsModule,
+    BrowserModule,
+    HeaderComponent,
+    RouterModule
   ]
 })
 export class CoreModule { }

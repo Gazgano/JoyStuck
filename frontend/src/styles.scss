@@ -1,5 +1,8 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto');
 @import 'mixins';
+
+// Theme
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import url('https://fonts.googleapis.com/css?family=Roboto');
 
 // Layout
 * {
