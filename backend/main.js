@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 
 const apiLogin = require('./webapi/apiLogin.js');
+const apiPublication = require('./webapi/apiPublication.js');
 
 var buildPathFolder = __dirname + '\\' + '..' + '\\' + 'dist' + '\\' + 'frontend';
 
