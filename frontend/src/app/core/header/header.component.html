@@ -1,44 +1,26 @@
-<!-- <img class="Logo" src="assets/images/logo.svg" routerLink="">
-<div class="SearchBar">
-  <input type="text" placeholder="Rechercher">
-  <div class="SearchBar-Icon"><i class="fas fa-search"></i></div>
-</div>
-<div class="SocialButtons">
-  <div class="HeaderButton SocialButtons-Message">
-    <i class="far fa-comment"></i>
-    <div class="HeaderButton-Alert">{{ countMessageAlerts }}</div>
-  </div>
-  <div class="HeaderButton SocialButtons-Notification">
-    <i class="far fa-bell"></i>
-    <div class="HeaderButton-Alert">{{ countNotifAlerts }}</div>
-  </div>
-</div>
-<div class="UserMenu" (click)="onUserMenuClick()">
-  <img class="UserMenu-Image" *ngIf="!displayDefaultImage" [src]="userPicturePath">
-  <div class="UserMenu-DefaultImage" *ngIf="displayDefaultImage">{{ userName.substring(0, 2) }}</div>
-  <div class="UserMenu-Name">{{ userName }}</div>
-  <div class="UserMenu-Caret"><i class="fas fa-caret-down"></i></div>
-  <div class="UserMenu-Dropdown" *ngIf="displayDropdown">
-    <a class="UserMenu-Dropdown-Link" routerLink="/admin">
-      <div class="UserMenu-Dropdown-Link-Icon"><i class="fas fa-user-cog"></i></div>
-      <div class="UserMenu-Dropdown-Link-Name">Admin</div>
-    </a>
-    <a class="UserMenu-Dropdown-Link" routerLink="/system">
-      <div class="UserMenu-Dropdown-Link-Icon"><i class="fas fa-tools"></i></div>
-      <div class="UserMenu-Dropdown-Link-Name">System</div>
-    </a>
-  </div>
-</div> -->
-
 <mat-toolbar color="primary">
-  <img class="Logo" src="assets/images/logo.svg" routerLink="">
+  <a class="Logo" routerLink=""><img src="assets/images/logo.svg"></a>
+
+  <div class="SearchBar">
+    <input type="text" placeholder="Rechercher">
+    <mat-icon class="SearchBar-Icon" color="primary">search</mat-icon>
+  </div>
 
   <button mat-icon-button>
-    <mat-icon fontSet="far" fontIcon="fa-comment"></mat-icon>
+    <mat-icon>chat_bubble_outline</mat-icon>
   </button>
 
   <button mat-icon-button>
-    <mat-icon fontSet="far" fontIcon="fa-bell"></mat-icon>
+    <mat-icon>notifications_none</mat-icon>
   </button>
+
+  <button mat-button [matMenuTriggerFor]="menu">
+    <img class="UserMenu-Image" *ngIf="!displayDefaultImage" [src]="userPicturePath">
+    <span class="UserMenu-Name">Gazgano</span>
+    <mat-icon>arrow_drop_down</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu" xPosition="before">
+    <button mat-menu-item>Item 1</button>
+    <button mat-menu-item>Item 2</button>
+  </mat-menu>
 </mat-toolbar>
-

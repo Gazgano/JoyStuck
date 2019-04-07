@@ -1,144 +1,47 @@
-@import 'mixins';
 @import 'breakpoints';
 
+.mat-toolbar {
+  line-height: 0px;
+  height: 64px;
+}
+
 .Logo {
-  height: 40px;
   margin-right: auto;
-}
-
-.mat-icon-button .mat-icon {
-  font-size: 30px;
-  height: 30px;
-  line-height: 30px;
-  width: 30px;
-}
-
-/*
-// Imports
-@import 'colours';
-@import 'mixins';
-@import 'breakpoints';
-
-// Variables
-$header-height: 50px;
-$header-background-color: $rhino;
-$searchbar-height: 25px;
-
-// Style
-:host {
-  align-items: center;
-  background-color: $header-background-color;
-  display: flex;
-  flex: 0 0 $header-height;
-}
-
-.Logo {
-  @include clickable;
-  height: 30px;
-  margin: 0 auto 0 10px;
-}
-
-.SearchBar {
-  display: none;
-  margin: 0 10px;
-  position: relative;
-  width: 50%;
-  input {
-    border: none;
-    height: $searchbar-height;
-    padding-left: 10px;
-    width: 100%;
-    &:focus {
-      border-color: #d8d8d8;
-    }
+  img {
+    height: 40px;
   }
 }
 
-.SearchBar-Icon {
-  @include center-everything;
-  background-color: white;
-  color: $header-background-color;
-  font-size: 15px;
-  height: 100%;
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: $searchbar-height;
-}
+.SearchBar {
+  $side-padding: 15px;
 
-.SocialButtons {
-  color: white;
-  display: flex;
-  height: 100%;
-  margin-left: auto;
-}
-
-.HeaderButton {
-  @include center-everything;
-  @include clickable;
-  @include hover-lightened($header-background-color);
-  font-size: 25px;
+  display: none;
+  padding: 0 $side-padding;
+  margin: 0 auto;
   position: relative;
-  width: $header-height;
-}
+  width: 50%;
 
-.HeaderButton-Alert {
-  @include center-everything;
-  @include disc(7px, $chestnut);
-  bottom: $header-height/6;
-  font-size: 10px;
-  position: absolute;
-  right: $header-height/6;
-}
+  input {
+    border: none;
+    height: 25px;
+    padding-left: 10px;
+    width: 100%;
+  }
 
-.UserMenu {
-  @include clickable;
-  @include hover-lightened($header-background-color);
-  align-items: center;
-  color: white;
-  display: flex;
-  height: 100%;
-  padding: 0 10px;
-  position: relative;
-  & > div:not(:first-child) {
-    margin-left: 10px;
+  .SearchBar-Icon {
+    position: absolute;
+    right: $side-padding;
   }
 }
 
 .UserMenu-Image {
   height: 30px;
+  margin-right: 5px;
   width: 30px;
-}
-
-.UserMenu-DefaultImage {
-  @include center-everything;
-  @include disc(15px, $olivine);
-  text-transform: uppercase;
 }
 
 .UserMenu-Name {
   display: none;
-}
-
-.UserMenu-Dropdown {
-  background-color: $header-background-color;
-  box-shadow: -4px 4px 4px 0 rgba(0, 0, 0, 0.2);
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  right: 0;
-  top: $header-height;
-  width: max-content;
-}
-
-.UserMenu-Dropdown-Link {
-  @include hover-lightened($header-background-color);
-  display: flex;
-  padding: 10px;
-}
-
-.UserMenu-Dropdown-Link-Icon {
-  margin-right: 5px;
 }
 
 // Breakpoints
@@ -148,7 +51,6 @@ $searchbar-height: 25px;
   }
 
   .UserMenu-Name {
-    display: block;
+    display: inline;
   }
 }
-*/
