@@ -15,4 +15,5 @@ app.use('/', express.static(buildPathFolder));
 
 app.listen(3000, function () {
   console.log('Unnamed App\'s launch on port 3000!');
+  console.log('test');
 })
