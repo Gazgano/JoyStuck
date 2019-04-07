@@ -1,0 +1,12 @@
+@import 'mixins';
+
+:host {
+  @include full-size;
+  display: flex;
+  flex-direction: column;
+}
+
+.AppContent {
+  flex-grow: 1;
+  overflow: auto;
+}

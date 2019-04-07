@@ -16,11 +16,13 @@
 
   <button mat-button [matMenuTriggerFor]="menu">
     <img class="UserMenu-Image" *ngIf="!displayDefaultImage" [src]="userPicturePath">
-    <span class="UserMenu-Name">Gazgano</span>
+    <span class="UserMenu-Name">{{userName}}</span>
     <mat-icon>arrow_drop_down</mat-icon>
   </button>
   <mat-menu #menu="matMenu" xPosition="before">
-    <button mat-menu-item>Item 1</button>
-    <button mat-menu-item>Item 2</button>
+    <button mat-menu-item routerLink="admin">
+      <mat-icon>perm_data_setting</mat-icon>
+      Admin
+    </button>
   </mat-menu>
 </mat-toolbar>
