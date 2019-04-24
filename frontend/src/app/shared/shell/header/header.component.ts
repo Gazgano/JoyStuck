@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
   selector: 'app-header',
@@ -11,12 +12,13 @@ export class HeaderComponent implements OnInit {
   userName = 'Gazgano';
   userPicturePath = 'assets/images/gazgano-picture-64px.png';
 
-  constructor() { }
+  constructor(private userService: UserService) { }
 
   ngOnInit() {
   }
 
-  onUserMenuClick() {
+  logout() {
+    this.userService.logout();
   }
 
 }

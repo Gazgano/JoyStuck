@@ -20,9 +20,13 @@
     <mat-icon>arrow_drop_down</mat-icon>
   </button>
   <mat-menu #menu="matMenu" xPosition="before">
-    <button mat-menu-item routerLink="/admin">
+    <a mat-menu-item routerLink="/admin">
       <mat-icon>perm_data_setting</mat-icon>
       Admin
+    </a>
+    <button mat-menu-item (click)="logout()">
+      <mat-icon>power_settings_new</mat-icon>
+      Logout
     </button>
   </mat-menu>
 </mat-toolbar>
