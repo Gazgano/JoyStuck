@@ -1,7 +1,5 @@
-@import 'breakpoints';
-/*
+@import 'mixins';
+
 :host {
-  display: block;
-  padding: 20px;
+  @include full-size;
 }
-*/
