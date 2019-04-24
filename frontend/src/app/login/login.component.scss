@@ -1,0 +1,28 @@
+@import 'mixins';
+
+:host {
+    @include full-size;
+    display: flex;
+}
+
+.LoginForm {
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    margin: auto;
+    padding: 40px;
+    width: 400px;
+}
+
+.LoginForm-Title {
+    text-align: center;
+}
+
+.LoginForm-Field {
+    display: block;
+}
+
+.LoginForm-LoginButton {
+    margin-top: 20px;
+    text-align: center;
+}
