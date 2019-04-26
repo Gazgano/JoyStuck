@@ -2,12 +2,18 @@
   <h1 class="LoginForm-Title">Log in</h1>
   
   <mat-form-field class="LoginForm-Field">
-    <input matInput placeholder="Username" [(ngModel)]="credentials.username">
+    <input #username [(ngModel)]="credentials.username" matInput name="username" placeholder="Username" tabindex="1">
   </mat-form-field>
     
   <mat-form-field class="LoginForm-Field">
-    <input matInput placeholder="Password" type="password" [(ngModel)]="credentials.password">
+    <input [(ngModel)]="credentials.password" matInput name="password" placeholder="Password" type="password" tabindex="2">
   </mat-form-field>
   
-  <div class="LoginForm-LoginButton"><button mat-raised-button color="primary">Log in</button></div>
+  <div class="LoginForm-LoginButton">
+    <button *ngIf="!isLoading" color="primary" mat-raised-button tabindex="3" type="submit">Log in</button>
+    <div *ngIf="isLoading" class="LoginForm-LoginButton-Loading">
+      <mat-spinner class="LoginForm-LoginButton-Loading-Spinner" diameter="30"></mat-spinner>
+      <span>Loggin in...</span>
+    </div>
+  </div>
 </form>

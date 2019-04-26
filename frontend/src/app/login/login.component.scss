@@ -23,6 +23,16 @@
 }
 
 .LoginForm-LoginButton {
+    display: flex;
     margin-top: 20px;
-    text-align: center;
+    justify-content: center;
+}
+
+.LoginForm-LoginButton-Loading {
+    display: flex;
+    align-items: center;
+}
+
+.LoginForm-LoginButton-Loading-Spinner {
+    margin: 0 5px;
 }
