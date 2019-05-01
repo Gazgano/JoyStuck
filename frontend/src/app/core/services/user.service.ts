@@ -1,34 +1,33 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
-const IS_AUTHENTICATED_KEY = 'isAuthenticated';
+import { JwtService } from './jwt.service';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  constructor(private router: Router) { }
+  constructor(private apiService: ApiService, private jwtService: JwtService, private router: Router) { }
   
   login(credentials: any): void {
-    const credentialsOK = credentials.username === 'admin' && credentials.password === 'admin';
-    window.localStorage.setItem(IS_AUTHENTICATED_KEY, credentialsOK? 'true' : 'false');
-    
-    if (credentialsOK) {
+    if (this.apiService.get('/login', credentials)) {
+      this.jwtService.saveToken('true');
       console.log('Credentials OK. Logging in...');
       this.router.navigate(['/']);
     } else {
+      this.jwtService.saveToken('false');
       console.log('Unrecognized credentials, authentication failed.');
     }
   }
 
   logout() {
-    window.localStorage.setItem(IS_AUTHENTICATED_KEY, 'false');
-    
+    this.jwtService.destroyToken();
     console.log('Logging out...');
     this.router.navigate(['login']);
   }
 
   getAuthenticationState(): boolean {
-    return window.localStorage.getItem(IS_AUTHENTICATED_KEY) === 'true'? true : false;
+    return this.jwtService.getToken() === 'true'? true : false;
   }
 }

@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit, AfterContentInit {
   }
 
   onSubmit() {
-    this.isLoading = true;
+    // this.isLoading = true;
     this.userService.login(this.credentials);
   }
 
