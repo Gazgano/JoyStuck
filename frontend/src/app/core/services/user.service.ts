@@ -1,28 +1,34 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, of, Subject } from 'rxjs';
-import { delay } from 'rxjs/operators';
+
+const IS_AUTHENTICATED_KEY = 'isAuthenticated';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-
-  public isAuthenticated: Subject<boolean>;
+  constructor(private router: Router) { }
   
-  constructor(private router: Router) {
-    this.isAuthenticated = new Subject<boolean>();
-    this.isAuthenticated.next(false);
-  }
-
-  login(credentials: any): Subject<boolean> {
-    const credentialsOk = credentials.username === 'admin' && credentials.password === 'admin';
-    this.isAuthenticated.next(credentialsOk);
-    return this.isAuthenticated;
+  login(credentials: any): void {
+    const credentialsOK = credentials.username === 'admin' && credentials.password === 'admin';
+    window.localStorage.setItem(IS_AUTHENTICATED_KEY, credentialsOK? 'true' : 'false');
+    
+    if (credentialsOK) {
+      console.log('Credentials OK. Logging in...');
+      this.router.navigate(['/']);
+    } else {
+      console.log('Unrecognized credentials, authentication failed.');
+    }
   }
 
   logout() {
-    this.isAuthenticated.next(false);
-    return this.isAuthenticated.pipe(delay(1000));
+    window.localStorage.setItem(IS_AUTHENTICATED_KEY, 'false');
+    
+    console.log('Logging out...');
+    this.router.navigate(['login']);
+  }
+
+  getAuthenticationState(): boolean {
+    return window.localStorage.getItem(IS_AUTHENTICATED_KEY) === 'true'? true : false;
   }
 }

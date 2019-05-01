@@ -31,15 +31,7 @@ export class LoginComponent implements OnInit, AfterContentInit {
 
   onSubmit() {
     this.isLoading = true;
-    this.userService.login(this.credentials).subscribe(r => {
-      if (r) {
-        console.log('Credentials OK, loggin in...');
-        this.router.navigate(['/']);
-      } else {
-        console.log('Bad credentials');
-      }
-      this.isLoading = false;
-    });
+    this.userService.login(this.credentials);
   }
 
 }
