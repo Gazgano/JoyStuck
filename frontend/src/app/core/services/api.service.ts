@@ -13,12 +13,12 @@ const ONLY_USER = {
   providedIn: 'root'
 })
 export class ApiService {
-  get(path: string, params?: HttpParams): Observable<any> {
+  get(path: string, params?: any): Observable<any> {
     let res: Observable<any>;
 
     switch(path) {
       case '/user':
-        if (params.get('token') === ONLY_USER.token) {
+        if (params.token === ONLY_USER.token) {
           res = of({user: {
             username: ONLY_USER.username,
             token: ONLY_USER.token
@@ -31,10 +31,10 @@ export class ApiService {
         }
         break;
       default:
-        res = throwError({ error: {
+        res = throwError({
           errorCode: 404,
           errorName: 'Not Found'
-        }});
+        });
     }
 
     return res.pipe(delay(1000));
@@ -51,17 +51,17 @@ export class ApiService {
             token: ONLY_USER.token
           }});
         } else {
-          res = throwError({ error: {
+          res = throwError({
             errorCode: 401,
             errorName: 'Unauthorized'
-          }});
+          });
         }
         break;
       default:
-        res = throwError({ error: {
+        res = throwError({
           errorCode: 404,
           errorName: 'Not Found'
-        }});
+        });
     }
 
     return res.pipe(delay(1000));

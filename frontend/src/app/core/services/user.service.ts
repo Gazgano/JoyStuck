@@ -30,18 +30,18 @@ export class UserService {
 
   populate() { // executed at the initialisation of the app (app.component.ts)
     if (this.jwtService.getToken()) {
-      const params = new HttpParams();
-      params.set('token', this.jwtService.getToken());
-      this.apiService.get('/user', params).subscribe(
+      this.apiService.get('/user', {token: this.jwtService.getToken()}).subscribe(
         data => {
-          console.log('Current token recognized, retrieving user data');
+          console.log('Existing token recognized, retrieving user data');
           this.setAuth(data.user);
         },
         err => {
+          console.log('Existing token not recognized, cleaning stored data', err);
           this.purgeAuth();
         }
       );
     } else {
+      console.log('No existing token, cleaning stored data');
       this.purgeAuth();
     }
   }
