@@ -25,17 +25,22 @@ export class UserService {
   // buffer set to 1 to still only have one current state
   private isAuthenticatedSubject = new ReplaySubject<boolean>(1);
   public isAuthenticated = this.isAuthenticatedSubject.asObservable();
-  
+
   constructor(private apiService: ApiService, private jwtService: JwtService, private router: Router) { }
-  
+
   populate() { // executed at the initialisation of the app (app.component.ts)
-    // check if a token already exists
     if (this.jwtService.getToken()) {
-      // if token exists, retrieve and store user infos
       const params = new HttpParams();
       params.set('token', this.jwtService.getToken());
-      this.apiService.get('/user', params).subscribe(data => this.setAuth(data.user));
-      // how to handle error?
+      this.apiService.get('/user', params).subscribe(
+        data => {
+          console.log('Current token recognized, retrieving user data');
+          this.setAuth(data.user);
+        },
+        err => {
+          this.purgeAuth();
+        }
+      );
     } else {
       this.purgeAuth();
     }
@@ -52,12 +57,14 @@ export class UserService {
     this.currentUserSubject.next({} as User);
     this.isAuthenticatedSubject.next(false);
   }
-  
+
   login(credentials: any): Observable<User> {
-    return this.apiService.post('/login', credentials).pipe(map(data => {
-      this.setAuth(data.user);
-      return data.user;
-    }));
+    return this.apiService.post('/login', credentials).pipe(map(
+      data => {
+        this.setAuth(data.user);
+        return data.user;
+      })
+    );
     // how to handle error?
     // console.log('Credentials OK. Logging in...');
     // console.log('Unrecognized credentials, authentication failed.');

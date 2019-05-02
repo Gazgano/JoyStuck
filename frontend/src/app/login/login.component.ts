@@ -28,8 +28,14 @@ export class LoginComponent implements OnInit, AfterContentInit {
   }
 
   onSubmit() {
-    // this.isLoading = true;
-    this.userService.login(this.credentials);
+    this.isLoading = true;
+    this.userService.login(this.credentials).subscribe(
+      data => this.router.navigateByUrl('/'),
+      err => {
+        this.isLoading = false;
+        console.error(err);
+      }
+    );
   }
 
 }
