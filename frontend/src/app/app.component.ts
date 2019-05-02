@@ -6,7 +6,11 @@ import { UserService } from './core/services/user.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   constructor(private userService: UserService) { }
+
+  ngOnInit() {
+    this.userService.populate();
+  }
 }

@@ -12,7 +12,7 @@ export class LoginComponent implements OnInit, AfterContentInit {
 
   @ViewChild('username') usernameMatInput: ElementRef;
   public credentials: any;
-  public isLoading: boolean;
+  public isLoading = false;
 
   constructor(private router: Router, private userService: UserService) { }
 
@@ -21,8 +21,6 @@ export class LoginComponent implements OnInit, AfterContentInit {
       username: null,
       password: null
     };
-
-    this.isLoading = false;
   }
 
   ngAfterContentInit() {
