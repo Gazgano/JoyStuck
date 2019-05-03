@@ -33,7 +33,6 @@ export class LoginComponent implements OnInit, AfterContentInit {
       data => this.router.navigateByUrl('/'),
       err => {
         this.isLoading = false;
-        console.error(err);
       }
     );
   }

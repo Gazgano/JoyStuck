@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpParams } from '@angular/common/http';
 
 import { BehaviorSubject, ReplaySubject, Observable } from 'rxjs';
-import { distinctUntilChanged, map } from 'rxjs/operators';
+import { distinctUntilChanged, tap } from 'rxjs/operators';
 
 import { ApiService } from './api.service';
 import { JwtService } from './jwt.service';
@@ -59,15 +58,15 @@ export class UserService {
   }
 
   login(credentials: any): Observable<User> {
-    return this.apiService.post('/login', credentials).pipe(map(
+    return this.apiService.post('/login', credentials).pipe(tap(
       data => {
+        console.log('Credentials OK. Logging in...');
         this.setAuth(data.user);
-        return data.user;
-      })
-    );
-    // how to handle error?
-    // console.log('Credentials OK. Logging in...');
-    // console.log('Unrecognized credentials, authentication failed.');
+      },
+      err => {
+        console.log('Unrecognized credentials, authentication failed.', err);
+      }
+    ));
   }
 
   logout() {
