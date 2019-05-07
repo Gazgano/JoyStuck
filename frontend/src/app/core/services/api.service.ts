@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpParams } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { delay, materialize, dematerialize } from 'rxjs/operators';
 
 const ONLY_USER = {
   username: 'admin',
   password: 'admin',
   token: '123456789'
-}
+};
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +36,11 @@ export class ApiService {
         });
     }
 
-    return res.pipe(delay(1000));
+    return res.pipe(  // need to use materialize/dematerialize to make
+      materialize(),  // delay apply on all notifications
+      delay(1000),    // otherwise, delay is not applied on errors
+      dematerialize()
+    );
   }
 
   post(path: string, body: any): Observable<any> {
@@ -64,6 +67,10 @@ export class ApiService {
         });
     }
 
-    return res.pipe(delay(1000));
+    return res.pipe(
+      materialize(),
+      delay(1000),
+      dematerialize()
+    );
   }
 }
