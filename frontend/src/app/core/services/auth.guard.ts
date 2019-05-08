@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanLoad, Router } from '@angular/router';
 
-import { UserService } from './user.service';
+import { UserService } from '@app/core/services/user.service';
 import { take, tap } from 'rxjs/operators';
 
 @Injectable({

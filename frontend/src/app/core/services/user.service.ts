@@ -4,9 +4,9 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, ReplaySubject, Observable } from 'rxjs';
 import { distinctUntilChanged, tap } from 'rxjs/operators';
 
-import { ApiService } from './api.service';
-import { JwtService } from './jwt.service';
-import { User } from '../models/user.model';
+import { ApiService } from '@app/core/services/api.service';
+import { JwtService } from '@app/core/services/jwt.service';
+import { User } from '@app/core/models/user.model';
 
 @Injectable({
   providedIn: 'root'
