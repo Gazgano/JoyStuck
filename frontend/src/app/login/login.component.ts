@@ -1,7 +1,9 @@
 import { AfterContentInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { UserService } from '@app/core/services/user.service';
+import { Credentials } from '@app/core/models/user.model';
 
 @Component({
   selector: 'app-login',
@@ -10,28 +12,35 @@ import { UserService } from '@app/core/services/user.service';
 })
 export class LoginComponent implements OnInit, AfterContentInit {
 
-  @ViewChild('username') usernameMatInput: ElementRef;
-  public credentials: any;
+  // @ViewChild('username') usernameMatInput: ElementRef;
+
+  public badCredentials = false;
   public isLoading = false;
+  public passwordFormControl: FormControl;
+  public usernameFormControl: FormControl;
 
   constructor(private router: Router, private userService: UserService) { }
 
   ngOnInit() {
-    this.credentials = {
-      username: null,
-      password: null
-    };
+    this.usernameFormControl = new FormControl('', Validators.required);
+    this.passwordFormControl = new FormControl('', Validators.required);
   }
 
   ngAfterContentInit() {
-    this.usernameMatInput.nativeElement.focus();
+    // this.usernameMatInput.nativeElement.focus();
   }
 
   onSubmit() {
+    const credentials: Credentials = {
+      username: this.usernameFormControl.value,
+      password: this.passwordFormControl.value
+    };
+
     this.isLoading = true;
-    this.userService.login(this.credentials).subscribe(
+    this.userService.login(credentials).subscribe(
       data => this.router.navigateByUrl('/'),
       err => {
+        this.badCredentials = true;
         this.isLoading = false;
       }
     );

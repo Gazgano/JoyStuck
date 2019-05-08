@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { 
-  MatButtonModule, 
-  MatFormFieldModule, 
-  MatIconModule, 
-  MatInputModule, 
-  MatMenuModule, 
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  MatButtonModule,
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule,
+  MatMenuModule,
   MatProgressSpinnerModule ,
   MatToolbarModule
 } from '@angular/material';
@@ -33,6 +33,7 @@ import { ShellComponent } from './shell/shell.component';
     MatMenuModule,
     MatProgressSpinnerModule,
     MatToolbarModule,
+    ReactiveFormsModule,
     RouterModule
   ],
   exports: [
@@ -45,6 +46,7 @@ import { ShellComponent } from './shell/shell.component';
     MatMenuModule,
     MatToolbarModule,
     MatProgressSpinnerModule,
+    ReactiveFormsModule,
     ShellComponent
   ]
 })
