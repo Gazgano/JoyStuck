@@ -12,7 +12,7 @@ import { Credentials } from '@app/core/models/user.model';
 })
 export class LoginComponent implements OnInit, AfterContentInit {
 
-  // @ViewChild('username') usernameMatInput: ElementRef;
+  @ViewChild('username') usernameMatInput: ElementRef;
 
   public badCredentials = false;
   public isLoading = false;
@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit, AfterContentInit {
   }
 
   ngAfterContentInit() {
-    // this.usernameMatInput.nativeElement.focus();
+    this.usernameMatInput.nativeElement.focus();
   }
 
   onSubmit() {
@@ -45,5 +45,4 @@ export class LoginComponent implements OnInit, AfterContentInit {
       }
     );
   }
-
 }

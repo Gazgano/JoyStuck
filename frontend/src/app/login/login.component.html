@@ -2,7 +2,7 @@
   <h1 class="LoginForm-Title">Log in</h1>
 
   <mat-form-field class="LoginForm-Field">
-    <input [formControl]="usernameFormControl" matInput name="username" placeholder="Username" tabindex="1">
+    <input #username [formControl]="usernameFormControl" matInput name="username" placeholder="Username" tabindex="1">
     <mat-error *ngIf="usernameFormControl.invalid && usernameFormControl.touched">Username is required</mat-error>
   </mat-form-field>
 
