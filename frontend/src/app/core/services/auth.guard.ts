@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
 import { CanLoad, Router } from '@angular/router';
-
-import { UserService } from '@app/core/services/user.service';
 import { take, tap } from 'rxjs/operators';
+
+import { Logger } from '@app/core/services/logger.service';
+import { UserService } from '@app/core/services/user.service';
+
+const log = new Logger('AuthGuard');
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +18,7 @@ export class AuthGuard implements CanLoad {
       take(1), // to send an onComplete message in the observer. Otherwise, the guard waits for it
       tap(isAuth => {
         if (!isAuth) {
-          console.log('Not logged in. Access denied.');
+          log.info('Not logged in. Access denied.');
           this.router.navigateByUrl('login');
         }
       })

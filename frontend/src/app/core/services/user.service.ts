@@ -6,7 +6,10 @@ import { distinctUntilChanged, tap } from 'rxjs/operators';
 
 import { ApiService } from '@app/core/services/api.service';
 import { JwtService } from '@app/core/services/jwt.service';
+import { Logger } from '@app/core/services/logger.service';
 import { User } from '@app/core/models/user.model';
+
+const log = new Logger('UserService');
 
 @Injectable({
   providedIn: 'root'
@@ -31,16 +34,16 @@ export class UserService {
     if (this.jwtService.getToken()) {
       this.apiService.get('/user', {token: this.jwtService.getToken()}).subscribe(
         data => {
-          console.log('Existing token recognized, retrieving user data');
+          log.debug('Existing token recognized, retrieving user data');
           this.setAuth(data.user);
         },
         err => {
-          console.log('Existing token not recognized, cleaning stored data', err);
+          log.debug('Existing token not recognized, cleaning stored data', err);
           this.purgeAuth();
         }
       );
     } else {
-      console.log('No existing token, cleaning stored data');
+      log.debug('No existing token, cleaning stored data');
       this.purgeAuth();
     }
   }
@@ -60,18 +63,18 @@ export class UserService {
   login(credentials: any): Observable<User> {
     return this.apiService.post('/login', credentials).pipe(tap(
       data => {
-        console.log('Credentials OK. Logging in...');
+        log.info('Credentials OK. Logging in...');
         this.setAuth(data.user);
       },
       err => {
-        console.log('Unrecognized credentials, authentication failed.', err);
+        log.info('Unrecognized credentials, authentication failed.', err);
       }
     ));
   }
 
   logout() {
     this.purgeAuth();
-    console.log('Logging out...');
+    log.info('Logging out...');
     this.router.navigate(['login']);
   }
 }
