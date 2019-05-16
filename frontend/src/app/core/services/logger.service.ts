@@ -10,6 +10,8 @@ Example usage:
  log.debug('something happened');
 */
 
+import * as moment from 'moment';
+
 import { environment } from 'src/environments/environment';
 
 export enum LogLevel {
@@ -20,9 +22,24 @@ export enum LogLevel {
   Debug
 }
 
-export class Logger {
+interface LoggerConfig {
+  readonly level: LogLevel;
+  readonly includeTimestamp: boolean;
+}
 
-  static level: LogLevel = environment.production? LogLevel.Warn : LogLevel.Debug;
+const GLOBAL_CONFIG: { [key: string]: LoggerConfig; } = {
+  production: {
+    level: LogLevel.Warn,
+    includeTimestamp: true
+  },
+  dev: {
+    level: LogLevel.Debug,
+    includeTimestamp: false
+  }
+};
+
+export class Logger {
+  private config = environment.production? GLOBAL_CONFIG.production : GLOBAL_CONFIG.dev;
   
   constructor(private source?: string) { }
 
@@ -44,14 +61,19 @@ export class Logger {
   }
   
   private log(func: (...args: any[]) => void, level: LogLevel, objects: any[]): void {
-    if (Logger.level >= level) { // we print messages of the level and also more serious
-      let output: any[];
+    if (this.config.level >= level) { // we print messages of the level and also more serious ones as well
+      let output: any[] = [];
+      
+      if (this.config.includeTimestamp) {
+        output = [moment().format('YYYYMMDD HH:mm:ss.SSS')];
+      }
+      
+      // if provided, we flag the source
       if (this.source) {
-        output = ['[' + this.source + ']'].concat(objects); // if provided, we flag the source at the beginning
-      } else {
-        output = objects;
+        output = output.concat(['[' + this.source + ']']); 
       }
 
+      output = output.concat(objects);
       func(...output);
     }
   }
