@@ -8,7 +8,8 @@ import {
   MatInputModule,
   MatMenuModule,
   MatProgressSpinnerModule ,
-  MatToolbarModule
+  MatToolbarModule,
+  MatCardModule
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
 
@@ -27,6 +28,7 @@ import { ShellComponent } from './shell/shell.component';
     CommonModule,
     FormsModule,
     MatButtonModule,
+    MatCardModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
@@ -40,6 +42,7 @@ import { ShellComponent } from './shell/shell.component';
     CommonModule,
     FormsModule,
     MatButtonModule,
+    MatCardModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,

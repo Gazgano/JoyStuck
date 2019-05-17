@@ -1,5 +1,18 @@
 @import 'mixins';
+@import 'breakpoints';
 
 :host {
  @include full-size;
+}
+
+.WallContainer {
+    @include full-size;
+    display: flex;
+    justify-content: center;
+}
+
+.Wall {
+    height: 100%;
+    padding: 10px;  
+    width: $md;
 }
