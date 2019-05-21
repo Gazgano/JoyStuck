@@ -1,4 +1,5 @@
 @import 'mixins';
+@import 'ink-theme';
 
 // Theme
 @import url('https://fonts.googleapis.com/css?family=Roboto');
@@ -28,4 +29,44 @@ a {
 
 input {
   border-radius: 2px;
+}
+
+// Themes custom class
+.primary {
+  color: mat-color($ink-primary) !important;
+}
+
+.warn {
+  color: mat-color($ink-warn) !important;
+}
+
+.accent {
+  color: mat-color($ink-accent) !important;
+}
+
+.reverse-primary {
+  background-color: mat-color($ink-primary) !important;
+  color: white !important;
+}
+
+.reverse-warn {
+  background-color: mat-color($ink-warn) !important;
+  color: white !important;
+}
+
+.reverse-accent {
+  background-color: mat-color($ink-accent) !important;
+  color: white !important;
+}
+
+.svg-fill-primary {
+  fill: mat-color($ink-primary);
+}
+
+.svg-fill-warn {
+  fill: mat-color($ink-warn);
+}
+
+.svg-fill-accent {
+  fill: mat-color($ink-accent);
 }

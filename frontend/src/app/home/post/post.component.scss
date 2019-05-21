@@ -17,19 +17,12 @@ $ribbon-icon-size: 30px;
 }
 
 .PostCard-Title-Word {
-    background-color: $warn-color;
-    color: white;
     font-weight: bold;
     margin-bottom: 3px;
     padding: 0 3px;
 }
 
-.PostCard-Subtitle {
-    color: $warn-color;
-}
-
 .PostCard-Actions {
-    color: $warn-color;
     display: flex;
     justify-content: flex-end;
 }
@@ -39,10 +32,6 @@ $ribbon-icon-size: 30px;
     position: absolute;
     right: 0;
     top: 0;
-}
-
-.PostCard-Ribbon-Background {
-    fill: $warn-color;
 }
 
 .PostCard-Ribbon-Icon {

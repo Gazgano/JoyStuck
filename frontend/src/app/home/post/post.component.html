@@ -2,26 +2,16 @@
     <mat-card-header>
         <img mat-card-avatar src="assets/images/gazgano-picture-64px.png">
         <mat-card-title class="PostCard-Title">
-               <div class="PostCard-Title-Word">Imbided</div>
-               <div class="PostCard-Title-Word">souhaite</div>
-               <div class="PostCard-Title-Word">nous</div>
-               <div class="PostCard-Title-Word">faire</div>
-               <div class="PostCard-Title-Word">découvrir</div>
-               <div class="PostCard-Title-Word">un</div>
-               <div class="PostCard-Title-Word">jeu</div>
-               <div class="PostCard-Title-Word">!</div>
+               <div *ngFor="let word of title" [ngClass]="'reverse-' + postType.color" class="PostCard-Title-Word">{{ word }}</div>
         </mat-card-title>
-        <mat-card-subtitle class="PostCard-Subtitle">2 min.</mat-card-subtitle>
+        <mat-card-subtitle [ngClass]="postType.color">2 min.</mat-card-subtitle>
         <div class="PostCard-Ribbon">
-            <!-- <mat-icon class="PostCard-Ribbon-Icon" [inline]="true">image</mat-icon> -->
-            <mat-icon class="PostCard-Ribbon-Icon" [inline]="true">videogame_asset</mat-icon>
-            <svg width="100" height="100"><polygon class="PostCard-Ribbon-Background" points="0,0 50,0 100,50 100,100" /></svg>
+            <mat-icon class="PostCard-Ribbon-Icon" [inline]="true">{{ postType.icon }}</mat-icon>
+            <svg width="100" height="100"><polygon [ngClass]="'svg-fill-' + postType.color" points="0,0 50,0 100,50 100,100" /></svg>
         </div>
     </mat-card-header>
-    <mat-card-content>
-        <p>Duis sunt tempor culpa est duis qui aliquip tempor mollit. Esse ad minim dolor ea ex culpa laborum. Anim sit sunt in incididunt mollit et culpa ex velit. Fugiat excepteur quis nisi ea occaecat incididunt. Magna excepteur eiusmod sunt dolore ut elit ea dolor Lorem quis anim.</p>
-    </mat-card-content>
-    <mat-card-actions class="PostCard-Actions">
+    <mat-card-content><p>{{ post.content }}</p></mat-card-content>
+    <mat-card-actions [ngClass]="postType.color" class="PostCard-Actions">
         <button mat-button>
             <mat-icon>thumb_up</mat-icon>
             3
