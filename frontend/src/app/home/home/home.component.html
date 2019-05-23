@@ -1,6 +1,7 @@
 <app-shell>
     <div class="WallContainer">
         <div class="Wall" >
+            <mat-spinner *ngIf="posts.length === 0" class="Home-Spinner" diameter="50"></mat-spinner>
             <ng-container *ngFor="let post of posts">
                 <app-post [post]="post"></app-post>
             </ng-container>

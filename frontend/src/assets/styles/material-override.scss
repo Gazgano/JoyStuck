@@ -1,0 +1,4 @@
+// PostCard
+.PostCard .mat-card-header-text {
+    max-width: calc(100% - 132px); // less ribbon width + title margins
+}
