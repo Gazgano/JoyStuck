@@ -1,4 +1,13 @@
+// Button with icon and text
+.mat-button-wrapper > span {
+    margin-left: 5px;
+}
+
 // PostCard
 .PostCard .mat-card-header-text {
     max-width: calc(100% - 132px); // less ribbon width + title margins
+}
+
+.PostCard .mat-button-wrapper > span, .PostCardLight .mat-button-wrapper > span {
+    width: 10px;
 }
