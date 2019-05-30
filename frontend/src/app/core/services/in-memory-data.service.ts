@@ -50,7 +50,7 @@ export class InMemoryDataService implements InMemoryDbService {
           {
             authorName: 'Gazgano',
             timestamp: moment().subtract(47, 'minute'),
-            content: 'Trop stylé',
+            content: 'Occaecat minim laborum dolor proident reprehenderit ipsum esse non laborum. Velit id tempor aliquip reprehenderit exercitation velit. Amet ad eiusmod esse est. Magna in Lorem velit sunt veniam incididunt eu ipsum sit. Ipsum tempor aliqua velit reprehenderit ipsum dolore do cillum dolore sunt laboris aute sunt. Fugiat enim minim sunt anim dolore.',
             likesCount: 0
           }
         ],

@@ -10,7 +10,11 @@
             <svg width="100" height="100"><polygon [ngClass]="'svg-fill-' + postDesign.color" points="0,0 50,0 100,50 100,100" /></svg>
         </div>
     </mat-card-header>
-    <mat-card-content><p>{{ post.content }}</p></mat-card-content>
+    
+    <mat-card-content>
+        <p>{{ post.content }}</p>
+    </mat-card-content>
+    
     <mat-card-actions [ngClass]="postDesign.color" class="PostCard-Actions">
         <button mat-button>
             <mat-icon>thumb_up</mat-icon>
@@ -21,6 +25,19 @@
             <span *ngIf="post.comments?.length > 0">{{ post.comments?.length }}</span>
         </button>
     </mat-card-actions>
+
+    <div class="PostComment-Container">
+        <div *ngFor="let comment of post.comments" class="PostComment">
+            <div class="PostComment-Avatar">
+                <img mat-card-avatar src="assets/images/gazgano-picture-64px.png">
+            </div>
+            <div class="PostComment-Content" [ngClass]="'reverse-soft-' + postDesign.color">{{ comment.content }}</div>
+            <button [ngClass]="postDesign.color" class="PostComment-LikeButton" mat-icon-button>
+                <mat-icon [inline]="true">thumb_up</mat-icon>
+                <span *ngIf="comment.likesCount > 0">{{ comment.likesCount }}</span>
+            </button>
+        </div>
+    </div>
 </mat-card>
 
 <mat-card *ngIf="postDesign.componentStyle === 1" class="PostCard PostCard--Light" [ngClass]="'reverse-' + postDesign.color">
