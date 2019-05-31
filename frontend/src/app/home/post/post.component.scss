@@ -1,5 +1,7 @@
 @import 'ink-theme';
 
+$palettes: primary, warn, accent;
+
 ///////////////////////////////////////////////
 // PostCard - General
 ///////////////////////////////////////////////
@@ -7,7 +9,7 @@
 $ribbon-icon-size: 30px;
 
 .PostCard {
-    border-radius: 0 !important;
+    border-radius: 0;
     box-shadow: none !important;
     margin-bottom: 10px;
 }
@@ -19,15 +21,54 @@ $ribbon-icon-size: 30px;
 }
 
 .PostCard-Title-Word {
-    font-weight: bold;
-    margin-bottom: 3px;
-    padding: 0 3px;
+  font-weight: bold;
+  margin-bottom: 3px;
+  padding: 0 3px;
 }
 
 .PostCard-Actions {
-    display: flex;
-    justify-content: flex-end;
-    padding: 0;
+  display: flex;
+  justify-content: flex-end;
+  padding: 0;
+}
+
+.PostCard-Ribbon-Icon {
+  // center coordinates is defined by SVG ribbon
+  left: 62.5px - $ribbon-icon-size/2;
+  position: absolute;
+  top: 37.5px - $ribbon-icon-size/2;
+  transform: rotateZ(45deg);
+}
+
+// adding colors depending of the theme
+@each $name in $palettes {
+  $palette: map-get($ink-theme, $name);
+  $color: map-get($palette, default);
+  $color-contrast: map-get($palette, default-contrast);
+
+  .PostCard-Title-Word--#{$name} {
+    @extend .PostCard-Title-Word;
+    background-color: $color;
+    color: $color-contrast;
+  }
+
+  .PostCard-Subtitle--#{$name} {
+    color: $color;
+  }
+
+  .PostCard-Ribbon-Svg--#{$name} {
+    fill: $color;
+  }
+
+  .PostCard-Actions--#{$name} {
+    @extend .PostCard-Actions;
+    color: $color;
+  }
+
+  .PostCard-Ribbon-Icon--#{$name} {
+    @extend .PostCard-Ribbon-Icon;
+    color: $color-contrast;
+  }
 }
 
 .PostCard-Ribbon {
@@ -37,36 +78,49 @@ $ribbon-icon-size: 30px;
     top: 0;
 }
 
-.PostCard-Ribbon-Icon {
-    // center coordinates is defined by SVG ribbon
-    color: white;
-    left: 62.5px - $ribbon-icon-size/2;
-    position: absolute;
-    top: 37.5px - $ribbon-icon-size/2;
-    transform: rotateZ(45deg);
-}
-
 ///////////////////////////////////////////////
-// PostCard - Light modifier
+// PostCardLight
 ///////////////////////////////////////////////
 
-.PostCard--Light {
-    align-items: center;    
-    display: flex;
+.PostCardLight {
+  @extend .PostCard;
+  align-items: center;
+  display: flex;
 }
 
-.PostCard-Avatar--Light {
-    margin-right: 10px;
+.PostCardLight-Avatar {
+  @extend .PostCard-Avatar !optional;
+  margin-right: 10px;
 }
 
-.PostCard-Title--Light {
-    text-transform: none;
+.PostCardLight-Title {
+  @extend .PostCard-Title;
+  text-transform: none;
 }
 
-.PostCard-Actions--Light {
-    margin-bottom: 0 !important;
-    margin-left: auto;
-    padding: 0;
+.PostCardLight-Actions {
+  @extend .PostCard-Actions;
+  margin-bottom: 0 !important;
+  margin-left: auto;
+  padding: 0;
+}
+
+// adding colors depending of the theme
+@each $name in $palettes {
+  $palette: map-get($ink-theme, $name);
+  $color: map-get($palette, default);
+  $color-contrast: map-get($palette, default-contrast);
+
+  .PostCardLight--#{$name} {
+    @extend .PostCardLight;
+    background-color: $color;
+    color: $color-contrast;
+  }
+
+  .PostCardLight-Actions--#{$name} {
+    @extend .PostCardLight-Actions;
+    color: $color-contrast;
+  }
 }
 
 ///////////////////////////////////////////////
@@ -74,7 +128,7 @@ $ribbon-icon-size: 30px;
 ///////////////////////////////////////////////
 
 .PostComment-Container {
-    border-top: 2px solid map-get(map-get($ink-theme, background), background);
+    border-top: 2px solid map-get(map-get($ink-theme, foreground), divider);
     padding: 10px 0;
 }
 
@@ -96,4 +150,21 @@ $ribbon-icon-size: 30px;
 
 .PostComment-LikeButton {
     margin-left: auto;
+}
+
+// adding colors depending of the theme
+@each $name in $palettes {
+  $palette: map-get($ink-theme, $name);
+  $color: map-get($palette, default);
+  $soft-color: map-get($palette, 50);
+
+  .PostComment-Content--#{$name} {
+    @extend .PostComment-Content;
+    background-color: $soft-color;
+  }
+
+  .PostComment-LikeButton--#{$name} {
+    @extend .PostComment-LikeButton;
+    color: $color;
+  }
 }

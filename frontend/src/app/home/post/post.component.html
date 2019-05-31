@@ -2,20 +2,20 @@
     <mat-card-header>
         <img mat-card-avatar src="assets/images/gazgano-picture-64px.png">
         <mat-card-title *ngIf="isTitleArray" class="PostCard-Title">
-               <div *ngFor="let word of title" [ngClass]="'reverse-' + postDesign.color" class="PostCard-Title-Word">{{ word }}</div>
+               <div *ngFor="let word of title" [ngClass]="'PostCard-Title-Word--' + postDesign.color">{{ word }}</div>
         </mat-card-title>
-        <mat-card-subtitle [ngClass]="postDesign.color">{{ elapsedTime }}</mat-card-subtitle>
+        <mat-card-subtitle [ngClass]="'PostCard-Subtitle--' + postDesign.color">{{ elapsedTime }}</mat-card-subtitle>
         <div class="PostCard-Ribbon">
-            <mat-icon class="PostCard-Ribbon-Icon" [inline]="true">{{ postDesign.icon }}</mat-icon>
-            <svg width="100" height="100"><polygon [ngClass]="'svg-fill-' + postDesign.color" points="0,0 50,0 100,50 100,100" /></svg>
+            <mat-icon [ngClass]="'PostCard-Ribbon-Icon--' + postDesign.color" [inline]="true">{{ postDesign.icon }}</mat-icon>
+            <svg width="100" height="100"><polygon [ngClass]="'PostCard-Ribbon-Svg--' + postDesign.color" points="0,0 50,0 100,50 100,100" /></svg>
         </div>
     </mat-card-header>
-    
+
     <mat-card-content>
         <p>{{ post.content }}</p>
     </mat-card-content>
-    
-    <mat-card-actions [ngClass]="postDesign.color" class="PostCard-Actions">
+
+    <mat-card-actions [ngClass]="'PostCard-Actions--' + postDesign.color">
         <button mat-button>
             <mat-icon>thumb_up</mat-icon>
             <span *ngIf="post.likesCount > 0">{{ post.likesCount }}</span>
@@ -31,8 +31,8 @@
             <div class="PostComment-Avatar">
                 <img mat-card-avatar src="assets/images/gazgano-picture-64px.png">
             </div>
-            <div class="PostComment-Content" [ngClass]="'reverse-soft-' + postDesign.color">{{ comment.content }}</div>
-            <button [ngClass]="postDesign.color" class="PostComment-LikeButton" mat-icon-button>
+            <div [ngClass]="'PostComment-Content--' + postDesign.color">{{ comment.content }}</div>
+            <button [ngClass]="'PostComment-LikeButton--' + postDesign.color" mat-icon-button>
                 <mat-icon [inline]="true">thumb_up</mat-icon>
                 <span *ngIf="comment.likesCount > 0">{{ comment.likesCount }}</span>
             </button>
@@ -40,14 +40,14 @@
     </div>
 </mat-card>
 
-<mat-card *ngIf="postDesign.componentStyle === 1" class="PostCard PostCard--Light" [ngClass]="'reverse-' + postDesign.color">
-    <div class="PostCard-Avatar--Light">
+<mat-card *ngIf="postDesign.componentStyle === 1" [ngClass]="'PostCardLight--' + postDesign.color">
+    <div class="PostCardLight-Avatar">
         <img mat-card-avatar src="assets/images/gazgano-picture-64px.png">
     </div>
-    
-    <div *ngIf="!isTitleArray" class="PostCard-Title PostCard-Title--Light">{{ title }}</div>
 
-    <mat-card-actions [ngClass]="'reverse-' + postDesign.color" class="PostCard-Actions PostCard-Actions--Light">
+    <div *ngIf="!isTitleArray" class="PostCardLight-Title">{{ title }}</div>
+
+    <mat-card-actions [ngClass]="'PostCardLight-Actions--' + postDesign.color">
         <button mat-button>
             <mat-icon>thumb_up</mat-icon>
             <span *ngIf="post.likesCount > 0">{{ post.likesCount }}</span>
