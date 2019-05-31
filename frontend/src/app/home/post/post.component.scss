@@ -29,6 +29,7 @@ $ribbon-icon-size: 30px;
 .PostCard-Actions {
   display: flex;
   justify-content: flex-end;
+  margin: 0;
   padding: 0;
 }
 
@@ -129,6 +130,7 @@ $ribbon-icon-size: 30px;
 
 .PostComment-Container {
     border-top: 2px solid map-get(map-get($ink-theme, foreground), divider);
+    overflow: hidden;
     padding: 10px 0;
 }
 
@@ -136,11 +138,18 @@ $ribbon-icon-size: 30px;
     align-items: center;
     display: flex;
     margin-top: 5px;
+
+    &:hover {
+      .PostComment-LikeButton {
+          display: block;
+      }
+    }
 }
 
 .PostComment-Content {
     border-radius: 3px;
     margin-right: 10px;
+    max-width: calc(100% - 100px); // to let space for button
     padding: 10px 15px;
 }
 
@@ -149,7 +158,7 @@ $ribbon-icon-size: 30px;
 }
 
 .PostComment-LikeButton {
-    margin-left: auto;
+    display: none;
 }
 
 // adding colors depending of the theme
