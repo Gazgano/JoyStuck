@@ -2,12 +2,12 @@
     <mat-card-header>
         <img mat-card-avatar src="assets/images/gazgano-picture-64px.png">
         <mat-card-title *ngIf="isTitleArray" class="PostCard-Title">
-               <div *ngFor="let word of title" [ngClass]="'PostCard-Title-Word--' + postDesign.color">{{ word }}</div>
+               <div *ngFor="let word of title" [ngClass]="'PostCard-Title-Word--' + postDesign.palette">{{ word }}</div>
         </mat-card-title>
-        <mat-card-subtitle [ngClass]="'PostCard-Subtitle--' + postDesign.color">{{ elapsedTime }}</mat-card-subtitle>
+        <mat-card-subtitle [ngClass]="'PostCard-Subtitle--' + postDesign.palette">{{ elapsedTime }}</mat-card-subtitle>
         <div class="PostCard-Ribbon">
-            <mat-icon [ngClass]="'PostCard-Ribbon-Icon--' + postDesign.color" [inline]="true">{{ postDesign.icon }}</mat-icon>
-            <svg width="100" height="100"><polygon [ngClass]="'PostCard-Ribbon-Svg--' + postDesign.color" points="0,0 50,0 100,50 100,100" /></svg>
+            <mat-icon [ngClass]="'PostCard-Ribbon-Icon--' + postDesign.palette" [inline]="true">{{ postDesign.icon }}</mat-icon>
+            <svg width="100" height="100"><polygon [ngClass]="'PostCard-Ribbon-Svg--' + postDesign.palette" points="0,0 50,0 100,50 100,100" /></svg>
         </div>
     </mat-card-header>
 
@@ -15,7 +15,7 @@
         <p>{{ post.content }}</p>
     </mat-card-content>
 
-    <mat-card-actions [ngClass]="'PostCard-Actions--' + postDesign.color">
+    <mat-card-actions [ngClass]="'PostCard-Actions--' + postDesign.palette">
         <button mat-button>
             <mat-icon>thumb_up</mat-icon>
             <span *ngIf="post.likesCount > 0">{{ post.likesCount }}</span>
@@ -26,28 +26,19 @@
         </button>
     </mat-card-actions>
 
-    <div [@openClose]="commentsOpen ? 'open' : 'closed'" class="PostComment-Container">
-        <div *ngFor="let comment of post.comments" class="PostComment">
-            <div class="PostComment-Avatar">
-                <img mat-card-avatar src="assets/images/gazgano-picture-64px.png">
-            </div>
-            <div [ngClass]="'PostComment-Content--' + postDesign.color">{{ comment.content }}</div>
-            <button [ngClass]="'PostComment-LikeButton--' + postDesign.color" [ngStyle]="comment.likesCount > 0? {display: 'block'} : {}" mat-icon-button>
-                <mat-icon [inline]="true">thumb_up</mat-icon>
-                <span *ngIf="comment.likesCount > 0">{{ comment.likesCount }}</span>
-            </button>
-        </div>
+    <div [@openClose]="commentsOpen ? 'open' : 'closed'" class="PostCard-Comments">
+        <app-comments [comments]="post.comments" [palette]="postDesign.palette"></app-comments>
     </div>
 </mat-card>
 
-<mat-card *ngIf="postDesign.componentStyle === 1" [ngClass]="'PostCardLight--' + postDesign.color">
+<mat-card *ngIf="postDesign.componentStyle === 1" [ngClass]="'PostCardLight--' + postDesign.palette">
     <div class="PostCardLight-Avatar">
         <img mat-card-avatar src="assets/images/gazgano-picture-64px.png">
     </div>
 
     <div *ngIf="!isTitleArray" class="PostCardLight-Title">{{ title }}</div>
 
-    <mat-card-actions [ngClass]="'PostCardLight-Actions--' + postDesign.color">
+    <mat-card-actions [ngClass]="'PostCardLight-Actions--' + postDesign.palette">
         <button mat-button>
             <mat-icon>thumb_up</mat-icon>
             <span *ngIf="post.likesCount > 0">{{ post.likesCount }}</span>

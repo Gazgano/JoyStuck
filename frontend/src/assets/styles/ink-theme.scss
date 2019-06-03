@@ -8,3 +8,5 @@ $ink-warn:    mat-palette($mat-deep-purple);
 
 $ink-theme: mat-light-theme($ink-primary, $ink-accent, $ink-warn);
 @include angular-material-theme($ink-theme);
+
+$palettes: primary, warn, accent; //to loop on it to generate classes

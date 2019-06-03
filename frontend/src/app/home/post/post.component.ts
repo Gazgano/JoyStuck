@@ -1,9 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {  trigger, state, style, animate, transition, } from '@angular/animations';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 import * as moment from 'moment';
 
 import { Post } from '@app/core/models/post.model';
-import { isArray } from 'util';
 
 enum PostType {
   Normal = 0,
@@ -12,23 +11,23 @@ enum PostType {
 
 interface PostDesign {
   readonly componentStyle: PostType;
-  readonly color: string;
+  readonly palette: string;
   readonly icon: string;
 }
 
 const POST_TYPES_DESIGNS: { [key: string]: PostDesign } = {
   gameDiscover: {
-    color: 'warn',
+    palette: 'warn',
     icon: 'videogame_asset',
     componentStyle: PostType.Normal
   },
   newMember: {
-    color: 'primary',
+    palette: 'primary',
     icon: 'user',
     componentStyle: PostType.Light
   },
   screenshotShare: {
-    color: 'accent',
+    palette: 'accent',
     icon: 'image',
     componentStyle: PostType.Normal
   }
@@ -40,7 +39,6 @@ const POST_TYPES_DESIGNS: { [key: string]: PostDesign } = {
   styleUrls: ['./post.component.scss'],
   animations: [
     trigger('openClose', [
-      // ...
       state('open', style({
         height: '*',
       })),
