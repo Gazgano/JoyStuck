@@ -79,8 +79,14 @@ $ribbon-icon-size: 30px;
 
 .PostCard-Comments {
   border-top: 2px solid map-get(map-get($ink-theme, foreground), divider);
+  display: flex;
   overflow: hidden;
   padding: 10px 0;
+}
+
+.PostCard-Comments-Spinner {
+  margin: 0 auto;
+  text-align: center;
 }
 
 ///////////////////////////////////////////////

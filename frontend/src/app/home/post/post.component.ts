@@ -2,7 +2,11 @@ import { Component, OnInit, Input } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import * as moment from 'moment';
 
+import { Logger } from '@app/core/services/logger.service';
 import { Post } from '@app/core/models/post.model';
+import { PostsService } from '@app/core/services/posts.service';
+
+const log = new Logger('PostComponent');
 
 enum PostType {
   Normal = 0,
@@ -63,10 +67,15 @@ export class PostComponent implements OnInit {
   public isTitleArray: boolean;
   public postDesign: PostDesign;
   public elapsedTime: string;
-  public commentsOpen  = false;
+  public commentsOpen = false;
+  public commentsLoading = true;
 
-  constructor() { }
-
+  constructor(private postsService: PostsService) { }
+  
+  //////////////////////////////////////////
+  // Initialisation
+  //////////////////////////////////////////
+  
   ngOnInit() {
     this.postDesign = POST_TYPES_DESIGNS[this.post.type];
     this.initTitle();
@@ -85,7 +94,18 @@ export class PostComponent implements OnInit {
     }
   }
 
-  toggleComments() {
+  //////////////////////////////////////////
+  // Comments
+  //////////////////////////////////////////
+
+  toggleComments(postId: number) {
+    if (!this.commentsOpen && !this.post.comments) {
+      this.postsService.getCommentsByPostId(postId).subscribe(comments => {
+        log.debug(comments);
+        this.post.comments = comments;
+      });
+    }
+    
     this.commentsOpen = !this.commentsOpen;
   }
 }

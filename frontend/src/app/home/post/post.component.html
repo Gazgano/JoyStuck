@@ -20,13 +20,14 @@
             <mat-icon>thumb_up</mat-icon>
             <span *ngIf="post.likesCount > 0">{{ post.likesCount }}</span>
         </button>
-        <button mat-button (click)="toggleComments()">
+        <button mat-button (click)="toggleComments(post.id)">
             <mat-icon>chat_bubble</mat-icon>
             <span *ngIf="post.comments?.length > 0">{{ post.comments?.length }}</span>
         </button>
     </mat-card-actions>
 
     <div [@openClose]="commentsOpen ? 'open' : 'closed'" class="PostCard-Comments">
+        <mat-spinner *ngIf="commentsLoading && !post.comments" [color]="postDesign.palette" [diameter]="30" class="PostCard-Comments-Spinner"></mat-spinner>
         <app-comments [comments]="post.comments" [palette]="postDesign.palette"></app-comments>
     </div>
 </mat-card>
