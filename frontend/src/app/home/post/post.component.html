@@ -1,3 +1,4 @@
+<!-- Usual card -->
 <mat-card *ngIf="postDesign.componentStyle === 0" class="PostCard">
     <mat-card-header>
         <img mat-card-avatar src="assets/images/gazgano-picture-64px.png">
@@ -25,13 +26,15 @@
             <span *ngIf="post.comments?.length > 0">{{ post.comments?.length }}</span>
         </button>
     </mat-card-actions>
-
-    <div [@openClose]="commentsOpen ? 'open' : 'closed'" class="PostCard-Comments">
-        <mat-spinner *ngIf="commentsLoading && !post.comments" [color]="postDesign.palette" [diameter]="30" class="PostCard-Comments-Spinner"></mat-spinner>
-        <app-comments [comments]="post.comments" [palette]="postDesign.palette"></app-comments>
-    </div>
 </mat-card>
 
+<!-- Usual card comments -->
+<div *ngIf="postDesign.componentStyle === 0" [@openClose]="commentsOpen ? 'open' : 'closed'" class="PostCard-Comments">
+    <mat-spinner *ngIf="commentsLoading && !post.comments" [color]="postDesign.palette" [diameter]="30"></mat-spinner>
+    <app-comments [comments]="post.comments" [palette]="postDesign.palette"></app-comments>
+</div>
+
+<!-- Light card (no content, just title) -->
 <mat-card *ngIf="postDesign.componentStyle === 1" [ngClass]="'PostCardLight--' + postDesign.palette">
     <div class="PostCardLight-Avatar">
         <img mat-card-avatar src="assets/images/gazgano-picture-64px.png">
@@ -44,9 +47,15 @@
             <mat-icon>thumb_up</mat-icon>
             <span *ngIf="post.likesCount > 0">{{ post.likesCount }}</span>
         </button>
-        <button mat-button>
+        <button mat-button (click)="toggleComments(post.id)">
             <mat-icon>chat_bubble</mat-icon>
             <span *ngIf="post.comments?.length > 0">{{ post.comments?.length }}</span>
         </button>
     </mat-card-actions>
 </mat-card>
+
+<!-- Light card comments -->
+<div *ngIf="postDesign.componentStyle === 1" [@openClose]="commentsOpen ? 'open' : 'closed'" class="PostCardLight-Comments">
+    <mat-spinner *ngIf="commentsLoading && !post.comments" [color]="postDesign.palette" [diameter]="30"></mat-spinner>
+    <app-comments [comments]="post.comments" [palette]="postDesign.palette"></app-comments>
+</div>

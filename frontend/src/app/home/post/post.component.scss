@@ -9,7 +9,7 @@ $ribbon-icon-size: 30px;
 .PostCard {
     border-radius: 0;
     box-shadow: none !important;
-    margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 .PostCard-Title {
@@ -78,15 +78,13 @@ $ribbon-icon-size: 30px;
 }
 
 .PostCard-Comments {
-  border-top: 2px solid map-get(map-get($ink-theme, foreground), divider);
+  align-items: center;
+  background-color: white;
+  border-top: solid 1px map-get(map-get(($ink-theme), foreground), divider);
   display: flex;
+  flex-direction: column;
   overflow: hidden;
-  padding: 10px 0;
-}
-
-.PostCard-Comments-Spinner {
-  margin: 0 auto;
-  text-align: center;
+  padding: 20px;
 }
 
 ///////////////////////////////////////////////
@@ -114,6 +112,10 @@ $ribbon-icon-size: 30px;
   margin-bottom: 0 !important;
   margin-left: auto;
   padding: 0;
+}
+
+.PostCardLight-Comments {
+  @extend .PostCard-Comments;
 }
 
 // adding colors depending of the theme

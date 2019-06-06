@@ -45,6 +45,20 @@ export class InMemoryDataService implements InMemoryDbService {
         likesCount: 1
       },
       {
+        post_id: 12,
+        authorName: 'Imbibed',
+        timestamp: moment().subtract(78, 'minute'),
+        content: 'ruir',
+        likesCount: 3
+      },
+      {
+        post_id: 12,
+        authorName: 'Gazgano',
+        timestamp: moment().subtract(47, 'minute'),
+        content: 'Occaecat minim laborum',
+        likesCount: 0
+      },
+      {
         post_id: 13,
         authorName: 'Imbibed',
         timestamp: moment().subtract(78, 'minute'),

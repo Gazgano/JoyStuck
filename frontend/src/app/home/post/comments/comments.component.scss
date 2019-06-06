@@ -1,5 +1,9 @@
 @import 'ink-theme';
 
+:host {
+  width: 100%;
+}
+
 .PostComment {
     align-items: center;
     display: flex;
@@ -31,11 +35,15 @@
 @each $name in $palettes {
   $palette: map-get($ink-theme, $name);
   $color: map-get($palette, default);
-  $soft-color: map-get($palette, 50);
+  
+  $variant-code: 50;
+  $soft-color: map-get($palette, $variant-code);
+  $soft-color-contrast: map-get(map-get($palette, contrast), $variant-code);
 
   .PostComment-Content--#{$name} {
     @extend .PostComment-Content;
     background-color: $soft-color;
+    color: $soft-color-contrast;
   }
 
   .PostComment-LikeButton--#{$name} {
