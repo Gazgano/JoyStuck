@@ -51,12 +51,16 @@ const POST_TYPES_DESIGNS: { [key: string]: PostDesign } = {
         height: '0',
         padding: '0'
       })),
+      transition(':enter', [
+        style({borderColor: 'rgba(0, 0, 0, 0)', height: '0', padding: '0'}),
+        animate('200ms')
+      ]),
       transition('* => closed', [
         animate('200ms')
       ]),
       transition('* => open', [
         animate('200ms')
-      ]),
+      ])
     ]),
   ],
 })
@@ -68,7 +72,7 @@ export class PostComponent implements OnInit {
   public postDesign: PostDesign;
   public elapsedTime: string;
   public commentsOpen = false;
-  public commentsLoading = true;
+  public commentsLoading = false;
 
   constructor(private postsService: PostsService) { }
   
@@ -100,9 +104,11 @@ export class PostComponent implements OnInit {
 
   toggleComments(postId: number) {
     if (!this.commentsOpen && !this.post.comments) {
+      this.commentsLoading = true;
       this.postsService.getCommentsByPostId(postId).subscribe(comments => {
         log.debug(comments);
         this.post.comments = comments;
+        this.commentsLoading = false;
       });
     }
     

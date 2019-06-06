@@ -29,7 +29,7 @@
 </mat-card>
 
 <!-- Usual card comments -->
-<div *ngIf="postDesign.componentStyle === 0" [@openClose]="commentsOpen ? 'open' : 'closed'" class="PostCard-Comments">
+<div *ngIf="postDesign.componentStyle === 0 && (!!post.comments || commentsLoading)" [@openClose]="commentsOpen ? 'open' : 'closed'" class="PostCard-Comments">
     <mat-spinner *ngIf="commentsLoading && !post.comments" [color]="postDesign.palette" [diameter]="30"></mat-spinner>
     <app-comments [comments]="post.comments" [palette]="postDesign.palette"></app-comments>
 </div>
@@ -55,7 +55,7 @@
 </mat-card>
 
 <!-- Light card comments -->
-<div *ngIf="postDesign.componentStyle === 1" [@openClose]="commentsOpen ? 'open' : 'closed'" class="PostCardLight-Comments">
+<div *ngIf="postDesign.componentStyle === 1 && (!!post.comments || commentsLoading)" [@openClose]="commentsOpen ? 'open' : 'closed'" class="PostCardLight-Comments">
     <mat-spinner *ngIf="commentsLoading && !post.comments" [color]="postDesign.palette" [diameter]="30"></mat-spinner>
     <app-comments [comments]="post.comments" [palette]="postDesign.palette"></app-comments>
 </div>
