@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
+import { environment } from 'src/environments/environment';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { InMemoryDataService } from '@app/core/services/in-memory-data.service';
 
@@ -13,8 +14,8 @@ import { InMemoryDataService } from '@app/core/services/in-memory-data.service';
     BrowserAnimationsModule,
     BrowserModule,
     HttpClientModule,
-    HttpClientInMemoryWebApiModule.forRoot(
-      InMemoryDataService, { dataEncapsulation: false }
+    environment.production ? [] : HttpClientInMemoryWebApiModule.forRoot(
+      InMemoryDataService, { dataEncapsulation: false, delay: 500 }
     ),
     RouterModule
   ]
