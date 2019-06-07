@@ -1,0 +1,23 @@
+@import 'ink-theme';
+
+.AdminDashboard-Charter {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+%AdminDashboard-Charter-Color {
+    margin: 0 10px 10px 0;
+    padding: 10px;
+    text-align: center;
+    width: 150px;
+}
+
+@each $name in $palettes {
+    $palette: map-get($ink-theme, $name);
+
+    .AdminDashboard-Charter-Color--#{$name} {
+        @extend %AdminDashboard-Charter-Color;
+        color: map-get($palette, default-contrast);
+        background-color: map-get($palette, default);
+    }
+}
