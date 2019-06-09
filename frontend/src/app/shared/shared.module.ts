@@ -9,7 +9,8 @@ import {
   MatMenuModule,
   MatProgressSpinnerModule ,
   MatToolbarModule,
-  MatCardModule
+  MatCardModule,
+  MatDividerModule
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
 
@@ -29,6 +30,7 @@ import { ShellComponent } from './shell/shell.component';
     FormsModule,
     MatButtonModule,
     MatCardModule,
+    MatDividerModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
@@ -43,6 +45,7 @@ import { ShellComponent } from './shell/shell.component';
     FormsModule,
     MatButtonModule,
     MatCardModule,
+    MatDividerModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,

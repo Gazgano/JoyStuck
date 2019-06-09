@@ -1,4 +1,4 @@
-<div *ngFor="let comment of comments" class="PostComment">
+<div *ngFor="let comment of comments" class="PostComment-Comment">
     <div class="PostComment-Avatar">
         <img mat-card-avatar src="assets/images/gazgano-picture-64px.png">
     </div>
@@ -6,5 +6,15 @@
     <button [ngClass]="'PostComment-LikeButton--' + palette" [ngStyle]="comment.likesCount > 0? {display: 'block'} : {}" mat-icon-button>
         <mat-icon [inline]="true">thumb_up</mat-icon>
         <span *ngIf="comment.likesCount > 0">{{ comment.likesCount }}</span>
+    </button>
+</div>
+<mat-divider></mat-divider>
+<div class="PostComment-WriteBox">
+    <div class="PostComment-WriteBox-Avatar">
+        <img mat-card-avatar src="assets/images/gazgano-picture-64px.png">
+    </div>
+    <input class="PostComment-WriteBox-Input" type="text" placeholder="Write a comment...">
+    <button [ngClass]="'PostComment-WriteBox-SendButton--' + palette" mat-icon-button>
+        <mat-icon [inline]="true">send</mat-icon>
     </button>
 </div>
