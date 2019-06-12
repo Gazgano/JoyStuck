@@ -13,8 +13,8 @@
     <div class="PostComment-WriteBox-Avatar">
         <img mat-card-avatar src="assets/images/gazgano-picture-64px.png">
     </div>
-    <input class="PostComment-WriteBox-Input" type="text" placeholder="Write a comment...">
-    <button [ngClass]="'PostComment-WriteBox-SendButton--' + palette" mat-icon-button>
+    <input #userComment class="PostComment-WriteBox-Input" type="text" placeholder="Write a comment...">
+    <button (click)="sendComment(userComment.value)" [ngClass]="'PostComment-WriteBox-SendButton--' + palette" mat-icon-button>
         <mat-icon [inline]="true">send</mat-icon>
     </button>
 </div>

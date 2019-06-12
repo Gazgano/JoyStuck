@@ -1,21 +1,24 @@
 import { Injectable } from '@angular/core';
-import { InMemoryDbService } from 'angular-in-memory-web-api';
+import { InMemoryDbService, RequestInfo } from 'angular-in-memory-web-api';
 import * as moment from 'moment';
+import { Logger } from './logger.service';
+
+const log = new Logger('InMemoryDataService');
 
 @Injectable({
   providedIn: 'root',
 })
 export class InMemoryDataService implements InMemoryDbService {
-  createDb() {
+  createDb(reqInfo?: RequestInfo) {
     const posts = [
-      { 
-        id: 11, 
+      {
+        id: 11,
         timestamp: moment().subtract(5, 'minute'),
-        type: 'gameDiscover', 
+        type: 'gameDiscover',
         authorName: 'Imbibed',
-        title: 'Imbibed veut nous faire découvrir un jeu', 
+        title: 'Imbibed veut nous faire découvrir un jeu',
         likesCount: 3,
-        content: 'Duis sunt tempor culpa est duis qui aliquip tempor mollit. Esse ad minim dolor ea ex culpa laborum. Anim sit sunt in incididunt mollit et culpa ex velit. Fugiat excepteur quis nisi ea occaecat incididunt. Magna excepteur eiusmod sunt dolore ut elit ea dolor Lorem quis anim.' 
+        content: 'Duis sunt tempor culpa est duis qui aliquip tempor mollit. Esse ad minim dolor ea ex culpa laborum. Anim sit sunt in incididunt mollit et culpa ex velit. Fugiat excepteur quis nisi ea occaecat incididunt. Magna excepteur eiusmod sunt dolore ut elit ea dolor Lorem quis anim.'
       },
       {
         id: 12,
@@ -25,14 +28,14 @@ export class InMemoryDataService implements InMemoryDbService {
         title: 'ClemDOT vient de rejoindre le serveur. Bienvenue à lui !',
         likesCount: 3
       },
-      { 
-        id: 13, 
+      {
+        id: 13,
         timestamp: moment().subtract(2, 'hour'),
-        type: 'screenshotShare', 
+        type: 'screenshotShare',
         authorName: 'Nini',
-        title: 'Nini a partagé une capture d\'écran', 
+        title: 'Nini a partagé une capture d\'écran',
         likesCount: 0,
-        content: 'Amet minim do dolor sit. Ut non incididunt quis culpa id officia velit. Esse est proident aute excepteur minim nulla laboris. Esse veniam fugiat nostrud adipisicing. Aute occaecat eu labore laboris est enim dolor ex adipisicing aliqua esse.' 
+        content: 'Amet minim do dolor sit. Ut non incididunt quis culpa id officia velit. Esse est proident aute excepteur minim nulla laboris. Esse veniam fugiat nostrud adipisicing. Aute occaecat eu labore laboris est enim dolor ex adipisicing aliqua esse.'
       }
     ];
 
@@ -73,6 +76,10 @@ export class InMemoryDataService implements InMemoryDbService {
         likesCount: 0
       }
     ];
+
+    if(reqInfo) {
+      log.debug(reqInfo);
+    }
 
     return { posts, comments };
   }
