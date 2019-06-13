@@ -73,6 +73,7 @@ export class PostComponent implements OnInit {
   public elapsedTime: string;
   public commentsOpen = false;
   public commentsLoading = false;
+  public commentsCount: number;
 
   constructor(private postsService: PostsService) { }
   
@@ -84,6 +85,7 @@ export class PostComponent implements OnInit {
     this.postDesign = POST_TYPES_DESIGNS[this.post.type];
     this.initTitle();
     this.elapsedTime = moment().diff(this.post.timestamp, 'minute') + ' min.';
+    this.defineCommentsCount();
   }
 
   initTitle() {
@@ -102,8 +104,8 @@ export class PostComponent implements OnInit {
   // Post
   //////////////////////////////////////////
 
-  giveLike() {
-    this.postsService.giveLike(this.post).subscribe();
+  likePost() {
+    this.postsService.likePost(this.post).subscribe();
   }
   
   //////////////////////////////////////////
@@ -116,10 +118,19 @@ export class PostComponent implements OnInit {
       this.postsService.getCommentsByPostId(postId).subscribe(comments => {
         log.debug(comments);
         this.post.comments = comments;
+        this.defineCommentsCount();
         this.commentsLoading = false;
       });
     }
     
     this.commentsOpen = !this.commentsOpen;
+  }
+
+  defineCommentsCount() {
+    if (this.post.comments) {
+      this.commentsCount = this.post.comments.length;
+    } else {
+      this.commentsCount = this.post.commentsCount;
+    }
   }
 }

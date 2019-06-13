@@ -17,13 +17,13 @@
     </mat-card-content>
 
     <mat-card-actions [ngClass]="'PostCard-Actions--' + postDesign.palette">
-        <button (click)="giveLike()" mat-button>
+        <button (click)="likePost()" mat-button>
             <mat-icon>thumb_up</mat-icon>
             <span *ngIf="post.likesCount > 0">{{ post.likesCount }}</span>
         </button>
         <button mat-button (click)="toggleComments(post.id)">
             <mat-icon>chat_bubble</mat-icon>
-            <span *ngIf="post.comments?.length > 0">{{ post.comments?.length }}</span>
+            <span *ngIf="this.commentsCount > 0">{{ this.commentsCount }}</span>
         </button>
     </mat-card-actions>
 </mat-card>
@@ -44,13 +44,13 @@
     <div *ngIf="!isTitleArray" class="PostCardLight-Title">{{ title }}</div>
 
     <mat-card-actions [ngClass]="'PostCardLight-Actions--' + postDesign.palette">
-        <button mat-button (click)="giveLike()">
+        <button mat-button (click)="likePost()">
             <mat-icon>thumb_up</mat-icon>
             <span *ngIf="post.likesCount > 0">{{ post.likesCount }}</span>
         </button>
         <button mat-button (click)="toggleComments(post.id)">
             <mat-icon>chat_bubble</mat-icon>
-            <span *ngIf="post.comments?.length > 0">{{ post.comments?.length }}</span>
+            <span *ngIf="this.commentsCount > 0">{{ this.commentsCount }}</span>
         </button>
     </mat-card-actions>
 </mat-card>

@@ -21,6 +21,9 @@ export class PostsService {
 
   constructor(private http: HttpClient, private jwt: JwtService, private userService: UserService) { }
 
+  //////////////////////////////////////////
+  // Utils
+  //////////////////////////////////////////
 
   getReqOptions(): {headers: HttpHeaders} {
     return { headers: new HttpHeaders({
@@ -34,22 +37,36 @@ export class PostsService {
     return throwError(err);
   }
 
+  //////////////////////////////////////////
+  // Posts
+  //////////////////////////////////////////
+
   getPosts(): Observable<Post[]> {
     return this.http.get<Post[]>(this.baseUrl + 'posts').pipe(
       catchError(this.handleError)
     );
   }
 
+  likePost(post: Post): Observable<Post | null> {
+    ++post.likesCount;
+    return this.http.put<Post>(this.baseUrl + 'posts', post, this.getReqOptions()).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  //////////////////////////////////////////
+  // Comments
+  //////////////////////////////////////////
+  
   getCommentsByPostId(postId: number): Observable<UserComment[]> {
     return this.http.get<UserComment[]>(this.baseUrl + 'comments?post_id=' + postId).pipe(
       catchError(this.handleError)
     );
   }
-
-  giveLike(post: Post): Observable<Post | null> {
-    ++post.likesCount;
-    log.debug(this.getReqOptions());
-    return this.http.put<Post>(this.baseUrl + 'posts', post, this.getReqOptions()).pipe(
+  
+  likeComment(comment: UserComment): Observable<UserComment | null> {
+    ++comment.likesCount;
+    return this.http.put<UserComment>(this.baseUrl + 'comments', comment, this.getReqOptions()).pipe(
       catchError(this.handleError)
     );
   }

@@ -9,6 +9,7 @@ export interface Post {
     authorName: string;
     title: string;
     likesCount: number;
+    commentsCount: number;
     comments?: UserComment[];
     content?: string;
 }
