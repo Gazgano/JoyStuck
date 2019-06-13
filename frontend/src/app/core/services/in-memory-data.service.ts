@@ -41,6 +41,7 @@ export class InMemoryDataService implements InMemoryDbService {
 
     const comments = [
       {
+        id: 1,
         post_id: 11,
         authorName: 'Gazagno',
         timestamp: moment().subtract(4, 'minute'),
@@ -48,6 +49,7 @@ export class InMemoryDataService implements InMemoryDbService {
         likesCount: 1
       },
       {
+        id: 2,
         post_id: 12,
         authorName: 'Imbibed',
         timestamp: moment().subtract(78, 'minute'),
@@ -55,6 +57,7 @@ export class InMemoryDataService implements InMemoryDbService {
         likesCount: 3
       },
       {
+        id: 3,
         post_id: 12,
         authorName: 'Gazgano',
         timestamp: moment().subtract(47, 'minute'),
@@ -62,6 +65,7 @@ export class InMemoryDataService implements InMemoryDbService {
         likesCount: 0
       },
       {
+        id: 4,
         post_id: 13,
         authorName: 'Imbibed',
         timestamp: moment().subtract(78, 'minute'),
@@ -69,6 +73,7 @@ export class InMemoryDataService implements InMemoryDbService {
         likesCount: 12
       },
       {
+        id: 5,
         post_id: 13,
         authorName: 'Gazgano',
         timestamp: moment().subtract(47, 'minute'),

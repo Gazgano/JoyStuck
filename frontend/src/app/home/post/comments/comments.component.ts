@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 
 import { Logger } from '@app/core/services/logger.service';
 import { PostsService } from '@app/core/services/posts.service';
@@ -16,10 +16,23 @@ export class CommentsComponent {
   @Input() comments: UserComment[];
   @Input() palette: string;
   @Input() postId: number;
+  @ViewChild('userComment') userCommentInput: ElementRef;
+  public sendCommentLoading = false;
 
   constructor(private postService: PostsService) { }
 
   sendComment(text: string) {
-    this.postService.postComment(text, this.postId).subscribe(comment => log.debug(comment));
+    this.sendCommentLoading = true;
+    
+    this.postService.postComment(text, this.postId).subscribe(comment => {
+      log.debug(comment);
+      
+      if (comment) {
+        this.comments.push(comment);
+        this.userCommentInput.nativeElement.value = '';
+      }
+
+      this.sendCommentLoading = false;
+    });
   }
 }
