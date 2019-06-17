@@ -27,7 +27,7 @@ export class PostsService {
 
   getReqOptions(): {headers: HttpHeaders} {
     return { headers: new HttpHeaders({
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json; charset=utf-8',
       Authorization: this.jwt.getToken()
     })};
   }
@@ -57,13 +57,13 @@ export class PostsService {
   //////////////////////////////////////////
   // Comments
   //////////////////////////////////////////
-  
+
   getCommentsByPostId(postId: number): Observable<UserComment[]> {
     return this.http.get<UserComment[]>(this.baseUrl + 'comments?post_id=' + postId).pipe(
       catchError(this.handleError)
     );
   }
-  
+
   likeComment(comment: UserComment): Observable<UserComment | null> {
     ++comment.likesCount;
     return this.http.put<UserComment>(this.baseUrl + 'comments', comment, this.getReqOptions()).pipe(

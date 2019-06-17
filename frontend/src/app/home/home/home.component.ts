@@ -13,8 +13,8 @@ const log = new Logger('HomeComponent');
 })
 export class HomeComponent implements OnInit {
 
-  public posts: Post[] = [];
-  
+  public posts: Post[];
+
   constructor(private postsService: PostsService) { }
 
   ngOnInit() {

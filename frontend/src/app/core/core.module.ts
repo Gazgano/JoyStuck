@@ -15,7 +15,7 @@ import { InMemoryDataService } from '@app/core/services/in-memory-data.service';
     BrowserModule,
     HttpClientModule,
     environment.production ? [] : HttpClientInMemoryWebApiModule.forRoot(
-      InMemoryDataService, { dataEncapsulation: false, delay: 500 }
+      InMemoryDataService, { dataEncapsulation: false, delay: 1000 }
     ),
     RouterModule
   ]
