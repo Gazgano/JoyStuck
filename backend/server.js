@@ -22,7 +22,7 @@ const port = process.env.PORT || 8080;
 const router = express.Router();
 
 router.use( (req, res, next) => {
-    console.log('Do something when API is called');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
     next();
 });
 
@@ -34,6 +34,12 @@ router.get('/', (req, res) => {
 router.route('/posts')
 .get( (req, res) => {
     res.json(posts);
+});
+
+router.route('/comments/:post_id') // to be modified to create a proper API
+.get( (req, res) => {
+    const result = comments.filter(c => c.post_id == req.params.post_id);
+    res.json(result);
 });
 
 router.route('/comments')

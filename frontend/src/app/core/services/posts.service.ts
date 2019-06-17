@@ -17,7 +17,7 @@ const log = new Logger('PostsService');
 })
 export class PostsService {
 
-  private baseUrl = 'api/';
+  private baseUrl = 'http://localhost:8080/api/';
 
   constructor(private http: HttpClient, private jwt: JwtService, private userService: UserService) { }
 
@@ -59,7 +59,7 @@ export class PostsService {
   //////////////////////////////////////////
 
   getCommentsByPostId(postId: number): Observable<UserComment[]> {
-    return this.http.get<UserComment[]>(this.baseUrl + 'comments?post_id=' + postId).pipe(
+    return this.http.get<UserComment[]>(this.baseUrl + 'comments/' + postId).pipe( // to be modified with a proper API
       catchError(this.handleError)
     );
   }
