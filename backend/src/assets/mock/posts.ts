@@ -1,4 +1,4 @@
-module.exports = [
+const posts = [
     {
         id: 11,
         timestamp: Date.now(),
@@ -29,3 +29,5 @@ module.exports = [
         content: 'Amet minim do dolor sit. Ut non incididunt quis culpa id officia velit. Esse est proident aute excepteur minim nulla laboris. Esse veniam fugiat nostrud adipisicing. Aute occaecat eu labore laboris est enim dolor ex adipisicing aliqua esse.'
     }
 ];
+
+export default posts;
