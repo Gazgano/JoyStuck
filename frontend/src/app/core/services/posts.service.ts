@@ -8,7 +8,7 @@ import { JwtService } from './jwt.service';
 import { Logger } from './logger.service';
 import { Post } from '@app/core/models/post.model';
 import { UserComment } from '@app/core/models/user-comment.model';
-import { UserService } from './user.service';
+import { AuthService } from './auth.service';
 
 const log = new Logger('PostsService');
 
@@ -19,7 +19,7 @@ export class PostsService {
 
   private baseUrl = 'http://localhost:8080/api/';
 
-  constructor(private http: HttpClient, private jwt: JwtService, private userService: UserService) { }
+  constructor(private http: HttpClient, private jwt: JwtService, private authService: AuthService) { }
 
   //////////////////////////////////////////
   // Utils
@@ -73,7 +73,7 @@ export class PostsService {
 
   postComment(text: string, postId: number): Observable<UserComment | null> {
     let authorName: string;
-    this.userService.currentUser.subscribe(user => authorName = user.username);
+    this.authService.currentUser.subscribe(user => authorName = user.username);
 
     const comment: UserComment = {
       post_id: postId,

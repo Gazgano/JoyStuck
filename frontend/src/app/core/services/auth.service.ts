@@ -9,12 +9,12 @@ import { JwtService } from '@app/core/services/jwt.service';
 import { Logger } from '@app/core/services/logger.service';
 import { User } from '@app/core/models/user.model';
 
-const log = new Logger('UserService');
+const log = new Logger('AuthService');
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
+export class AuthService {
 
   // private subject so that only this class can fill the flow
   // behaviorSubject in order to define an initial value

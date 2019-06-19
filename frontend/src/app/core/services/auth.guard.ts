@@ -3,7 +3,7 @@ import { CanLoad, Router } from '@angular/router';
 import { take, tap } from 'rxjs/operators';
 
 import { Logger } from '@app/core/services/logger.service';
-import { UserService } from '@app/core/services/user.service';
+import { AuthService } from '@app/core/services/auth.service';
 
 const log = new Logger('AuthGuard');
 
@@ -11,10 +11,10 @@ const log = new Logger('AuthGuard');
   providedIn: 'root'
 })
 export class AuthGuard implements CanLoad {
-  constructor(private userService: UserService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   canLoad() {
-    return this.userService.isAuthenticated.pipe(
+    return this.authService.isAuthenticated.pipe(
       take(1), // to send an onComplete message in the observer. Otherwise, the guard waits for it
       tap(isAuth => {
         if (!isAuth) {

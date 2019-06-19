@@ -3,7 +3,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { Credentials } from '@app/core/models/user.model';
-import { UserService } from '@app/core/services/user.service';
+import { AuthService } from '@app/core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit, AfterContentInit {
   public passwordFormControl: FormControl;
   public usernameFormControl: FormControl;
 
-  constructor(private router: Router, private userService: UserService) { }
+  constructor(private router: Router, private authService: AuthService) { }
 
   ngOnInit() {
     this.usernameFormControl = new FormControl('', Validators.required);
@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit, AfterContentInit {
     };
     
     this.isLoading = true;
-    this.userService.login(credentials).subscribe(
+    this.authService.login(credentials).subscribe(
       data => this.router.navigateByUrl('/'),
       err => {
         this.badCredentials = true;
