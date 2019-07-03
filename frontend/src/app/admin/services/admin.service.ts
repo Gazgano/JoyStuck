@@ -1,8 +1,4 @@
 import { Injectable } from '@angular/core';
 
 @Injectable()
-export class AdminService {
-    test() {
-        console.log('AdminService lives!');
-    }
-}
+export class AdminService {}

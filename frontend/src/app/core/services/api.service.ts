@@ -8,6 +8,8 @@ const ONLY_USER = {
   token: '123456789'
 };
 
+export const baseUrl = 'http://localhost:8080/api/';
+
 @Injectable({
   providedIn: 'root'
 })

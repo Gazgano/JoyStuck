@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import * as moment from 'moment';
-
 import { catchError } from 'rxjs/operators';
+
+import { AuthService } from './auth.service';
+import { baseUrl } from '@app/core/services/api.service';
 import { JwtService } from './jwt.service';
 import { Logger } from './logger.service';
 import { Post } from '@app/core/models/post.model';
 import { UserComment } from '@app/core/models/user-comment.model';
-import { AuthService } from './auth.service';
 
 const log = new Logger('PostsService');
 
@@ -16,8 +17,6 @@ const log = new Logger('PostsService');
   providedIn: 'root'
 })
 export class PostsService {
-
-  private baseUrl = 'http://localhost:8080/api/';
 
   constructor(private http: HttpClient, private jwt: JwtService, private authService: AuthService) { }
 
@@ -42,14 +41,14 @@ export class PostsService {
   //////////////////////////////////////////
 
   getPosts(): Observable<Post[]> {
-    return this.http.get<Post[]>(this.baseUrl + 'posts').pipe(
+    return this.http.get<Post[]>(baseUrl + 'posts').pipe(
       catchError(this.handleError)
     );
   }
 
   likePost(post: Post): Observable<Post | null> {
     ++post.likesCount;
-    return this.http.put<Post>(this.baseUrl + 'posts', post, this.getReqOptions()).pipe(
+    return this.http.put<Post>(baseUrl + 'posts', post, this.getReqOptions()).pipe(
       catchError(this.handleError)
     );
   }
@@ -59,14 +58,14 @@ export class PostsService {
   //////////////////////////////////////////
 
   getCommentsByPostId(postId: number): Observable<UserComment[]> {
-    return this.http.get<UserComment[]>(this.baseUrl + 'comments/' + postId).pipe( // to be modified with a proper API
+    return this.http.get<UserComment[]>(baseUrl + 'comments/' + postId).pipe( // to be modified with a proper API
       catchError(this.handleError)
     );
   }
 
   likeComment(comment: UserComment): Observable<UserComment | null> {
     ++comment.likesCount;
-    return this.http.put<UserComment>(this.baseUrl + 'comments', comment, this.getReqOptions()).pipe(
+    return this.http.put<UserComment>(baseUrl + 'comments', comment, this.getReqOptions()).pipe(
       catchError(this.handleError)
     );
   }
@@ -83,7 +82,7 @@ export class PostsService {
       likesCount: 0
     };
 
-    return this.http.post<UserComment>(this.baseUrl + 'comments', comment, this.getReqOptions()).pipe(
+    return this.http.post<UserComment>(baseUrl + 'comments', comment, this.getReqOptions()).pipe(
       catchError(this.handleError)
     );
   }
