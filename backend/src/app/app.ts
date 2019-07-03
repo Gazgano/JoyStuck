@@ -54,6 +54,15 @@ class App {
             });
         }
     });
+
+    router.route('/users/:user_id').get( (req, res) => {
+        const result = users.filter(u => u.id == req.params.user_id);
+        res.json(result);
+    });
+
+    router.route('/users').get( (req, res) => {
+        res.json(users);
+    });
     
     router.route('/posts').get( (req, res) => {
         res.json(posts);
