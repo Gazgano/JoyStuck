@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const url = require('url');
 
 import posts from '../assets/mock/posts';
 import comments from '../assets/mock/comments';
@@ -19,6 +20,13 @@ class App {
     this.express.use(bodyParser.urlencoded({ extended: true }));
     this.express.use(bodyParser.json());
   }
+
+  private transformData(req) {
+    users.map(user => { // create image profile url from other data
+        const url = new URL('/api/users/' + user.id + '/profileImage', 'http://' + req.headers.host);
+        user.profileImageSrcUrl = url.toString();
+    });
+  }
   
   private mountRoutes(): void {
     const router = express.Router()
@@ -26,6 +34,7 @@ class App {
     
     router.use( (req, res, next) => {
         res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
+        this.transformData(req);
         next();
     });
 
