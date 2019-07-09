@@ -6,19 +6,12 @@ import { RouterModule } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
-// import { environment } from 'src/environments/environment';
-// import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
-// import { InMemoryDataService } from '@app/core/services/in-memory-data.service';
-
 @NgModule({
   declarations: [],
   imports: [
     BrowserAnimationsModule,
     BrowserModule,
     HttpClientModule,
-    // environment.production ? [] : HttpClientInMemoryWebApiModule.forRoot(
-    //   InMemoryDataService, { dataEncapsulation: false, delay: 1000 }
-    // ),
     RouterModule,
     StoreModule.forRoot({}),
     EffectsModule.forRoot([])
