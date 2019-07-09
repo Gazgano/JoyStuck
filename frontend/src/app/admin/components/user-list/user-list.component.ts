@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { AdminService } from '@app/admin/services/admin.service';
+import { Observable, pipe } from 'rxjs';
+import { Store, select } from '@ngrx/store';
+
+import { User } from '@app/core/models/user.model';
+import * as userListActions from '../../store/user-list.actions';
+import { UserService } from '@app/core/services/user.service';
 
 @Component({
   selector: 'app-user-list',
@@ -7,9 +12,12 @@ import { AdminService } from '@app/admin/services/admin.service';
   styleUrls: ['./user-list.component.scss']
 })
 export class UserListComponent implements OnInit {
-
-  constructor(private adminService: AdminService) { }
+  public userList$: Observable<{ users: User[] }>;
+  
+  constructor(private store: Store<User[]>) { }
 
   ngOnInit() {
+    this.userList$ = this.store.pipe(select('userList'));
+    this.store.dispatch(userListActions.loadUserLists());
   }
 }
