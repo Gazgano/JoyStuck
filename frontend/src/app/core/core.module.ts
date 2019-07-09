@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 
 // import { environment } from 'src/environments/environment';
 // import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
@@ -19,7 +20,8 @@ import { StoreModule } from '@ngrx/store';
     //   InMemoryDataService, { dataEncapsulation: false, delay: 1000 }
     // ),
     RouterModule,
-    StoreModule.forRoot({})
+    StoreModule.forRoot({}),
+    EffectsModule.forRoot([])
   ]
 })
 export class CoreModule { }

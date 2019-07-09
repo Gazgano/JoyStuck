@@ -14,14 +14,14 @@ import * as fromUserList from './store/user-list.reducer';
 @NgModule({
   declarations: [ 
     AdminComponent, 
-    AdminDashboardComponent ,
+    AdminDashboardComponent,
     UserListComponent,
   ],
   imports: [
     AdminRoutingModule,
     SharedModule,
-    StoreModule.forFeature('userList', fromUserList.reducer)
-    // EffectsModule.forFeature([UserListEffects])
+    StoreModule.forFeature('userList', fromUserList.reducer),
+    EffectsModule.forFeature([UserListEffects])
   ],
   providers: [
     AdminService

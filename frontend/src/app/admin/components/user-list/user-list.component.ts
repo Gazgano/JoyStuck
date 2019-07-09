@@ -18,6 +18,6 @@ export class UserListComponent implements OnInit {
 
   ngOnInit() {
     this.userList$ = this.store.pipe(select('userList'));
-    this.store.dispatch(userListActions.loadUserLists());
+    this.store.dispatch(userListActions.loadUserList());
   }
 }
