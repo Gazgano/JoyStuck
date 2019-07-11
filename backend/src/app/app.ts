@@ -18,6 +18,13 @@ class App {
   private configure() {
     this.express.use(bodyParser.urlencoded({ extended: true }));
     this.express.use(bodyParser.json());
+    this.express.use(this.allowCrossDomain);
+  }
+
+  private allowCrossDomain(req, res, next) {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:4200')
+    res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE');
+    next();
   }
 
   private transformData(req) {
@@ -32,7 +39,6 @@ class App {
     this.express.use('/api', router); // URLs must begin with 'api'
     
     router.use( (req, res, next) => {
-        res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
         this.transformData(req);
         next();
     });
@@ -68,7 +74,7 @@ class App {
         const index = users.findIndex(user => user.id == req.params.user_id);
         if (index > -1) {
             users.splice(index, 1);
-            res.status(200).send(`User (id: ${req.params.user_id}) has been deleted successfully.`); 
+            res.status(204).send(`User (id: ${req.params.user_id}) has been deleted successfully.`); 
         } else {
             res.status(404).send(`User (id: ${req.params.user_id}) does not exist.`);
         }

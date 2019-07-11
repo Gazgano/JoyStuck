@@ -14,8 +14,14 @@ export const initialState: State = {
 
 const userListReducer = createReducer(
   initialState,
-  on(userListActions.loadedSuccessUserLists, (state, props) => { 
+  on(userListActions.loadUserListSuccess, (state, props) => {
     return { users: props.users };
+  }),
+  on(userListActions.deleteUserSuccess, (state, props) => {
+    const index = state.users.findIndex(u => u.id === props.user.id);
+    const result = [...state.users];
+    result.splice(index, 1);
+    return { users: result };
   })
 );
 

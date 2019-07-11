@@ -12,7 +12,7 @@
       <td>{{ user.id }}</td>
       <td class="UserList-Table-Body-ProfileImage"><img [src]="user.profileImageSrcUrl" class="UserList-Table-Body-ProfileImage-Image"></td>
       <td>{{ user.username }}</td>
-      <td><button mat-button><mat-icon>delete</mat-icon></button></td>
+      <td><button mat-button (click)="deleteUser(user)"><mat-icon>delete</mat-icon></button></td>
     </tr>
   </tbody>
 </table>
