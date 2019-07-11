@@ -1,7 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
-const url = require('url');
 
 import posts from '../assets/mock/posts';
 import comments from '../assets/mock/comments';
@@ -37,7 +36,7 @@ class App {
         this.transformData(req);
         next();
     });
-
+    
     router.route('/users/:user_id/profileImage').get( (req, res, next) => {
         const user = users.find(u => u.id == req.params.user_id);
         if (!user) {
@@ -55,11 +54,7 @@ class App {
             const fileName = user.profileImageFileName;
 
             res.sendFile(fileName, options, function (err) {
-                if (err) {
-                    next(err);
-                } else {
-                    console.log('Sent:', fileName);
-                }
+                if (err) {next(err);}
             });
         }
     });
@@ -67,6 +62,16 @@ class App {
     router.route('/users/:user_id').get( (req, res) => {
         const result = users.filter(u => u.id == req.params.user_id);
         res.json(result);
+    });
+
+    router.route('/users/:user_id').delete( (req, res) => {
+        const index = users.findIndex(user => user.id == req.params.user_id);
+        if (index > -1) {
+            users.splice(index, 1);
+            res.status(200).send(`User (id: ${req.params.user_id}) has been deleted successfully.`); 
+        } else {
+            res.status(404).send(`User (id: ${req.params.user_id}) does not exist.`);
+        }
     });
 
     router.route('/users').get( (req, res) => {
