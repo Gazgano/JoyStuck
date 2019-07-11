@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { delay, materialize, dematerialize } from 'rxjs/operators';
 
+import { JwtService } from './jwt.service';
+import { HttpHeaders } from '@angular/common/http';
+
 const ONLY_USER = {
   username: 'admin',
   password: 'admin',
@@ -14,6 +17,16 @@ export const baseUrl = 'http://localhost:8080/api/';
   providedIn: 'root'
 })
 export class ApiService {
+
+  constructor(private jwt: JwtService) {}
+
+  getReqOptions(): {headers: HttpHeaders} {
+    return { headers: new HttpHeaders({
+      'Content-Type': 'application/json; charset=utf-8',
+      Authorization: this.jwt.getToken()
+    })};
+  }
+
   get(path: string, params?: any): Observable<any> {
     let res: Observable<any>;
 

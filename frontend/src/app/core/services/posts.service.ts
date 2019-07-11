@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import * as moment from 'moment';
 import { catchError } from 'rxjs/operators';
 
 import { AuthService } from './auth.service';
-import { baseUrl } from '@app/core/services/api.service';
-import { JwtService } from './jwt.service';
+import { baseUrl, ApiService } from '@app/core/services/api.service';
 import { Logger } from './logger.service';
 import { Post } from '@app/core/models/post.model';
 import { UserComment } from '@app/core/models/user-comment.model';
@@ -18,23 +17,7 @@ const log = new Logger('PostsService');
 })
 export class PostsService {
 
-  constructor(private http: HttpClient, private jwt: JwtService, private authService: AuthService) { }
-
-  //////////////////////////////////////////
-  // Utils
-  //////////////////////////////////////////
-
-  getReqOptions(): {headers: HttpHeaders} {
-    return { headers: new HttpHeaders({
-      'Content-Type': 'application/json; charset=utf-8',
-      Authorization: this.jwt.getToken()
-    })};
-  }
-
-  handleError(err: any) {
-    log.error(err);
-    return throwError(err);
-  }
+  constructor(private http: HttpClient, private apiService: ApiService, private authService: AuthService) { }
 
   //////////////////////////////////////////
   // Posts
@@ -42,14 +25,14 @@ export class PostsService {
 
   getPosts(): Observable<Post[]> {
     return this.http.get<Post[]>(baseUrl + 'posts').pipe(
-      catchError(this.handleError)
+      catchError(log.handleError)
     );
   }
 
   likePost(post: Post): Observable<Post | null> {
     ++post.likesCount;
-    return this.http.put<Post>(baseUrl + 'posts', post, this.getReqOptions()).pipe(
-      catchError(this.handleError)
+    return this.http.put<Post>(baseUrl + 'posts', post, this.apiService.getReqOptions()).pipe(
+      catchError(log.handleError)
     );
   }
 
@@ -59,14 +42,14 @@ export class PostsService {
 
   getCommentsByPostId(postId: number): Observable<UserComment[]> {
     return this.http.get<UserComment[]>(baseUrl + 'comments/' + postId).pipe( // to be modified with a proper API
-      catchError(this.handleError)
+      catchError(log.handleError)
     );
   }
 
   likeComment(comment: UserComment): Observable<UserComment | null> {
     ++comment.likesCount;
-    return this.http.put<UserComment>(baseUrl + 'comments', comment, this.getReqOptions()).pipe(
-      catchError(this.handleError)
+    return this.http.put<UserComment>(baseUrl + 'comments', comment, this.apiService.getReqOptions()).pipe(
+      catchError(log.handleError)
     );
   }
 
@@ -82,8 +65,8 @@ export class PostsService {
       likesCount: 0
     };
 
-    return this.http.post<UserComment>(baseUrl + 'comments', comment, this.getReqOptions()).pipe(
-      catchError(this.handleError)
+    return this.http.post<UserComment>(baseUrl + 'comments', comment, this.apiService.getReqOptions()).pipe(
+      catchError(log.handleError)
     );
   }
 }
