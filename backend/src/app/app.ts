@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const cors = require('cors');
 
 import posts from '../assets/mock/posts';
 import comments from '../assets/mock/comments';
@@ -18,13 +19,10 @@ class App {
   private configure() {
     this.express.use(bodyParser.urlencoded({ extended: true }));
     this.express.use(bodyParser.json());
-    this.express.use(this.allowCrossDomain);
-  }
-
-  private allowCrossDomain(req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:4200')
-    res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE');
-    next();
+    this.express.use(cors({
+        origin: 'http://localhost:4200',
+        methods: 'GET, PUT, POST, DELETE'
+    }));
   }
 
   private transformData(req) {
