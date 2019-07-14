@@ -2,26 +2,39 @@ import { Action, createReducer, on } from '@ngrx/store';
 
 import { User } from '@app/core/models/user.model';
 import * as userListActions from './user-list.actions';
-
+import { copyArrayAndDeleteFrom } from '@app/shared/utilities';
 
 export interface State {
   users: User[];
+  loadingUsersId: number[];
 }
 
 export const initialState: State = {
-  users: []
+  users: [],
+  loadingUsersId: []
 };
 
 const userListReducer = createReducer(
   initialState,
-  on(userListActions.loadUserListSuccess, (state, props) => {
-    return { users: props.users };
+  
+  on(userListActions.loadUserListSuccess, (state: State, props) => {
+    const users = props.users;
+    const loadingUsersId = [...state.loadingUsersId];
+    return { users, loadingUsersId };
   }),
-  on(userListActions.deleteUserSuccess, (state, props) => {
-    const index = state.users.findIndex(u => u.id === props.user.id);
-    const result = [...state.users];
-    result.splice(index, 1);
-    return { users: result };
+  
+  on(userListActions.deleteUser, (state: State, props) => {
+    return { 
+      users: [...state.users],
+      loadingUsersId:  state.loadingUsersId.includes(props.user.id)? [...state.loadingUsersId] : [...state.loadingUsersId, props.user.id]
+    };
+  }),
+  
+  on(userListActions.deleteUserSuccess, (state: State, props) => {
+    const users = copyArrayAndDeleteFrom(state.users, u => u.id === props.user.id);
+    const loadingUsersId = copyArrayAndDeleteFrom(state.loadingUsersId, id => id === props.user.id);
+    
+    return { users, loadingUsersId };
   })
 );
 

@@ -1,4 +1,4 @@
-<table class="UserList-Table">
+  <table *ngIf="userList$ | async as userList" class="UserList-Table">
   <thead class="UserList-Table-Header">
     <tr>
       <td>ID</td>
@@ -8,11 +8,16 @@
     </tr>
   </thead>
   <tbody class="UserList-Table-Body">
-    <tr *ngFor="let user of (userList$ | async).users">
+    <tr *ngFor="let user of userList.users">
       <td>{{ user.id }}</td>
       <td class="UserList-Table-Body-ProfileImage"><img [src]="user.profileImageSrcUrl" class="UserList-Table-Body-ProfileImage-Image"></td>
       <td>{{ user.username }}</td>
-      <td><button mat-button (click)="deleteUser(user)"><mat-icon>delete</mat-icon></button></td>
+      <td>
+        <div class="UserList-Table-Body-DeleteButton">
+          <button *ngIf="!userList.loadingUsersId.includes(user.id)" mat-button (click)="deleteUser(user)"><mat-icon>delete</mat-icon></button>
+          <mat-spinner *ngIf="userList.loadingUsersId.includes(user.id)" diameter="20"></mat-spinner>
+        </div>
+      </td>
     </tr>
   </tbody>
 </table>
