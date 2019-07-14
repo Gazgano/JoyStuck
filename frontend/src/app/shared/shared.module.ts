@@ -14,9 +14,9 @@ import {
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
 
-import { FooterComponent } from './shell/footer/footer.component';
-import { HeaderComponent } from './shell/header/header.component';
-import { ShellComponent } from './shell/shell.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { HeaderComponent } from './components/header/header.component';
+import { ShellComponent } from './components/shell/shell.component';
 
 
 @NgModule({
