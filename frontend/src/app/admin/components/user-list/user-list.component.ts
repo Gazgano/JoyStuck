@@ -4,7 +4,7 @@ import { Store, select } from '@ngrx/store';
 
 import { User } from '@app/core/models/user.model';
 import * as userListActions from '../../store/user-list.actions';
-import { UserListState } from '../../store/user-list.reducer';
+import { selectUsersArray, selectLoadingUsersIds } from '../../store/user-list.reducer';
 
 @Component({
   selector: 'app-user-list',
@@ -12,20 +12,18 @@ import { UserListState } from '../../store/user-list.reducer';
   styleUrls: ['./user-list.component.scss']
 })
 export class UserListComponent implements OnInit {
-  public userList$: Observable<UserListState>;
+  public users$: Observable<User[]>;
+  public loadingUsers$: Observable<number[]>;
 
   constructor(private store: Store<User[]>) { }
 
   ngOnInit() {
-    this.userList$ = this.store.pipe(select('userList'));
+    this.users$ = this.store.pipe(select(selectUsersArray));
+    this.loadingUsers$ = this.store.pipe(select(selectLoadingUsersIds));
     this.store.dispatch(userListActions.loadUserList());
   }
 
-  deleteUser(user: User) {
-    this.store.dispatch(userListActions.deleteUser({ user }));
-  }
-
-  isLoading(state: UserListState, user: User): boolean {
-    return state.loadingUsersId.includes(user.id);
+  deleteUser(id: number) {
+    this.store.dispatch(userListActions.deleteUser({ id }));
   }
 }

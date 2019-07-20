@@ -23,8 +23,8 @@ export class UserListEffects {
 
   deleteUser$ = createEffect(() => this.actions$.pipe(
     ofType(userListActions.deleteUser),
-    switchMap(action => this.userService.deleteUser(action.user).pipe(
-      map(user => userListActions.deleteUserSuccess({ user })),
+    switchMap(action => this.userService.deleteUser(action.id).pipe(
+      map(id => userListActions.deleteUserSuccess({ id })),
       catchError(() => EMPTY)
     ))
   ));

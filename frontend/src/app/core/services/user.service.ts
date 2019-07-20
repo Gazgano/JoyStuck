@@ -22,9 +22,9 @@ export class UserService {
     );
   }
 
-  deleteUser(user: User): Observable<User> {
-    return this.http.delete(baseUrl + 'users/' + user.id, this.apiService.getReqOptions()).pipe(
-      map(() => user),
+  deleteUser(id: number): Observable<number> {
+    return this.http.delete(baseUrl + 'users/' + id, this.apiService.getReqOptions()).pipe(
+      map(() => id),
       catchError(log.handleError)
     );
   }
