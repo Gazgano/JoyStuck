@@ -16,7 +16,14 @@ import { environment } from 'src/environments/environment'
     BrowserModule,
     HttpClientModule,
     RouterModule,
-    StoreModule.forRoot({}),
+    StoreModule.forRoot([], {
+      runtimeChecks: {
+        strictStateImmutability: true,
+        strictActionImmutability: true,
+        strictStateSerializability: true,
+        strictActionSerializability: true,
+      }
+    }),
     EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
