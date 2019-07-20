@@ -14,8 +14,8 @@
       <td>{{ user.username }}</td>
       <td>
         <div class="UserList-Table-Body-DeleteButton">
-          <button *ngIf="!userList.loadingUsersId.includes(user.id)" mat-button (click)="deleteUser(user)"><mat-icon>delete</mat-icon></button>
-          <mat-spinner *ngIf="userList.loadingUsersId.includes(user.id)" diameter="20"></mat-spinner>
+          <button *ngIf="!isLoading(userList, user)" mat-button (click)="deleteUser(user)"><mat-icon>delete</mat-icon></button>
+          <mat-spinner *ngIf="isLoading(userList, user)" diameter="20"></mat-spinner>
         </div>
       </td>
     </tr>
