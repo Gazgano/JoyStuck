@@ -17,13 +17,15 @@ import { RouterModule } from '@angular/router';
 import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
 import { ShellComponent } from './components/shell/shell.component';
+import { LoaderComponent } from './components/loader/loader.component';
 
 
 @NgModule({
   declarations: [
     FooterComponent,
     HeaderComponent,
-    ShellComponent
+    ShellComponent,
+    LoaderComponent
   ],
   imports: [
     CommonModule,
@@ -43,6 +45,7 @@ import { ShellComponent } from './components/shell/shell.component';
   exports: [
     CommonModule,
     FormsModule,
+    LoaderComponent,
     MatButtonModule,
     MatCardModule,
     MatDividerModule,

@@ -1,0 +1,86 @@
+$width: 300px;
+$font-size: 47px;
+
+:host {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.Loader-Joystick-Container {
+    width: $width;
+    height: $width*13/12;
+    margin: $width/30;
+    position: relative;
+}
+
+.Loader-Joystick-Body {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+}
+
+@keyframes leverMotion {
+    0% { transform: rotate(-20deg); }
+    10% { transform: rotate(10deg); }
+    20% { transform: rotate(-10deg); }
+    50% { transform: rotate(30deg); }
+    100% { transform: rotate(-20deg); }
+}
+
+.Loader-Joystick-Lever {
+    position: absolute;
+    right: 30%;
+    bottom: 34%;
+    transform-origin: bottom center;
+    width: 30%;
+    animation-name: leverMotion;
+    animation-duration: 1.5s;
+    animation-iteration-count: infinite;
+}
+
+.Loader-Joystick-Text {
+    color: white;
+    font-size: $font-size;
+    font-weight: bold;
+    width: $width*2/3;
+    overflow: hidden;
+    position: absolute;
+    left: 22%;
+    bottom: 22%;
+}
+
+@keyframes electricityMotionX {
+    0% { transform: translateX($width*0.056); }
+    100% { transform: translateX($width*0.917); }
+}
+
+@keyframes electricityMotionY {
+    0% { transform: translateY(-$width*0.255); }
+    100% { transform: translateY($width*0.012); }
+}
+
+.Loader-Joystick-Electricty-Container {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    
+    animation-name: electricityMotionX;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-timing-function: cubic-bezier(0.3,-0.4,0.43,0.59);
+}
+
+.Loader-Joystick-Electricty {
+    width: $width*0.083;
+    
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    
+    animation-name: electricityMotionY;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-timing-function: cubic-bezier(0.19,0.59,0.34,1.16);
+}
