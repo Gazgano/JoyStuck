@@ -1,23 +1,31 @@
-<table *ngIf="users$ | async as users" class="UserList-Table">
-  <thead class="UserList-Table-Header">
+<table *ngIf="users$ | async as users" class="UserList">
+  <thead class="UserList-Header">
     <tr>
-      <td>ID</td>
-      <td>Profile Image</td>
-      <td>Username</td>
-      <td>Actions</td>
+      <th>ID</th>
+      <th>Profile Image</th>
+      <th>Username</th>
+      <th class="UserList-Header-Actions">Actions</th>
+      <th></th>
     </tr>
   </thead>
-  <tbody class="UserList-Table-Body">
-    <tr *ngFor="let user of users">
-      <td>{{ user.id }}</td>
-      <td class="UserList-Table-Body-ProfileImage"><img [src]="user.profileImageSrcUrl" class="UserList-Table-Body-ProfileImage-Image"></td>
-      <td>{{ user.username }}</td>
-      <td>
-        <div *ngIf="loadingUsers$ | async as loadingUsers" class="UserList-Table-Body-DeleteButton">
-          <button *ngIf="!loadingUsers.includes(user.id)" mat-button (click)="deleteUser(user.id)"><mat-icon>delete</mat-icon></button>
+  <tbody class="UserList-Body">
+    <ng-container *ngIf="loadingUsers$ | async as loadingUsers" >
+      <tr *ngFor="let user of users">
+        <td>{{ user.id }}</td>
+        <td class="UserList-Body-ProfileImage"><img [src]="user.profileImageSrcUrl" class="UserList-Body-ProfileImage-Image"></td>
+        <td>{{ user.username }}</td>
+        <td>
+          <div class="UserList-Body-Actions">
+            <button [@buttonConfirmation]="deletionConfirmation === user.id" class="UserList-Body-Actions-DeleteButton" mat-button (click)="deleteUser(user.id)">
+              <mat-icon>delete</mat-icon>
+              <span *ngIf="deletionConfirmation === user.id" class="UserList-Body-Actions-DeleteButton-Confirmation">Click again</span>
+            </button>
+          </div>
+        </td>
+        <td>
           <mat-spinner *ngIf="loadingUsers.includes(user.id)" diameter="20"></mat-spinner>
-        </div>
-      </td>
-    </tr>
+        </td>
+      </tr>
+    </ng-container>
   </tbody>
 </table>

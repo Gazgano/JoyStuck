@@ -1,20 +1,32 @@
-.UserList-Table td {
+.UserList td {
     padding: 3px;
 }
 
-.UserList-Table-Header {
+.UserList-Header {
     font-weight: bold;
 }
 
-.UserList-Table-Body-ProfileImage {
+.UserList-Header-Actions {
+    width: 120px;
+}
+
+.UserList-Body-ProfileImage {
     text-align: center;
 }
 
-.UserList-Table-Body-ProfileImage-Image {
+.UserList-Body-ProfileImage-Image {
     width: 32px;
 }
 
-.UserList-Table-Body-DeleteButton {
+.UserList-Body-Actions {
     display: flex;
-    justify-content: center;
+}
+
+.UserList-Body-Actions-DeleteButton {
+    display: flex;
+    overflow-x: hidden;
+}
+
+.UserList-Body-Actions-DeleteButton-Confirmation {
+    font-size: 10px;
 }
