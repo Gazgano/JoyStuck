@@ -1,5 +1,6 @@
 <app-shell>
-  <app-loader *ngIf="posts === null || posts === undefined" class="Home-Loader"></app-loader>
+  <app-loader class="Home-Loader" palette="primary"></app-loader>
+  <!-- <app-loader *ngIf="posts === null || posts === undefined" class="Home-Loader"></app-loader>
     <div *ngIf="posts && posts.length > 0" class="WallContainer">
       <div class="Wall" >
           <ng-container *ngFor="let post of posts">
@@ -7,5 +8,5 @@
           </ng-container>
         <p *ngIf="posts && posts.length === 0" class="Wall-EmptyScreen">No post to display.</p>
       </div>
-    </div>
+    </div> -->
 </app-shell>

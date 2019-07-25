@@ -1,5 +1,7 @@
-$width: 300px;
-$font-size: 47px;
+@import 'ink-theme';
+
+$width: 150px;
+$font-size: $width*0.157;
 
 :host {
     align-items: center;
@@ -40,14 +42,13 @@ $font-size: 47px;
     animation-iteration-count: infinite;
 }
 
-.Loader-Joystick-Text {
-    color: white;
+%Loader-Joystick-Text {
     font-size: $font-size;
     font-weight: bold;
-    width: $width*2/3;
+    width: $width*3/4;
     overflow: hidden;
     position: absolute;
-    left: 22%;
+    left: 20%;
     bottom: 22%;
 }
 
@@ -83,4 +84,23 @@ $font-size: 47px;
     animation-duration: 2s;
     animation-iteration-count: infinite;
     animation-timing-function: cubic-bezier(0.19,0.59,0.34,1.16);
+}
+
+
+// adding colors depending of the theme
+@each $name in $palettes {
+    $palette: map-get($ink-theme, $name);
+    $color: map-get($palette, default);
+    $color-contrast: map-get($palette, default-contrast);
+
+    #leverSymbol--#{$name}, 
+    #bodySymbol--#{$name}, 
+    #electricitySymbol--#{$name} {
+        fill: $color;
+    }
+
+    .Loader-Joystick-Text--#{$name} {
+        @extend %Loader-Joystick-Text;
+        color: $color-contrast;
+    }
 }
