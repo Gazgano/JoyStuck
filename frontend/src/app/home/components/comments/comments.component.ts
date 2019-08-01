@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 
 import { Logger } from '@app/core/services/logger.service';
-import { PostsService } from '@app/core/services/posts.service';
-import { UserComment } from '@app/core/models/user-comment.model';
+import { PostsService } from '../../services/posts.service';
+import { UserComment } from '../../models/user-comment.model';
 
 const log = new Logger('Comments Component');
 

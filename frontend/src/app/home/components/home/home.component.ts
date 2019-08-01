@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PostsService } from '@app/core/services/posts.service';
+import { PostsService } from '../../services/posts.service';
 import { Logger } from '@app/core/services/logger.service';
-import { Post } from '@app/core/models/post.model';
+import { Post } from '../../models/post.model';
 
 const log = new Logger('HomeComponent');
 

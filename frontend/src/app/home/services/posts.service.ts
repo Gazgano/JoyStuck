@@ -4,11 +4,11 @@ import { Observable } from 'rxjs';
 import * as moment from 'moment';
 import { catchError } from 'rxjs/operators';
 
-import { AuthService } from './auth.service';
+import { AuthService } from '@app/core/services/auth.service';
 import { baseUrl, ApiService } from '@app/core/services/api.service';
-import { Logger } from './logger.service';
-import { Post } from '@app/core/models/post.model';
-import { UserComment } from '@app/core/models/user-comment.model';
+import { Logger } from '@app/core/services/logger.service';
+import { Post } from '../models/post.model';
+import { UserComment } from '../models/user-comment.model';
 
 const log = new Logger('PostsService');
 

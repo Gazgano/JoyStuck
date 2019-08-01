@@ -3,8 +3,8 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 import * as moment from 'moment';
 
 import { Logger } from '@app/core/services/logger.service';
-import { Post } from '@app/core/models/post.model';
-import { PostsService } from '@app/core/services/posts.service';
+import { Post } from '../../models/post.model';
+import { PostsService } from '../../services/posts.service';
 
 const log = new Logger('PostComponent');
 
