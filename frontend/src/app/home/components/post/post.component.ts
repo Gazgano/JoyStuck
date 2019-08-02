@@ -1,10 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { trigger, state, style, animate, transition } from '@angular/animations';
 import * as moment from 'moment';
 
 import { Logger } from '@app/core/services/logger.service';
 import { Post } from '../../models/post.model';
 import { PostsService } from '../../services/posts.service';
+import { openCloseTrigger } from './post.animation';
 
 const log = new Logger('PostComponent');
 
@@ -41,28 +41,7 @@ const POST_TYPES_DESIGNS: { [key: string]: PostDesign } = {
   selector: 'app-post',
   templateUrl: './post.component.html',
   styleUrls: ['./post.component.scss'],
-  animations: [
-    trigger('openClose', [
-      state('open', style({
-        height: '*',
-      })),
-      state('closed', style({
-        borderColor: 'rgba(0, 0, 0, 0)',
-        height: '0',
-        padding: '0'
-      })),
-      transition(':enter', [
-        style({borderColor: 'rgba(0, 0, 0, 0)', height: '0', padding: '0'}),
-        animate('200ms')
-      ]),
-      transition('* => closed', [
-        animate('200ms')
-      ]),
-      transition('* => open', [
-        animate('200ms')
-      ])
-    ]),
-  ],
+  animations: [openCloseTrigger],
 })
 export class PostComponent implements OnInit {
 
