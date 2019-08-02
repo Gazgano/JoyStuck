@@ -1,6 +1,8 @@
 <app-shell>
-  <app-loader *ngIf="posts === null || posts === undefined" class="Home-Loader" palette="primary"></app-loader>
-    <div *ngIf="posts && posts.length > 0" class="WallContainer">
+  <app-loader *ngIf="isLoading$ | async; else wall" class="Home-Loader" palette="primary"></app-loader>
+  
+  <ng-template #wall>
+    <div *ngIf="posts$ | async as posts" class="WallContainer">
       <div class="Wall" >
           <ng-container *ngFor="let post of posts">
               <app-post [post]="post"></app-post>
@@ -8,4 +10,5 @@
         <p *ngIf="posts && posts.length === 0" class="Wall-EmptyScreen">No post to display.</p>
       </div>
     </div>
+  </ng-template>
 </app-shell>
