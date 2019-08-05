@@ -3,6 +3,7 @@ import { createReducer, on, Action, createFeatureSelector, createSelector } from
 
 import { Post } from '../models/post.model';
 import * as homeActions from './home.actions';
+import { State } from '.';
 
 ////////////////////////////////////////////////
 // State
@@ -44,7 +45,12 @@ export function reducer(state: HomeState | undefined, action: Action) {
 // Selector
 ////////////////////////////////////////////////
 
-const selectHome = createFeatureSelector<HomeState>('home');
+const selectHomeFeature = createFeatureSelector<State>('home');
+
+export const selectHome = createSelector(
+  selectHomeFeature,
+  (state: State) => state.home
+);
 
 export const selectPostsArray = createSelector(
   selectHome,
@@ -53,5 +59,5 @@ export const selectPostsArray = createSelector(
 
 export const selectIsLoading = createSelector(
   selectHome,
-  state => state.isLoading
+  (state: HomeState) => state.isLoading
 );

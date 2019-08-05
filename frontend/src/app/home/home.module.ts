@@ -8,7 +8,7 @@ import { HomeComponent } from './components/home/home.component';
 import { HomeRoutingModule } from './home-routing.module';
 import { PostComponent } from './components/post/post.component';
 import { SharedModule } from '@app/shared/shared.module';
-import * as fromHome from './store/home.reducer';
+import { reducersMap } from './store/';
 import { HomeEffects } from './store/home.effects';
 
 @NgModule({
@@ -17,7 +17,7 @@ import { HomeEffects } from './store/home.effects';
     CommonModule,
     SharedModule,
     HomeRoutingModule,
-    StoreModule.forFeature('home', fromHome.reducer),
+    StoreModule.forFeature('home', reducersMap),
     EffectsModule.forFeature([HomeEffects])
   ]
 })
