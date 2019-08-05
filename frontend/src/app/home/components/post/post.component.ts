@@ -1,10 +1,15 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Store, select } from '@ngrx/store';
+import { Observable } from 'rxjs';
 import * as moment from 'moment';
 
 import { Logger } from '@app/core/services/logger.service';
 import { Post } from '../../models/post.model';
 import { PostsService } from '../../services/posts.service';
 import { openCloseTrigger } from './post.animation';
+import { UserComment } from '../../models/user-comment.model';
+import * as commentsActions from '../../store/comments.actions';
+import { selectCommentsArray } from '@app/home/store/comments.reducer';
 
 const log = new Logger('PostComponent');
 
@@ -54,7 +59,11 @@ export class PostComponent implements OnInit {
   public commentsLoading = false;
   public commentsCount: number;
 
-  constructor(private postsService: PostsService) { }
+
+  public comments$: Observable<UserComment[]>;
+
+
+  constructor(private postsService: PostsService, private store: Store<UserComment[]>) { }
   
   //////////////////////////////////////////
   // Initialisation
@@ -65,6 +74,8 @@ export class PostComponent implements OnInit {
     this.initTitle();
     this.elapsedTime = moment().diff(this.post.timestamp, 'minute') + ' min.';
     this.defineCommentsCount();
+
+    this.comments$ = this.store.pipe(select(selectCommentsArray));
   }
 
   initTitle() {
@@ -92,17 +103,10 @@ export class PostComponent implements OnInit {
   //////////////////////////////////////////
 
   toggleComments(postId: number) {
-    if (!this.commentsOpen && !this.post.comments) {
-      this.commentsLoading = true;
-      this.postsService.getCommentsByPostId(postId).subscribe(comments => {
-        log.debug(comments);
-        this.post.comments = comments;
-        this.defineCommentsCount();
-        this.commentsLoading = false;
-      });
+    if (!this.commentsOpen) {
+      this.commentsOpen = !this.commentsOpen;
+      this.store.dispatch(commentsActions.loadComments({ postId }));
     }
-    
-    this.commentsOpen = !this.commentsOpen;
   }
 
   defineCommentsCount() {

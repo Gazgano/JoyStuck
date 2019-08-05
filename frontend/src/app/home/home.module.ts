@@ -10,6 +10,9 @@ import { PostComponent } from './components/post/post.component';
 import { SharedModule } from '@app/shared/shared.module';
 import { reducersMap } from './store/';
 import { HomeEffects } from './store/home.effects';
+import { CommentsEffects } from './store/comments.effects';
+import { PostsService } from './services/posts.service';
+import { CommentsService } from './services/comments.service';
 
 @NgModule({
   declarations: [CommentsComponent, HomeComponent, PostComponent ],
@@ -18,7 +21,8 @@ import { HomeEffects } from './store/home.effects';
     SharedModule,
     HomeRoutingModule,
     StoreModule.forFeature('home', reducersMap),
-    EffectsModule.forFeature([HomeEffects])
-  ]
+    EffectsModule.forFeature([HomeEffects, CommentsEffects])
+  ],
+  providers: [PostsService, CommentsService]
 })
 export class HomeModule { }

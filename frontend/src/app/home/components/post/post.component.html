@@ -29,11 +29,17 @@
 </mat-card>
 
 <!-- Usual card comments -->
-<div *ngIf="postDesign.componentStyle === 0 && (!!post.comments || commentsLoading)" [@openClose]="commentsOpen ? 'open' : 'closed'" class="PostCard-Comments">
+<!-- <div *ngIf="postDesign.componentStyle === 0 && (!!post.comments || commentsLoading)" [@openClose]="commentsOpen ? 'open' : 'closed'" class="PostCard-Comments">
     <mat-divider></mat-divider>
     <mat-spinner *ngIf="commentsLoading && !post.comments" [color]="postDesign.palette" [diameter]="30"></mat-spinner>
     <app-comments [comments]="post.comments" [palette]="postDesign.palette" [postId]="post.id"></app-comments>
+</div> -->
+<div *ngIf="comments$ | async as comments" [@openClose]="commentsOpen ? 'open' : 'closed'" class="PostCard-Comments">
+    <mat-divider></mat-divider>
+    <mat-spinner *ngIf="commentsLoading && !comments" [color]="postDesign.palette" [diameter]="30"></mat-spinner>
+    <app-comments [comments]="comments" [palette]="postDesign.palette" [postId]="post.id"></app-comments>
 </div>
+
 
 <!-- Light card (no content, just title) -->
 <mat-card *ngIf="postDesign.componentStyle === 1" [ngClass]="'PostCardLight--' + postDesign.palette">
