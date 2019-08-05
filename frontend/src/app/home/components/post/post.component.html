@@ -23,21 +23,21 @@
         </button>
         <button mat-button (click)="toggleComments(post.id)">
             <mat-icon>chat_bubble</mat-icon>
-            <span *ngIf="this.commentsCount > 0">{{ this.commentsCount }}</span>
+            <ng-container *ngIf="commentsByPostId$(post.id) | async as comments">
+                <span *ngIf="comments.length > 0; else commentsCountLight">{{ comments.length }}</span>
+                <ng-template #commentsCountLight><span *ngIf="post.commentsCount > 0">{{ post.commentsCount }}</span></ng-template>
+            </ng-container>
         </button>
     </mat-card-actions>
 </mat-card>
 
 <!-- Usual card comments -->
-<!-- <div *ngIf="postDesign.componentStyle === 0 && (!!post.comments || commentsLoading)" [@openClose]="commentsOpen ? 'open' : 'closed'" class="PostCard-Comments">
+<div *ngIf="postDesign.componentStyle === 0" [@openClose]="commentsOpen ? 'open' : 'closed'" class="PostCard-Comments">
     <mat-divider></mat-divider>
-    <mat-spinner *ngIf="commentsLoading && !post.comments" [color]="postDesign.palette" [diameter]="30"></mat-spinner>
-    <app-comments [comments]="post.comments" [palette]="postDesign.palette" [postId]="post.id"></app-comments>
-</div> -->
-<div *ngIf="comments$ | async as comments" [@openClose]="commentsOpen ? 'open' : 'closed'" class="PostCard-Comments">
-    <mat-divider></mat-divider>
-    <mat-spinner *ngIf="commentsLoading && !comments" [color]="postDesign.palette" [diameter]="30"></mat-spinner>
-    <app-comments [comments]="comments" [palette]="postDesign.palette" [postId]="post.id"></app-comments>
+    <mat-spinner *ngIf="(loadingPostsIds$ | async).includes(post.id); else commentsComponent" [color]="postDesign.palette" [diameter]="30"></mat-spinner>
+    <ng-template #commentsComponent><ng-container *ngIf="commentsByPostId$(post.id) | async as comments">
+        <app-comments [comments]="comments" [palette]="postDesign.palette" [postId]="post.id"></app-comments>
+    </ng-container></ng-template>
 </div>
 
 
@@ -56,14 +56,19 @@
         </button>
         <button mat-button (click)="toggleComments(post.id)">
             <mat-icon>chat_bubble</mat-icon>
-            <span *ngIf="this.commentsCount > 0">{{ this.commentsCount }}</span>
+            <ng-container *ngIf="commentsByPostId$(post.id) | async as comments">
+                <span *ngIf="comments.length > 0; else commentsCountLight">{{ comments.length }}</span>
+                <ng-template #commentsCountLight><span *ngIf="post.commentsCount > 0">{{ post.commentsCount }}</span></ng-template>
+            </ng-container>
         </button>
     </mat-card-actions>
 </mat-card>
 
 <!-- Light card comments -->
-<div *ngIf="postDesign.componentStyle === 1 && (!!post.comments || commentsLoading)" [@openClose]="commentsOpen ? 'open' : 'closed'" class="PostCardLight-Comments">
-    <mat-divider></mat-divider>
-    <mat-spinner *ngIf="commentsLoading && !post.comments" [color]="postDesign.palette" [diameter]="30"></mat-spinner>
-    <app-comments [comments]="post.comments" [palette]="postDesign.palette" [postId]="post.id"></app-comments>
+<div *ngIf="postDesign.componentStyle === 1" [@openClose]="commentsOpen ? 'open' : 'closed'" class="PostCardLight-Comments">
+  <mat-divider></mat-divider>
+  <mat-spinner *ngIf="(loadingPostsIds$ | async).includes(post.id); else commentsComponentLight" [color]="postDesign.palette" [diameter]="30"></mat-spinner>
+  <ng-template #commentsComponentLight><ng-container *ngIf="commentsByPostId$(post.id) | async as comments">
+      <app-comments [comments]="comments" [palette]="postDesign.palette" [postId]="post.id"></app-comments>
+  </ng-container></ng-template>
 </div>

@@ -22,24 +22,24 @@ export class CommentsComponent {
   constructor(private postService: PostsService) { }
 
   sendComment(text: string) {
-    if (text.trim().length > 0) {
-      this.sendCommentLoading = true;
-      
-      this.postService.postComment(text, this.postId).subscribe(comment => {
-        log.debug(comment);
-        
-        if (comment) {
-          this.comments.push(comment);
-          this.userCommentInput.nativeElement.value = '';
-        }
+    // if (text.trim().length > 0) {
+    //   this.sendCommentLoading = true;
 
-        this.sendCommentLoading = false;
-      });
-    }
+    //   this.postService.postComment(text, this.postId).subscribe(comment => {
+    //     log.debug(comment);
+
+    //     if (comment) {
+    //       this.comments.push(comment);
+    //       this.userCommentInput.nativeElement.value = '';
+    //     }
+
+    //     this.sendCommentLoading = false;
+    //   });
+    // }
   }
 
   likeComment(commentId: number) {
-    const comment = this.comments.find(com => com.id === commentId);
-    this.postService.likeComment(comment);
+    // const comment = this.comments.find(com => com.id === commentId);
+    // this.postService.likeComment(comment);
   }
 }

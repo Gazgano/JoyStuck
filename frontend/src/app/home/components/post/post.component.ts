@@ -1,46 +1,19 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import * as moment from 'moment';
 
 import { Logger } from '@app/core/services/logger.service';
 import { Post } from '../../models/post.model';
 import { PostsService } from '../../services/posts.service';
+import { PostType, PostDesign, POST_TYPES_DESIGNS } from './post.config';
 import { openCloseTrigger } from './post.animation';
 import { UserComment } from '../../models/user-comment.model';
 import * as commentsActions from '../../store/comments.actions';
-import { selectCommentsArray } from '@app/home/store/comments.reducer';
+import * as fromComments from '@app/home/store/comments.reducer';
 
 const log = new Logger('PostComponent');
-
-enum PostType {
-  Normal = 0,
-  Light
-}
-
-interface PostDesign {
-  readonly componentStyle: PostType;
-  readonly palette: string;
-  readonly icon: string;
-}
-
-const POST_TYPES_DESIGNS: { [key: string]: PostDesign } = {
-  gameDiscover: {
-    palette: 'warn',
-    icon: 'videogame_asset',
-    componentStyle: PostType.Normal
-  },
-  newMember: {
-    palette: 'primary',
-    icon: 'user',
-    componentStyle: PostType.Light
-  },
-  screenshotShare: {
-    palette: 'accent',
-    icon: 'image',
-    componentStyle: PostType.Normal
-  }
-};
 
 @Component({
   selector: 'app-post',
@@ -56,26 +29,23 @@ export class PostComponent implements OnInit {
   public postDesign: PostDesign;
   public elapsedTime: string;
   public commentsOpen = false;
-  public commentsLoading = false;
-  public commentsCount: number;
 
-
-  public comments$: Observable<UserComment[]>;
-
+  private comments$: Observable<UserComment[]>;
+  public loadingPostsIds$: Observable<number[]>;
 
   constructor(private postsService: PostsService, private store: Store<UserComment[]>) { }
-  
+
   //////////////////////////////////////////
   // Initialisation
   //////////////////////////////////////////
-  
+
   ngOnInit() {
     this.postDesign = POST_TYPES_DESIGNS[this.post.type];
     this.initTitle();
     this.elapsedTime = moment().diff(this.post.timestamp, 'minute') + ' min.';
-    this.defineCommentsCount();
 
-    this.comments$ = this.store.pipe(select(selectCommentsArray));
+    this.comments$ = this.store.pipe(select(fromComments.selectCommentsArray));
+    this.loadingPostsIds$ = this.store.pipe(select(fromComments.selectLoadingIds));
   }
 
   initTitle() {
@@ -90,30 +60,22 @@ export class PostComponent implements OnInit {
     }
   }
 
-  //////////////////////////////////////////
-  // Post
-  //////////////////////////////////////////
-
   likePost() {
     this.postsService.likePost(this.post).subscribe();
   }
-  
-  //////////////////////////////////////////
-  // Comments
-  //////////////////////////////////////////
+
+  commentsByPostId$(postId: number): Observable<UserComment[]> {
+    return this.comments$.pipe(
+      map((comments: UserComment[]) =>
+        comments.filter(c => c.post_id === postId)
+      )
+    );
+  }
 
   toggleComments(postId: number) {
     if (!this.commentsOpen) {
-      this.commentsOpen = !this.commentsOpen;
       this.store.dispatch(commentsActions.loadComments({ postId }));
     }
-  }
-
-  defineCommentsCount() {
-    if (this.post.comments) {
-      this.commentsCount = this.post.comments.length;
-    } else {
-      this.commentsCount = this.post.commentsCount;
-    }
+    this.commentsOpen = !this.commentsOpen;
   }
 }

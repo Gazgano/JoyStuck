@@ -8,13 +8,17 @@ import { State } from '.';
 // State
 ////////////////////////////////////////////////
 
-export interface CommentsState extends EntityState<UserComment> { }
+export interface CommentsState extends EntityState<UserComment> {
+  loadingPostsIds: number[];
+}
 
 const adapter = createEntityAdapter({
   selectId: (c: UserComment) => c.id
 });
 
-const initialState: CommentsState = adapter.getInitialState();
+const initialState: CommentsState = adapter.getInitialState({
+  loadingPostsIds: []
+});
 
 ////////////////////////////////////////////////
 // Reducer
@@ -22,8 +26,15 @@ const initialState: CommentsState = adapter.getInitialState();
 
 const commentsReducer = createReducer(
   initialState,
+
+  on(commentsActions.loadComments, (state, props) => {
+    return {...state, loadingPostsIds: [...state.loadingPostsIds, props.postId]};
+  }),
+
   on(commentsActions.loadCommentsSuccess, (state, { comments }) => {
-    return adapter.addAll(comments, state);
+    // we are copying loadingPostsIds and remove all ids also in comments
+    const loadingPostsIds = [...state.loadingPostsIds.filter(e => !comments.map(c => c.post_id).includes(e))];
+    return adapter.addMany(comments, {...state, loadingPostsIds});
   })
 );
 
@@ -45,4 +56,9 @@ export const selectComments = createSelector(
 export const selectCommentsArray = createSelector(
   selectComments,
   adapter.getSelectors().selectAll
+);
+
+export const selectLoadingIds = createSelector(
+  selectComments,
+  (state: CommentsState) => state.loadingPostsIds
 );

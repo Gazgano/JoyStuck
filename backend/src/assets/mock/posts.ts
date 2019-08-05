@@ -16,7 +16,7 @@ const posts = [
         authorName: 'system',
         title: 'ClemDOT vient de rejoindre le serveur. Bienvenue à lui !',
         likesCount: 3,
-        commentsCount: 1,
+        commentsCount: 0,
     },
     {
         id: 13,
