@@ -41,8 +41,8 @@ class App {
         next();
     });
     
-    router.route('/users/:user_id/profileImage').get( (req, res, next) => {
-        const user = users.find(u => u.id == req.params.user_id);
+    router.route('/users/:id/profileImage').get( (req, res, next) => {
+        const user = users.find(u => u.id == req.params.id);
         if (!user) {
             res.status(404).send('Profile image cannot be found.'); 
         } else {
@@ -63,18 +63,18 @@ class App {
         }
     });
 
-    router.route('/users/:user_id').get( (req, res) => {
-        const result = users.filter(u => u.id == req.params.user_id);
+    router.route('/users/:id').get( (req, res) => {
+        const result = users.find(u => u.id == req.params.id);
         res.json(result);
     });
 
-    router.route('/users/:user_id').delete( (req, res) => {
-        const index = users.findIndex(user => user.id == req.params.user_id);
+    router.route('/users/:id').delete( (req, res) => {
+        const index = users.findIndex(user => user.id == req.params.id);
         if (index > -1) {
             users.splice(index, 1);
-            res.status(204).send(`User (id: ${req.params.user_id}) has been deleted successfully.`); 
+            res.status(204).send(`User (id: ${req.params.id}) has been deleted successfully.`); 
         } else {
-            res.status(404).send(`User (id: ${req.params.user_id}) does not exist.`);
+            res.status(404).send(`User (id: ${req.params.id}) does not exist.`);
         }
     });
 
@@ -86,13 +86,32 @@ class App {
         res.json(posts);
     });
 
-    router.route('/comments/:post_id').get( (req, res) => { // to be modified to create a proper API
-        const result = comments.filter(c => c.post_id == req.params.post_id);
-        res.json(result);
+    router.route('/comments/:id/like').put( (req, res) => {
+        const result = comments.find(c => c.id == req.params.id);
+        if (result) {
+            result.likesCount++;
+            res.json(result);
+        } else {
+            res.status(404).send(`Comment (id: ${req.params.id}) does not exist.`);
+        }
+    });
+    
+    router.route('/comments/:id').get( (req, res) => { 
+        const result = comments.find(c => c.id == req.params.id);
+        if (result) {
+            res.json(result);
+        } else {
+            res.status(404).send(`Comment (id: ${req.params.id}) does not exist.`);
+        }
     });
 
     router.route('/comments').get( (req, res) => {
-        res.json(comments);
+        if (req.query.post_id) {
+            const result = comments.filter(c => c.post_id == req.query.post_id);
+            return res.json(result);
+        } else {
+            res.json(comments);
+        }
     });
 
     router.use('/', (req, res, next) => {
