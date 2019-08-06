@@ -17,4 +17,12 @@ export class CommentsEffects {
       catchError(() => EMPTY)
     ))
   ));
+
+  likeComment$ = createEffect(() => this.actions$.pipe(
+    ofType(commentsActions.likeComment),
+    switchMap(action => this.commentsService.likeComment(action.id).pipe(
+      map(comment => commentsActions.likeCommentSuccess({ comment })),
+      catchError(() => EMPTY)
+    ))
+  ));
 }

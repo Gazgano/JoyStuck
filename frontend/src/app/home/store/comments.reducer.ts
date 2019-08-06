@@ -1,4 +1,4 @@
-import { EntityState, createEntityAdapter } from '@ngrx/entity';
+import { EntityState, createEntityAdapter, Update } from '@ngrx/entity';
 import { UserComment } from '../models/user-comment.model';
 import { createReducer, on, Action, createSelector, createFeatureSelector } from '@ngrx/store';
 import * as commentsActions from './comments.actions';
@@ -35,6 +35,17 @@ const commentsReducer = createReducer(
     // we are copying loadingPostsIds and remove all ids also in comments
     const loadingPostsIds = [...state.loadingPostsIds.filter(e => !comments.map(c => c.post_id).includes(e))];
     return adapter.addMany(comments, {...state, loadingPostsIds});
+  }),
+
+  on(commentsActions.likeCommentSuccess, (state, { comment }) => {
+    const update: Update<UserComment> = {
+      id: comment.id,
+      changes: {
+        likesCount: comment.likesCount
+      }
+    };
+    
+    return adapter.updateOne(update, state);
   })
 );
 

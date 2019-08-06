@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef } from '@angular/core';
+import { Store } from '@ngrx/store';
 
 import { Logger } from '@app/core/services/logger.service';
-import { PostsService } from '../../services/posts.service';
 import { UserComment } from '../../models/user-comment.model';
+import * as commentsActions from '../../store/comments.actions';
 
 const log = new Logger('Comments Component');
 
@@ -19,7 +20,7 @@ export class CommentsComponent {
   @ViewChild('userComment') userCommentInput: ElementRef;
   public sendCommentLoading = false;
 
-  constructor(private postService: PostsService) { }
+  constructor(private store: Store<UserComment[]>) { }
 
   sendComment(text: string) {
     // if (text.trim().length > 0) {
@@ -38,8 +39,7 @@ export class CommentsComponent {
     // }
   }
 
-  likeComment(commentId: number) {
-    // const comment = this.comments.find(com => com.id === commentId);
-    // this.postService.likeComment(comment);
+  likeComment(id: number) {
+    this.store.dispatch(commentsActions.likeComment({ id }));
   }
 }

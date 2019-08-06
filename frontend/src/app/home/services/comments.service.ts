@@ -16,14 +16,13 @@ export class CommentsService {
   constructor(private http: HttpClient, private apiService: ApiService, private authService: AuthService) {}
 
   getCommentsByPostId(postId: number): Observable<UserComment[]> {
-    return this.http.get<UserComment[]>(baseUrl + 'comments/' + postId).pipe( // to be modified with a proper API
+    return this.http.get<UserComment[]>(`${baseUrl}comments/?post_id=${postId}`).pipe( // to be modified with a proper API
       catchError(log.handleError)
     );
   }
 
-  likeComment(comment: UserComment): Observable<UserComment | null> {
-    ++comment.likesCount;
-    return this.http.put<UserComment>(baseUrl + 'comments', comment, this.apiService.getReqOptions()).pipe(
+  likeComment(id: number): Observable<UserComment | null> {
+    return this.http.put<UserComment>(`${baseUrl}comments/${id}/like`, {}, this.apiService.getReqOptions()).pipe(
       catchError(log.handleError)
     );
   }
@@ -40,7 +39,7 @@ export class CommentsService {
       likesCount: 0
     };
 
-    return this.http.post<UserComment>(baseUrl + 'comments', comment, this.apiService.getReqOptions()).pipe(
+    return this.http.post<UserComment>(`${baseUrl}comments`, comment, this.apiService.getReqOptions()).pipe(
       catchError(log.handleError)
     );
   }
