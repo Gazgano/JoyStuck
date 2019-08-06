@@ -16,18 +16,12 @@ const log = new Logger('HomeComponent');
 })
 export class HomeComponent implements OnInit {
 
-  public posts$: Observable<Post[]>;
-  public isLoading$: Observable<boolean>;
+  public posts$ = this.store.pipe(select(selectPostsArray));
+  public isLoading$ = this.store.pipe(select(selectIsLoading));
 
   constructor(private store: Store<Post[]>) { }
 
   ngOnInit() {
-    this.posts$ = this.store.pipe(select(selectPostsArray));
-    this.isLoading$ = this.store.pipe(select(selectIsLoading));
-    this.store.dispatch(homeActions.loadPosts());
-  }
-
-  refresh() {
     this.store.dispatch(homeActions.loadPosts());
   }
 }

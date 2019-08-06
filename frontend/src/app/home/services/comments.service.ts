@@ -5,7 +5,6 @@ import { catchError } from 'rxjs/operators';
 import * as moment from 'moment';
 
 import { Logger } from '@app/core/services/logger.service';
-import { AuthService } from '@app/core/services/auth.service';
 import { baseUrl, ApiService } from '@app/core/services/api.service';
 import { UserComment } from '../models/user-comment.model';
 
@@ -13,7 +12,7 @@ const log = new Logger('CommentsService');
 
 @Injectable()
 export class CommentsService {
-  constructor(private http: HttpClient, private apiService: ApiService, private authService: AuthService) {}
+  constructor(private http: HttpClient, private apiService: ApiService) {}
 
   getCommentsByPostId(postId: number): Observable<UserComment[]> {
     return this.http.get<UserComment[]>(`${baseUrl}comments/?post_id=${postId}`).pipe( // to be modified with a proper API

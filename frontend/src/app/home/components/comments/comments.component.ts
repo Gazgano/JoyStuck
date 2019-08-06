@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, ElementRef, OnInit } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
@@ -15,20 +15,16 @@ const log = new Logger('Comments Component');
   templateUrl: './comments.component.html',
   styleUrls: ['./comments.component.scss']
 })
-export class CommentsComponent implements OnInit {
+export class CommentsComponent {
 
   @Input() comments: UserComment[];
   @Input() palette: string;
   @Input() postId: number;
   @ViewChild('userComment') userCommentInput: ElementRef;
 
-  public sendingCommentPostsIds$: Observable<number[]>;
-  
-  constructor(private store: Store<UserComment[]>, private commentsEffects: CommentsEffects) { }
+  public sendingCommentPostsIds$ = this.store.pipe(select(fromComments.selectSendingPostIds));
 
-  ngOnInit() {
-    this.sendingCommentPostsIds$ = this.store.pipe(select(fromComments.selectSendingPostIds));
-  }
+  constructor(private store: Store<UserComment[]>) { }
   
   sendComment(text: string) {
     if (text.trim().length > 0) {

@@ -1,4 +1,4 @@
-import { EntityState, createEntityAdapter } from '@ngrx/entity';
+import { EntityState, createEntityAdapter, Update } from '@ngrx/entity';
 import { createReducer, on, Action, createFeatureSelector, createSelector } from '@ngrx/store';
 
 import { Post } from '../models/post.model';
@@ -34,7 +34,17 @@ const homeReducer = createReducer(
   
   on(homeActions.loadPostsSuccess, (state, { posts }) => {
     return adapter.addAll(posts, {...state, isLoading: false});
-  })
+  }),
+
+  on(homeActions.likePostSuccess, (state, { post }) => {
+    const update: Update<Post> = {
+      id: post.id,
+      changes: {
+        likesCount: post.likesCount
+      }
+    };
+    return adapter.updateOne(update, state);
+  }),
 );
 
 export function reducer(state: HomeState | undefined, action: Action) {

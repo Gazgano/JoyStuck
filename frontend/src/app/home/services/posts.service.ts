@@ -15,14 +15,13 @@ export class PostsService {
   constructor(private http: HttpClient, private apiService: ApiService) { }
 
   getPosts(): Observable<Post[]> {
-    return this.http.get<Post[]>(baseUrl + 'posts').pipe(
+    return this.http.get<Post[]>(`${baseUrl}posts`).pipe(
       catchError(log.handleError)
     );
   }
 
-  likePost(post: Post): Observable<Post | null> {
-    ++post.likesCount;
-    return this.http.put<Post>(baseUrl + 'posts', post, this.apiService.getReqOptions()).pipe(
+  likePost(id: number): Observable<Post | null> {
+    return this.http.put<Post>(`${baseUrl}posts/${id}/like`, {}, this.apiService.getReqOptions()).pipe(
       catchError(log.handleError)
     );
   }

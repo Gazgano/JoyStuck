@@ -12,6 +12,7 @@ import { openCloseTrigger } from './post.animation';
 import { UserComment } from '../../models/user-comment.model';
 import * as commentsActions from '../../store/comments.actions';
 import * as fromComments from '@app/home/store/comments.reducer';
+import * as homeActions from '../../store/home.actions';
 
 const log = new Logger('PostComponent');
 
@@ -30,8 +31,8 @@ export class PostComponent implements OnInit {
   public elapsedTime: string;
   public commentsOpen = false;
 
-  private comments$: Observable<UserComment[]>;
-  public loadingCommentsPostsIds$: Observable<number[]>;
+  private comments$ = this.store.pipe(select(fromComments.selectCommentsArray));
+  public loadingCommentsPostsIds$ = this.store.pipe(select(fromComments.selectLoadingPostIds));
 
   constructor(private postsService: PostsService, private store: Store<UserComment[]>) { }
 
@@ -43,9 +44,6 @@ export class PostComponent implements OnInit {
     this.postDesign = POST_TYPES_DESIGNS[this.post.type];
     this.initTitle();
     this.elapsedTime = moment().diff(this.post.timestamp, 'minute') + ' min.';
-
-    this.comments$ = this.store.pipe(select(fromComments.selectCommentsArray));
-    this.loadingCommentsPostsIds$ = this.store.pipe(select(fromComments.selectLoadingPostIds));
   }
 
   initTitle() {
@@ -61,18 +59,21 @@ export class PostComponent implements OnInit {
   }
 
   likePost() {
-    this.postsService.likePost(this.post).subscribe();
+    const id = this.post.id;
+    this.store.dispatch(homeActions.likePost({ id }));
   }
 
-  commentsByPostId$(postId: number): Observable<UserComment[]> {
+  commentsByPostId$(): Observable<UserComment[]> {
     return this.comments$.pipe(
       map((comments: UserComment[]) =>
-        comments.filter(c => c.post_id === postId)
+        comments.filter(c => c.post_id === this.post.id)
       )
     );
   }
 
-  toggleComments(postId: number) {
+  toggleComments() {
+    const postId = this.post.id;
+    
     if (!this.commentsOpen) {
       this.store.dispatch(commentsActions.loadComments({ postId }));
     }

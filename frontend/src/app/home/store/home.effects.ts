@@ -18,4 +18,12 @@ export class HomeEffects {
       catchError(() => EMPTY)
     ))
   ));
+
+  likePost$ = createEffect(() => this.actions$.pipe(
+    ofType(homeActions.likePost),
+    switchMap(action => this.postsService.likePost(action.id).pipe(
+      map(post => homeActions.likePostSuccess({ post })),
+      catchError(() => EMPTY)
+    ))
+  ));
 }
