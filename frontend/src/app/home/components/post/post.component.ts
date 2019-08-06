@@ -31,7 +31,7 @@ export class PostComponent implements OnInit {
   public commentsOpen = false;
 
   private comments$: Observable<UserComment[]>;
-  public loadingPostsIds$: Observable<number[]>;
+  public loadingCommentsPostsIds$: Observable<number[]>;
 
   constructor(private postsService: PostsService, private store: Store<UserComment[]>) { }
 
@@ -45,7 +45,7 @@ export class PostComponent implements OnInit {
     this.elapsedTime = moment().diff(this.post.timestamp, 'minute') + ' min.';
 
     this.comments$ = this.store.pipe(select(fromComments.selectCommentsArray));
-    this.loadingPostsIds$ = this.store.pipe(select(fromComments.selectLoadingIds));
+    this.loadingCommentsPostsIds$ = this.store.pipe(select(fromComments.selectLoadingPostIds));
   }
 
   initTitle() {

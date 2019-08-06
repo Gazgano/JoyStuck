@@ -34,7 +34,7 @@
 <!-- Usual card comments -->
 <div *ngIf="postDesign.componentStyle === 0" [@openClose]="commentsOpen ? 'open' : 'closed'" class="PostCard-Comments">
     <mat-divider></mat-divider>
-    <mat-spinner *ngIf="(loadingPostsIds$ | async).includes(post.id); else commentsComponent" [color]="postDesign.palette" [diameter]="30"></mat-spinner>
+    <mat-spinner *ngIf="(loadingCommentsPostsIds$ | async).includes(post.id); else commentsComponent" [color]="postDesign.palette" [diameter]="30"></mat-spinner>
     <ng-template #commentsComponent><ng-container *ngIf="commentsByPostId$(post.id) | async as comments">
         <app-comments [comments]="comments" [palette]="postDesign.palette" [postId]="post.id"></app-comments>
     </ng-container></ng-template>
@@ -67,7 +67,7 @@
 <!-- Light card comments -->
 <div *ngIf="postDesign.componentStyle === 1" [@openClose]="commentsOpen ? 'open' : 'closed'" class="PostCardLight-Comments">
   <mat-divider></mat-divider>
-  <mat-spinner *ngIf="(loadingPostsIds$ | async).includes(post.id); else commentsComponentLight" [color]="postDesign.palette" [diameter]="30"></mat-spinner>
+  <mat-spinner *ngIf="(loadingCommentsPostsIds$ | async).includes(post.id); else commentsComponentLight" [color]="postDesign.palette" [diameter]="30"></mat-spinner>
   <ng-template #commentsComponentLight><ng-container *ngIf="commentsByPostId$(post.id) | async as comments">
       <app-comments [comments]="comments" [palette]="postDesign.palette" [postId]="post.id"></app-comments>
   </ng-container></ng-template>

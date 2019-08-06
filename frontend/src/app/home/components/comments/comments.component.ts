@@ -1,9 +1,12 @@
-import { Component, Input, ViewChild, ElementRef } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Component, Input, ViewChild, ElementRef, OnInit } from '@angular/core';
+import { Store, select } from '@ngrx/store';
+import { Observable } from 'rxjs';
 
 import { Logger } from '@app/core/services/logger.service';
 import { UserComment } from '../../models/user-comment.model';
 import * as commentsActions from '../../store/comments.actions';
+import * as fromComments from '../../store/comments.reducer';
+import { CommentsEffects } from '@app/home/store/comments.effects';
 
 const log = new Logger('Comments Component');
 
@@ -12,31 +15,32 @@ const log = new Logger('Comments Component');
   templateUrl: './comments.component.html',
   styleUrls: ['./comments.component.scss']
 })
-export class CommentsComponent {
+export class CommentsComponent implements OnInit {
 
   @Input() comments: UserComment[];
   @Input() palette: string;
   @Input() postId: number;
   @ViewChild('userComment') userCommentInput: ElementRef;
-  public sendCommentLoading = false;
 
-  constructor(private store: Store<UserComment[]>) { }
+  public sendingCommentPostsIds$: Observable<number[]>;
+  
+  constructor(private store: Store<UserComment[]>, private commentsEffects: CommentsEffects) { }
 
+  ngOnInit() {
+    this.sendingCommentPostsIds$ = this.store.pipe(select(fromComments.selectSendingPostIds));
+  }
+  
   sendComment(text: string) {
-    // if (text.trim().length > 0) {
-    //   this.sendCommentLoading = true;
-
-    //   this.postService.postComment(text, this.postId).subscribe(comment => {
-    //     log.debug(comment);
-
-    //     if (comment) {
-    //       this.comments.push(comment);
-    //       this.userCommentInput.nativeElement.value = '';
-    //     }
-
-    //     this.sendCommentLoading = false;
-    //   });
-    // }
+    if (text.trim().length > 0) {
+      this.store.dispatch(commentsActions.sendComment({ text, postId: this.postId }));
+      
+      // this.commentsService.postComment(text, this.postId).subscribe(comment => {
+      //   if (comment) {
+      //     this.comments.push(comment);
+      //     this.userCommentInput.nativeElement.value = '';
+      //   }
+      // });
+    }
   }
 
   likeComment(id: number) {

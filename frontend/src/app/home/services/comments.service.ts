@@ -26,20 +26,9 @@ export class CommentsService {
       catchError(log.handleError)
     );
   }
-
-  postComment(text: string, postId: number): Observable<UserComment | null> {
-    let authorName: string;
-    this.authService.currentUser.subscribe(user => authorName = user.username);
-
-    const comment: UserComment = {
-      post_id: postId,
-      authorName,
-      timestamp: moment(),
-      content: text,
-      likesCount: 0
-    };
-
-    return this.http.post<UserComment>(`${baseUrl}comments`, comment, this.apiService.getReqOptions()).pipe(
+  
+  postComment(comment: UserComment): Observable<UserComment | null> {
+    return this.http.post<UserComment>(`${baseUrl}comments/`, comment, this.apiService.getReqOptions()).pipe(
       catchError(log.handleError)
     );
   }
