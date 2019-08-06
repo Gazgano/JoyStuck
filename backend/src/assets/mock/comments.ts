@@ -1,4 +1,6 @@
-const comments = [
+let lastId = 5;
+
+export const comments = [
   {
     id: 1,
     post_id: 11,
@@ -41,4 +43,6 @@ const comments = [
   }
 ];
 
-export default comments;
+export function generateNewId() {
+  return ++lastId;
+}

@@ -4,7 +4,7 @@ const path = require('path');
 const cors = require('cors');
 
 import posts from '../assets/mock/posts';
-import comments from '../assets/mock/comments';
+import * as commentsMock from '../assets/mock/comments';
 import users from '../assets/mock/users';
 
 class App {
@@ -87,7 +87,7 @@ class App {
     });
 
     router.route('/comments/:id/like').put( (req, res) => {
-        const result = comments.find(c => c.id == req.params.id);
+        const result = commentsMock.comments.find(c => c.id == req.params.id);
         if (result) {
             result.likesCount++;
             res.json(result);
@@ -97,7 +97,7 @@ class App {
     });
     
     router.route('/comments/:id').get( (req, res) => { 
-        const result = comments.find(c => c.id == req.params.id);
+        const result = commentsMock.comments.find(c => c.id == req.params.id);
         if (result) {
             res.json(result);
         } else {
@@ -105,17 +105,25 @@ class App {
         }
     });
 
+    router.route('/comments').post( (req, res) => {
+        const newComment = {...req.body};
+        newComment.id = commentsMock.generateNewId();
+        commentsMock.comments.push(newComment);
+
+        res.json(newComment);
+    });
+
     router.route('/comments').get( (req, res) => {
         if (req.query.post_id) {
-            const result = comments.filter(c => c.post_id == req.query.post_id);
-            return res.json(result);
+            const result = commentsMock.comments.filter(c => c.post_id == req.query.post_id);
+            res.json(result);
         } else {
-            res.json(comments);
+            res.json(commentsMock.comments);
         }
     });
 
     router.use('/', (req, res, next) => {
-        res.json({ message: 'Welcome to our API!' });
+        res.status(404).send();
         next();
     });
   }
