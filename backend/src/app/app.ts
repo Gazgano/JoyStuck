@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const cors = require('cors');
 
-import posts from '../assets/mock/posts';
+import * as postsMock from '../assets/mock/posts';
 import * as commentsMock from '../assets/mock/comments';
 import users from '../assets/mock/users';
 
@@ -82,8 +82,27 @@ class App {
         res.json(users);
     });
     
+    router.route('/posts/:id/like').put( (req, res) => {
+        const result = postsMock.posts.find(p => p.id == req.params.id);
+        if (result) {
+            result.likesCount++;
+            res.json(result);
+        } else {
+            res.status(404).send(`Post (id: ${req.params.id}) does not exist.`);
+        }
+    });
+    
+    router.route('/posts/:id').get( (req, res) => { 
+        const result = postsMock.posts.find(p => p.id == req.params.id);
+        if (result) {
+            res.json(result);
+        } else {
+            res.status(404).send(`Post (id: ${req.params.id}) does not exist.`);
+        }
+    });
+    
     router.route('/posts').get( (req, res) => {
-        res.json(posts);
+        res.json(postsMock.posts);
     });
 
     router.route('/comments/:id/like').put( (req, res) => {

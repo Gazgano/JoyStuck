@@ -1,4 +1,6 @@
-const posts = [
+export let lastId = 13;
+
+export const posts = [
     {
         id: 11,
         timestamp: Date.now(),
@@ -30,4 +32,6 @@ const posts = [
     }
 ];
 
-export default posts;
+export function generateNewId() {
+    return ++lastId;
+}
