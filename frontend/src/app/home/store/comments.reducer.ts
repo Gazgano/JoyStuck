@@ -4,7 +4,7 @@ import { createReducer, on, Action, createSelector, createFeatureSelector } from
 import { UserComment } from '../models/user-comment.model';
 import * as commentsActions from './comments.actions';
 import { State } from '.';
-import { Logger } from '@app/core/services/logger.service'
+import { Logger } from '@app/core/services/logger.service';
 import { copyArrayAndDeleteFrom } from '@app/shared/utilities';
 
 const log = new Logger('CommentsReducer');
