@@ -10,8 +10,8 @@ const routes: Routes = [
     path: '',
     component: AdminComponent,
     children: [
-      { path: 'user-list', component: UserListComponent},
-      { path: '', component: AdminDashboardComponent }
+      { path: 'dashboard', component: AdminDashboardComponent},
+      { path: 'user-list', component: UserListComponent}
     ]
   }
 ];
