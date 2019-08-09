@@ -4,8 +4,8 @@ import { Store, select } from '@ngrx/store';
 
 import { Logger } from '@app/core/services/logger.service';
 import { Post } from '../../models/post.model';
-import { selectPostsArray, selectIsLoading } from '../../store/home.reducer';
-import * as homeActions from '../../store/home.actions';
+import * as homeSelectors from '../../store/home/home.selectors';
+import * as homeActions from '../../store/home/home.actions';
 
 const log = new Logger('HomeComponent');
 
@@ -16,12 +16,14 @@ const log = new Logger('HomeComponent');
 })
 export class HomeComponent implements OnInit {
 
-  public posts$ = this.store.pipe(select(selectPostsArray));
-  public isLoading$ = this.store.pipe(select(selectIsLoading));
+  public posts$: Observable<Post[]>;
+  public isLoading$: Observable<boolean>;
 
   constructor(private store: Store<Post[]>) { }
 
   ngOnInit() {
+    this.posts$ = this.store.pipe(select(homeSelectors.selectPostsArray));
+    this.isLoading$ = this.store.pipe(select(homeSelectors.selectIsLoading));
     this.store.dispatch(homeActions.loadPosts());
   }
 }

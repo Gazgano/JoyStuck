@@ -5,9 +5,9 @@ import { switchMap, map, catchError, tap } from 'rxjs/operators';
 import * as moment from 'moment';
 
 import * as commentsActions from './comments.actions';
-import { CommentsService } from '../services/comments.service';
+import { CommentsService } from '../../services/comments.service';
 import { AuthService } from '@app/core/services/auth.service';
-import { UserComment } from '../models/user-comment.model';
+import { UserComment } from '../../models/user-comment.model';
 import { Logger } from '@app/core/services/logger.service';
 
 const log = new Logger('CommentsEffects');

@@ -14,7 +14,7 @@
         <img mat-card-avatar src="assets/images/gazgano-picture-64px.png">
     </div>
     <input #userComment (keyup.enter)="sendComment(userComment.value)" class="PostComment-WriteBox-Input" type="text" placeholder="Write a comment...">
-        <mat-spinner *ngIf="(sendingCommentPostsIds$ | async).includes(postId); else sendButton" [color]="palette" [diameter]="20"></mat-spinner>
+        <mat-spinner *ngIf="(isCommentSending$ | async); else sendButton" [color]="palette" [diameter]="20"></mat-spinner>
         <ng-template #sendButton>
             <button (click)="sendComment(userComment.value)" [ngClass]="'PostComment-WriteBox-SendButton--' + palette" mat-icon-button>
                 <mat-icon [inline]="true">send</mat-icon>

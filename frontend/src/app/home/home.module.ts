@@ -9,8 +9,8 @@ import { HomeRoutingModule } from './home-routing.module';
 import { PostComponent } from './components/post/post.component';
 import { SharedModule } from '@app/shared/shared.module';
 import { reducersMap } from './store/';
-import { HomeEffects } from './store/home.effects';
-import { CommentsEffects } from './store/comments.effects';
+import { HomeEffects } from './store/home/home.effects';
+import { CommentsEffects } from './store/comments/comments.effects';
 import { PostsService } from './services/posts.service';
 import { CommentsService } from './services/comments.service';
 

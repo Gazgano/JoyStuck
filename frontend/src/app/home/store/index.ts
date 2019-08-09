@@ -1,8 +1,7 @@
 import { ActionReducerMap, createFeatureSelector } from '@ngrx/store';
-import { HomeState } from './home.reducer';
-import { CommentsState } from './comments.reducer';
-import * as fromHome from './home.reducer';
-import * as fromComments from './comments.reducer';
+
+import { HomeState, homeReducer } from './home/home.reducer';
+import { CommentsState, commentsReducer } from './comments/comments.reducer';
 
 export interface State {
   home: HomeState;
@@ -10,8 +9,8 @@ export interface State {
 }
 
 export const reducersMap: ActionReducerMap<State> = {
-  home: fromHome.reducer,
-  comments: fromComments.reducer
+  home: homeReducer,
+  comments: commentsReducer
 };
 
 export const selectHomeFeature = createFeatureSelector<State>('home');

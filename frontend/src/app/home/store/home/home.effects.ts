@@ -4,7 +4,7 @@ import { switchMap, map, catchError } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
 
 import * as homeActions from './home.actions';
-import { PostsService } from '../services/posts.service';
+import { PostsService } from '../../services/posts.service';
 
 @Injectable()
 export class HomeEffects {
