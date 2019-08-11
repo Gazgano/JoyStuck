@@ -36,7 +36,7 @@ function onLoadComments(state: CommentsState, props: any) {
 
 function onLoadCommentsSuccess(state: CommentsState, props: any) {
   // we are copying loadingCommentsPostsIds and removing all ids also in comments
-  const loadingCommentsPostsIds = [...state.loadingCommentsPostsIds.filter(e => !props.comments.map(c => c.post_id).includes(e))];
+  const loadingCommentsPostsIds = state.loadingCommentsPostsIds.filter(e => !props.comments.map(c => c.post_id).includes(e));
   return commentsAdapter.addMany(props.comments, {...state, loadingCommentsPostsIds});
 }
 
@@ -55,8 +55,7 @@ function onSendComment(state: CommentsState, props: any) {
 }
 
 function onSendCommentSuccess(state: CommentsState, props: any) {
-  // we are copying sendingCommentPostsIds and removing the id of the successfully posted comment
-  const sendingCommentPostsIds = copyArrayAndDeleteFrom(state.sendingCommentPostsIds, e => e === props.comment.post_id);
+  const sendingCommentPostsIds = state.sendingCommentPostsIds.filter(id => id !== props.comment.post_id);
   return commentsAdapter.addOne(props.comment, {...state, sendingCommentPostsIds});
 }
 
