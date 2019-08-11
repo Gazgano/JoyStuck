@@ -11,6 +11,7 @@ import { UserComment } from '../../models/user-comment.model';
 import * as commentsActions from '../../store/comments/comments.actions';
 import * as commentsSelectors from '@app/home/store/comments/comments.selectors';
 import * as homeActions from '../../store/home/home.actions';
+import * as homeSelector from '../../store/home/home.selectors';
 
 const log = new Logger('PostComponent');
 
@@ -31,6 +32,7 @@ export class PostComponent implements OnInit {
 
   public comments$: Observable<UserComment[]>;
   public areCommentsLoading$: Observable<boolean>;
+  public likesCount$: Observable<number>;
 
   constructor(private store: Store<UserComment[]>) { }
 
@@ -39,8 +41,11 @@ export class PostComponent implements OnInit {
   //////////////////////////////////////////
 
   ngOnInit() {
+    log.debug('Initialization');
+    
     this.comments$ = this.store.pipe(select(commentsSelectors.selectCommentsByPostId(this.post.id)));
     this.areCommentsLoading$ = this.store.pipe(select(commentsSelectors.selectLoadingCommentsByPostId(this.post.id)));
+    this.likesCount$ = this.store.pipe(select(homeSelector.selectLikesCount(this.post.id)));
     
     this.postDesign = POST_TYPES_DESIGNS[this.post.type];
     this.initTitle();

@@ -19,7 +19,7 @@
     <mat-card-actions [ngClass]="'PostCard-Actions--' + postDesign.palette">
         <button (click)="likePost()" mat-button>
             <mat-icon>thumb_up</mat-icon>
-            <span *ngIf="post.likesCount > 0">{{ post.likesCount }}</span>
+            <span *ngIf="likesCount$ | async as likesCount">{{ likesCount }}</span>
         </button>
         <button mat-button (click)="toggleComments()">
             <mat-icon>chat_bubble</mat-icon>
@@ -50,9 +50,9 @@
     <div *ngIf="!isTitleArray" class="PostCardLight-Title">{{ title }}</div>
 
     <mat-card-actions [ngClass]="'PostCardLight-Actions--' + postDesign.palette">
-        <button mat-button (click)="likePost()">
+        <button (click)="likePost()" mat-button>
             <mat-icon>thumb_up</mat-icon>
-            <span *ngIf="post.likesCount > 0">{{ post.likesCount }}</span>
+            <span *ngIf="likesCount$ | async as likesCount">{{ likesCount }}</span>
         </button>
         <button mat-button (click)="toggleComments()">
             <mat-icon>chat_bubble</mat-icon>
