@@ -27,4 +27,8 @@ export class HomeComponent implements OnInit {
     this.isLoading$ = this.store.pipe(select(homeSelectors.selectIsLoading));
     this.store.dispatch(homeActions.loadPosts());
   }
+
+  trackByPost(index: number, post: Post) {
+    return post.id;
+  }
 }

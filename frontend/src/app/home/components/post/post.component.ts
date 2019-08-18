@@ -41,12 +41,10 @@ export class PostComponent implements OnInit {
   //////////////////////////////////////////
 
   ngOnInit() {
-    log.debug('Initialization');
-    
     this.comments$ = this.store.pipe(select(commentsSelectors.selectCommentsByPostId(this.post.id)));
     this.areCommentsLoading$ = this.store.pipe(select(commentsSelectors.selectLoadingCommentsByPostId(this.post.id)));
     this.likesCount$ = this.store.pipe(select(homeSelector.selectLikesCount(this.post.id)));
-    
+
     this.postDesign = POST_TYPES_DESIGNS[this.post.type];
     this.initTitle();
     this.elapsedTime = moment().diff(this.post.timestamp, 'minute') + ' min.';
@@ -71,7 +69,7 @@ export class PostComponent implements OnInit {
 
   toggleComments() {
     const postId = this.post.id;
-    
+
     if (!this.commentsOpen) {
       this.store.dispatch(commentsActions.loadComments({ postId }));
     }

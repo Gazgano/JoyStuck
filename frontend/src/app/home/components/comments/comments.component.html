@@ -1,4 +1,4 @@
-<div *ngFor="let comment of comments" class="PostComment-Comment">
+<div *ngFor="let comment of comments; trackBy: trackByComment" class="PostComment-Comment">
     <div class="PostComment-Avatar">
         <img mat-card-avatar src="assets/images/gazgano-picture-64px.png">
     </div>

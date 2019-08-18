@@ -34,4 +34,8 @@ export class UserListComponent implements OnInit {
       this.deletionConfirmation = id;
     }
   }
+
+  trackByUser(index: number, user: User) {
+    return user.id;
+  }
 }

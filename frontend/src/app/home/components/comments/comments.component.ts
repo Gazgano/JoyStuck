@@ -27,10 +27,10 @@ export class CommentsComponent implements OnInit, OnDestroy {
   private destroyed$ = new Subject<boolean>();
 
   constructor(private store: Store<UserComment[]>, private actions$: Actions) { }
-  
+
   ngOnInit() {
     this.isCommentSending$ = this.store.pipe(select(commentsSelectors.selectSendingCommentsByPostId(this.postId)));
-    
+
     this.eraseOnSentCommentSuccess();
   }
 
@@ -38,7 +38,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
-  
+
   sendComment(text: string) {
     if (text.trim().length > 0) {
       this.store.dispatch(commentsActions.sendComment({ text, postId: this.postId }));
@@ -58,5 +58,9 @@ export class CommentsComponent implements OnInit, OnDestroy {
 
   likeComment(id: number) {
     this.store.dispatch(commentsActions.likeComment({ id }));
+  }
+
+  trackByComment(index: number, comment: UserComment) {
+    return comment.id;
   }
 }

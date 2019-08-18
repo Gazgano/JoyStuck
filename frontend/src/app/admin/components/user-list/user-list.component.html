@@ -11,7 +11,7 @@
   </thead>
   <tbody class="UserList-Body">
     <ng-container *ngIf="loadingUsers$ | async as loadingUsers" >
-      <tr *ngFor="let user of users">
+      <tr *ngFor="let user of users; trackBy: trackByUser">
         <td>{{ user.id }}</td>
         <td class="UserList-Body-ProfileImage"><img [src]="user.profileImageSrcUrl" class="UserList-Body-ProfileImage-Image"></td>
         <td>{{ user.username }}</td>
