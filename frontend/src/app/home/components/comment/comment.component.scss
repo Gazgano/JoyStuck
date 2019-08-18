@@ -1,0 +1,49 @@
+@import 'ink-theme';
+
+:host {
+  align-items: center;
+  display: flex;
+  margin-top: 5px;
+
+  &:hover {
+    .PostComment-LikeButton {
+        display: block;
+    }
+  }
+}
+
+.PostComment-Avatar {
+  margin-right: 10px;
+}
+
+.PostComment-Content {
+  border-radius: 3px;
+  margin-right: 10px;
+  padding: 10px 15px;
+  max-width: calc(100% - 100px); // to let space for button
+}
+
+.PostComment-LikeButton {
+    display: none;
+}
+
+// adding colors depending of the theme
+@each $name in $palettes {
+  $palette: map-get($ink-theme, $name);
+  $color: map-get($palette, default);
+
+  $variant-code: 50;
+  $soft-color: map-get($palette, $variant-code);
+  $soft-color-contrast: map-get(map-get($palette, contrast), $variant-code);
+
+  .PostComment-Content--#{$name} {
+    @extend .PostComment-Content;
+    background-color: $soft-color;
+    color: $soft-color-contrast;
+  }
+
+  .PostComment-LikeButton--#{$name} {
+    @extend .PostComment-LikeButton;
+    color: $color;
+  }
+}

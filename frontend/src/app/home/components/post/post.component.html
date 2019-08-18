@@ -35,11 +35,10 @@
 <div *ngIf="postDesign.componentStyle === 0" [@openClose]="commentsOpen ? 'open' : 'closed'" class="PostCard-Comments">
     <mat-divider></mat-divider>
     <mat-spinner *ngIf="(areCommentsLoading$ | async); else commentsComponent" [color]="postDesign.palette" [diameter]="30"></mat-spinner>
-    <ng-template #commentsComponent><ng-container *ngIf="comments$ | async as comments">
-        <app-comments [comments]="comments" [palette]="postDesign.palette" [postId]="post.id"></app-comments>
-    </ng-container></ng-template>
+    <ng-template #commentsComponent>
+        <app-comment-list [comments]="comments$ | async" [palette]="postDesign.palette" [postId]="post.id"></app-comment-list>
+    </ng-template>
 </div>
-
 
 <!-- Light card (no content, just title) -->
 <mat-card *ngIf="postDesign.componentStyle === 1" [ngClass]="'PostCardLight--' + postDesign.palette">
@@ -68,7 +67,7 @@
 <div *ngIf="postDesign.componentStyle === 1" [@openClose]="commentsOpen ? 'open' : 'closed'" class="PostCardLight-Comments">
   <mat-divider></mat-divider>
   <mat-spinner *ngIf="(areCommentsLoading$ | async); else commentsComponentLight" [color]="postDesign.palette" [diameter]="30"></mat-spinner>
-  <ng-template #commentsComponentLight><ng-container *ngIf="comments$ | async as comments">
-      <app-comments [comments]="comments" [palette]="postDesign.palette" [postId]="post.id"></app-comments>
-  </ng-container></ng-template>
+  <ng-template #commentsComponentLight>
+      <app-comment-list [comments]="comments$ | async" [palette]="postDesign.palette" [postId]="post.id"></app-comment-list>
+  </ng-template>
 </div>

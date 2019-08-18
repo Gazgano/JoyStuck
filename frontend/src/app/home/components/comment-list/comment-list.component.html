@@ -1,12 +1,5 @@
 <div *ngFor="let comment of comments; trackBy: trackByComment" class="PostComment-Comment">
-    <div class="PostComment-Avatar">
-        <img mat-card-avatar src="assets/images/gazgano-picture-64px.png">
-    </div>
-    <div [ngClass]="'PostComment-Content--' + palette">{{ comment.content }}</div>
-    <button (click)="likeComment(comment.id)" [ngClass]="'PostComment-LikeButton--' + palette" [ngStyle]="comment.likesCount > 0? {display: 'block'} : {}" mat-icon-button>
-        <mat-icon [inline]="true">thumb_up</mat-icon>
-        <span *ngIf="comment.likesCount > 0">{{ comment.likesCount }}</span>
-    </button>
+    <app-comment [comment]="comment" [palette]="palette" [postId]="postId" ></app-comment>
 </div>
 <mat-divider></mat-divider>
 <div class="PostComment-WriteBox">
