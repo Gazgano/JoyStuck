@@ -1,4 +1,5 @@
 import { createSelector } from '@ngrx/store';
+
 import { HomeState, selectHomeFeature } from '../';
 import { commentsAdapter, CommentsState } from './comments.reducer';
 
@@ -15,6 +16,11 @@ const selectCommentsArray = createSelector(
 export const selectCommentsByPostId = (postId: number) => createSelector(
   selectCommentsArray,
   comments => comments.filter(c => c.post_id === postId)
+);
+
+export const selectCommentsCountByPostId = (postId: number) => createSelector(
+  selectCommentsArray,
+  comments => comments.filter(c => c.post_id === postId).length
 );
 
 export const selectLoadingCommentsByPostId = (postId: number) => createSelector(

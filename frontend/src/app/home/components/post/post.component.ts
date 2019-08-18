@@ -5,13 +5,12 @@ import * as moment from 'moment';
 
 import { Logger } from '@app/core/services/logger.service';
 import { Post } from '../../models/post.model';
-import { PostType, PostDesign, POST_TYPES_DESIGNS } from './post.config';
+import { PostDesign, POST_TYPES_DESIGNS } from './post.config';
 import { openCloseTrigger } from './post.animation';
 import { UserComment } from '../../models/user-comment.model';
 import * as commentsActions from '../../store/comments/comments.actions';
-import * as commentsSelectors from '@app/home/store/comments/comments.selectors';
+import * as commentsSelectors from '../../store/comments/comments.selectors';
 import * as postActions from '../../store/post/post.actions';
-import * as postSelector from '../../store/post/post.selectors';
 
 const log = new Logger('PostComponent');
 
@@ -24,42 +23,20 @@ const log = new Logger('PostComponent');
 export class PostComponent implements OnInit {
 
   @Input() post: Post;
-  public title: string | string[];
   public isTitleArray: boolean;
   public postDesign: PostDesign;
-  public elapsedTime: string;
   public commentsOpen = false;
-
-  public comments$: Observable<UserComment[]>;
-  public areCommentsLoading$: Observable<boolean>;
-  public likesCount$: Observable<number>;
+  public commentsCount$: Observable<number>;
 
   constructor(private store: Store<UserComment[]>) { }
 
-  //////////////////////////////////////////
-  // Initialisation
-  //////////////////////////////////////////
-
   ngOnInit() {
-    this.comments$ = this.store.pipe(select(commentsSelectors.selectCommentsByPostId(this.post.id)));
-    this.areCommentsLoading$ = this.store.pipe(select(commentsSelectors.selectLoadingCommentsByPostId(this.post.id)));
-    this.likesCount$ = this.store.pipe(select(postSelector.selectLikesCount(this.post.id)));
-
     this.postDesign = POST_TYPES_DESIGNS[this.post.type];
-    this.initTitle();
-    this.elapsedTime = moment().diff(this.post.timestamp, 'minute') + ' min.';
+    this.commentsCount$ = this.store.pipe(select(commentsSelectors.selectCommentsCountByPostId(this.post.id)));
   }
 
-  initTitle() {
-    switch (this.postDesign.componentStyle) {
-      case PostType.Normal:
-        this.title = this.post.title.split(' ');
-        this.isTitleArray = true;
-        break;
-      default:
-        this.title = this.post.title;
-        this.isTitleArray = false;
-    }
+  get elapsedTime(): string {
+    return moment(this.post.timestamp).fromNow();
   }
 
   likePost() {

@@ -1,0 +1,4 @@
+<mat-spinner *ngIf="(areCommentsLoading$ | async); else commentList" [color]="palette" [diameter]="30"></mat-spinner>
+<ng-template #commentList>
+    <app-comment-list [comments]="comments$ | async" [palette]="palette" [postId]="postId"></app-comment-list>
+</ng-template>

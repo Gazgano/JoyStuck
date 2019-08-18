@@ -15,9 +15,10 @@ import { PostsService } from './services/posts.service';
 import { CommentsService } from './services/comments.service';
 import { PostListComponent } from './components/post-list/post-list.component';
 import { CommentListComponent } from './components/comment-list/comment-list.component';
+import { CommentPageComponent } from './containers/comment-page/comment-page.component';
 
 @NgModule({
-  declarations: [CommentComponent, PostPageComponent, PostComponent, PostListComponent, CommentListComponent ],
+  declarations: [CommentComponent, PostPageComponent, PostComponent, PostListComponent, CommentListComponent, CommentPageComponent ],
   imports: [
     CommonModule,
     SharedModule,
