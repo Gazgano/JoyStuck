@@ -1,0 +1,13 @@
+@import 'breakpoints';
+
+.PostList {
+  height: 100%;
+  margin-top: -10px; // to compensate the margin-top of the first post
+  width: $md;
+}
+
+.PostList-EmptyScreen {
+margin: auto;
+padding: 20px;
+width: fit-content;
+}

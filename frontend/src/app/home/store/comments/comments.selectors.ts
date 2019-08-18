@@ -1,10 +1,10 @@
 import { createSelector } from '@ngrx/store';
-import { State, selectHomeFeature } from '../';
+import { HomeState, selectHomeFeature } from '../';
 import { commentsAdapter, CommentsState } from './comments.reducer';
 
 const selectComments = createSelector(
   selectHomeFeature,
-  (state: State) => state.comments
+  (state: HomeState) => state.comments
 );
 
 const selectCommentsArray = createSelector(

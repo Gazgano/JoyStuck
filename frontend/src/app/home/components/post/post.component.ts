@@ -10,8 +10,8 @@ import { openCloseTrigger } from './post.animation';
 import { UserComment } from '../../models/user-comment.model';
 import * as commentsActions from '../../store/comments/comments.actions';
 import * as commentsSelectors from '@app/home/store/comments/comments.selectors';
-import * as homeActions from '../../store/home/home.actions';
-import * as homeSelector from '../../store/home/home.selectors';
+import * as postActions from '../../store/post/post.actions';
+import * as postSelector from '../../store/post/post.selectors';
 
 const log = new Logger('PostComponent');
 
@@ -43,7 +43,7 @@ export class PostComponent implements OnInit {
   ngOnInit() {
     this.comments$ = this.store.pipe(select(commentsSelectors.selectCommentsByPostId(this.post.id)));
     this.areCommentsLoading$ = this.store.pipe(select(commentsSelectors.selectLoadingCommentsByPostId(this.post.id)));
-    this.likesCount$ = this.store.pipe(select(homeSelector.selectLikesCount(this.post.id)));
+    this.likesCount$ = this.store.pipe(select(postSelector.selectLikesCount(this.post.id)));
 
     this.postDesign = POST_TYPES_DESIGNS[this.post.type];
     this.initTitle();
@@ -64,7 +64,7 @@ export class PostComponent implements OnInit {
 
   likePost() {
     const id = this.post.id;
-    this.store.dispatch(homeActions.likePost({ id }));
+    this.store.dispatch(postActions.likePost({ id }));
   }
 
   toggleComments() {

@@ -1,0 +1,16 @@
+@import 'mixins';
+@import 'breakpoints';
+
+:host {
+ @include full-size;
+}
+
+.PostPageContainer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.PostPage-Loader {
+    margin: auto;
+}

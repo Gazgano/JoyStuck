@@ -2,21 +2,21 @@ import { EntityState, createEntityAdapter, Update } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
 
 import { Post } from '../../models/post.model';
-import * as homeActions from './home.actions';
+import * as postActions from './post.actions';
 
 ////////////////////////////////////////////////
 // State
 ////////////////////////////////////////////////
 
-export interface HomeState extends EntityState<Post> {
+export interface PostState extends EntityState<Post> {
   isLoading: boolean;
 }
 
-export const homeAdapter = createEntityAdapter({
+export const postAdapter = createEntityAdapter({
   selectId: (p: Post) => p.id
 });
 
-const initialState = homeAdapter.getInitialState({
+const initialState = postAdapter.getInitialState({
   isLoading: false
 });
 
@@ -24,14 +24,14 @@ const initialState = homeAdapter.getInitialState({
 // Reducer helpers
 ////////////////////////////////////////////////
 
-function onLikePostSuccess(state: HomeState, props: any) {
+function onLikePostSuccess(state: PostState, props: any) {
   const update: Update<Post> = {
     id: props.post.id,
     changes: {
       likesCount: props.post.likesCount
     }
   };
-  return homeAdapter.updateOne(update, state);
+  return postAdapter.updateOne(update, state);
 }
 
 ////////////////////////////////////////////////
@@ -40,16 +40,16 @@ function onLikePostSuccess(state: HomeState, props: any) {
 
 const reducer = createReducer(
   initialState,
-  
-  on(homeActions.loadPosts, state => ({ ...state, isLoading: true })),
-  
-  on(homeActions.loadPostsSuccess, (state, { posts }) => {
-    return homeAdapter.addAll(posts, {...state, isLoading: false});
+
+  on(postActions.loadPosts, state => ({ ...state, isLoading: true })),
+
+  on(postActions.loadPostsSuccess, (state, { posts }) => {
+    return postAdapter.addAll(posts, {...state, isLoading: false});
   }),
 
-  on(homeActions.likePostSuccess, (state, props) => onLikePostSuccess(state, props))
+  on(postActions.likePostSuccess, (state, props) => onLikePostSuccess(state, props))
 );
 
-export function homeReducer(state: HomeState | undefined, action: Action) {
+export function postReducer(state: PostState | undefined, action: Action) {
   return reducer(state, action);
 }

@@ -1,0 +1,7 @@
+<app-shell>
+  <app-loader *ngIf="isLoading$ | async; else postPage" class="PostPage-Loader" palette="primary"></app-loader>
+
+  <ng-template #postPage>
+    <app-post-list [posts]="posts$ | async" class="PostPageContainer"></app-post-list>
+  </ng-template>
+</app-shell>

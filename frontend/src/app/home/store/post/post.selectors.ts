@@ -1,25 +1,25 @@
 import { createSelector } from '@ngrx/store';
-import { selectHomeFeature, State } from '../';
-import { homeAdapter, HomeState } from './home.reducer';
+import { selectHomeFeature, HomeState } from '..';
+import { postAdapter, PostState } from './post.reducer';
 
-const selectHome = createSelector(
+const selectPost = createSelector(
   selectHomeFeature,
-  (state: State) => state.home
+  (state: HomeState) => state.post
 );
 
 const selectPostsEntities = createSelector(
-  selectHome,
-  homeAdapter.getSelectors().selectEntities
+  selectPost,
+  postAdapter.getSelectors().selectEntities
 );
 
 export const selectPostsArray = createSelector(
-  selectHome,
-  homeAdapter.getSelectors().selectAll
+  selectPost,
+  postAdapter.getSelectors().selectAll
 );
 
 export const selectIsLoading = createSelector(
-  selectHome,
-  (state: HomeState) => state.isLoading
+  selectPost,
+  (state: PostState) => state.isLoading
 );
 
 export const selectLikesCount = (postId: number) => createSelector(
