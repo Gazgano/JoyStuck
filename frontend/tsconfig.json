@@ -6,7 +6,7 @@
     "paths": {
       "@app/*": ["src/app/*"]
     },
-    "outDir": "./dist/out-tsc",
+    "outDir": "./dist",
     "sourceMap": true,
     "declaration": false,
     "module": "esnext",
