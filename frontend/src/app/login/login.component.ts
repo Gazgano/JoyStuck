@@ -14,7 +14,7 @@ import { AuthService } from '@app/core/services/auth.service';
 
 export class LoginComponent implements OnInit, AfterContentInit {
 
-  @ViewChild('username') usernameMatInput: ElementRef;
+  @ViewChild('username', { static: true }) usernameMatInput: ElementRef;
 
   public badCredentials = false;
   public isLoading = false;

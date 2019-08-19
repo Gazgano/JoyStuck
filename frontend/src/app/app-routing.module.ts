@@ -8,12 +8,12 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 const routes: Routes = [
   { 
     path: 'home', 
-    loadChildren: './home/home.module#HomeModule',
+    loadChildren: () => import('./home/home.module').then(m => m.HomeModule),
     canLoad: [AuthGuard]
   },
   { 
     path: 'admin', 
-    loadChildren: './admin/admin.module#AdminModule',
+    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
     canLoad: [AuthGuard]
   },
   { path: 'login', component: LoginComponent },

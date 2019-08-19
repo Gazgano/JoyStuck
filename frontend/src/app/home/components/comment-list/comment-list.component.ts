@@ -19,7 +19,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   @Input() palette: string;
   @Input() postId: number;
 
-  @ViewChild('userComment') userCommentInput: ElementRef;
+  @ViewChild('userComment', { static: true }) userCommentInput: ElementRef;
 
   public isCommentSending$: Observable<boolean>;
   private destroyed$ = new Subject<boolean>();
