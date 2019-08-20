@@ -11,7 +11,7 @@ Example usage:
 */
 
 import * as moment from 'moment';
-import { throwError } from 'rxjs';
+import { throwError, EMPTY } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 
@@ -63,7 +63,7 @@ export class Logger {
 
   public handleError(err: any) {
     this.error(err);
-    return throwError(err);
+    return EMPTY;
   }
 
   private log(func: (...args: any[]) => void, level: LogLevel, objects: any[]): void {

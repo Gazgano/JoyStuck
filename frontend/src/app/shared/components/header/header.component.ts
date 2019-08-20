@@ -1,6 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import * as firebase from 'firebase/app';
-import 'firebase/auth';
+import { Component } from '@angular/core';
 
 import { AuthService } from '@app/core/services/auth.service';
 import { Router } from '@angular/router';
@@ -10,20 +8,15 @@ import { Router } from '@angular/router';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
 
   displayDefaultImage = false;
   userName = 'Gazgano';
   userPicturePath = 'assets/images/gazgano-picture-64px.png';
 
-  constructor(private authService: AuthService, private router: Router) { }
-
-  ngOnInit() {
-  }
+  constructor(private authService: AuthService) { }
 
   logout() {
     this.authService.signOut();
-    console.log('Logging out...');
-    this.router.navigate(['login']);
   }
 }

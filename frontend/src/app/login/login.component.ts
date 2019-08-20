@@ -1,8 +1,6 @@
 import { AfterContentInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import * as firebase from 'firebase/app';
-import 'firebase/auth';
 
 import { AuthService } from '@app/core/services/auth.service';
 import { Logger } from '@app/core/services/logger.service';
@@ -35,7 +33,7 @@ export class LoginComponent implements OnInit, AfterContentInit {
   ngAfterContentInit() {
     this.emailMatInput.nativeElement.focus();
   }
-  
+
   onSubmit() {
     this.isLoading = true;
     this.signIn(this.emailFormControl.value, this.passwordFormControl.value);
@@ -43,11 +41,11 @@ export class LoginComponent implements OnInit, AfterContentInit {
 
   signIn(email: string, password: string) {
     this.authService.signIn(email, password).subscribe(
-      data => {
+      () => {
         this.isLoading = false;
         this.router.navigateByUrl('/');
       }, err => {
-        log.info(err);
+        this.isLoading = false;
         log.info(`Authentication failed (error code ${err.code})`);
         this.errorMessage = err.message;
       }
