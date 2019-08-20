@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
-import { BehaviorSubject, ReplaySubject, Observable } from 'rxjs';
+import { BehaviorSubject, ReplaySubject, Observable, from } from 'rxjs';
 import { distinctUntilChanged, tap } from 'rxjs/operators';
+import * as firebase from 'firebase/app';
+import 'firebase/auth';
 
 import { ApiService } from '@app/core/services/api.service';
 import { JwtService } from '@app/core/services/jwt.service';
@@ -29,7 +30,41 @@ export class AuthService {
   public isAuthenticated = this.isAuthenticatedSubject.asObservable();
 
   constructor(private apiService: ApiService, private jwtService: JwtService, private router: Router) { }
+  
+  initializeAuth() {
+    firebase.auth().onAuthStateChanged(user => this.onAuthStateChanged(user));
+  }
 
+  signIn(email: string, password: string): Observable<firebase.auth.UserCredential> {
+    return from(firebase.auth().signInWithEmailAndPassword(email, password));
+  }
+
+  signOut(): void {
+    firebase.auth().signOut();
+  }
+  
+  private onAuthStateChanged(user: any) {
+    if (user) {
+      this.currentUserSubject.next(this.mapUser(user));
+      this.isAuthenticatedSubject.next(true);
+      log.info(`User ${user.displayName} is now signed in`);
+    } else {
+      this.currentUserSubject.next({} as User);
+      this.isAuthenticatedSubject.next(false);
+      log.info('User is signed out');
+    }
+  }
+  
+  private mapUser(firebaseUser: firebase.User): User {
+    return {
+      id: firebaseUser.uid,
+      username: firebaseUser.displayName,
+      token: null,
+      profileImageSrcUrl: firebaseUser.photoURL
+    };
+  }
+
+  /*
   populate() { // executed at the initialisation of the app (app.component.ts)
     if (this.jwtService.getToken()) {
       this.apiService.get('/user', {token: this.jwtService.getToken()}).subscribe(
@@ -59,6 +94,7 @@ export class AuthService {
     this.currentUserSubject.next({} as User);
     this.isAuthenticatedSubject.next(false);
   }
+  
 
   login(credentials: any): Observable<User> {
     return this.apiService.post('/login', credentials).pipe(tap(
@@ -77,4 +113,5 @@ export class AuthService {
     log.info('Logging out...');
     this.router.navigate(['login']);
   }
+  */
 }

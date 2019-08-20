@@ -1,10 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '@app/core/services/auth.service';
 import * as firebase from 'firebase/app';
+import 'firebase/auth';
+
+import { Logger } from './core/services/logger.service';
+
+const log = new Logger('AppComponent');
 
 // Web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: 'AIzaSyBGEtojvCF9mRTVFcPvbFDx6A56VPCUBw4',
+  apiKey: 'AIzaSyD5KB5NePsWDsUXMqIic1dldav1W3jblyw',
   authDomain: 'joystuck.firebaseapp.com',
   databaseURL: 'https://joystuck.firebaseio.com',
   projectId: 'joystuck',
@@ -24,6 +29,6 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     firebase.initializeApp(firebaseConfig);
-    this.authService.populate();
+    this.authService.initializeAuth();
   }
 }
