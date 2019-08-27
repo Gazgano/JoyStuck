@@ -23,14 +23,20 @@ export class App {
   }
 
   private defineRoutes() {
+    this.app.put('/posts/:id/like', (req, res) => {
+      this.dbService.likePost(`posts/${req.params.id}`)
+      .then(post => res.status(200).json(post))
+      .catch(err => res.status(500).send(err));
+    });
+
     this.app.get('/:collection/:id', (req, res) => {
-      this.dbService.getDocumentByRef(`${req.params.collection}/${req.params.id}`)
+      this.dbService.getDocumentByPath(`${req.params.collection}/${req.params.id}`)
       .then(post => res.status(200).json(post))
       .catch(err => res.status(500).send(err));
     });
     
     this.app.get('/:collection', (req, res) => {
-      this.dbService.getCollection(req.params.collection)
+      this.dbService.getCollectionByPath(req.params.collection)
       .then(posts => res.status(200).json(posts))
       .catch(err => res.status(500).send(err));
     });
