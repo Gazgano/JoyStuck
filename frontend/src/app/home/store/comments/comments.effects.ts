@@ -40,7 +40,7 @@ export class CommentsEffects {
     ))
   ));
 
-  private createComment(text: string, postId: number): UserComment {
+  private createComment(text: string, postId: string): UserComment {
     let authorName: string;
     this.authService.currentUser.subscribe(user => authorName = user.username);
 

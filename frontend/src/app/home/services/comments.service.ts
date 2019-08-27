@@ -14,18 +14,18 @@ const log = new Logger('CommentsService');
 export class CommentsService {
   constructor(private http: HttpClient, private apiService: ApiService) {}
 
-  getCommentsByPostId(postId: number): Observable<UserComment[]> {
+  getCommentsByPostId(postId: string): Observable<UserComment[]> {
     return this.http.get<UserComment[]>(`${baseUrl}comments/?post_id=${postId}`).pipe( // to be modified with a proper API
       catchError(log.handleError)
     );
   }
 
-  likeComment(id: number): Observable<UserComment | null> {
+  likeComment(id: string): Observable<UserComment | null> {
     return this.http.put<UserComment>(`${baseUrl}comments/${id}/like`, {}, this.apiService.getReqOptions()).pipe(
       catchError(log.handleError)
     );
   }
-  
+
   postComment(comment: UserComment): Observable<UserComment | null> {
     return this.http.post<UserComment>(`${baseUrl}comments/`, comment, this.apiService.getReqOptions()).pipe(
       catchError(log.handleError)

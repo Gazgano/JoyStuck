@@ -16,11 +16,11 @@ export class CommentComponent {
 
   @Input() comment: UserComment;
   @Input() palette: string;
-  @Input() postId: number;
+  @Input() postId: string;
 
   constructor(private store: Store<UserComment[]>) { }
 
-  likeComment(id: number) {
+  likeComment(id: string) {
     this.store.dispatch(commentsActions.likeComment({ id }));
   }
 }

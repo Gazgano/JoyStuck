@@ -20,7 +20,7 @@ export class PostsService {
     );
   }
 
-  likePost(id: number): Observable<Post | null> {
+  likePost(id: string): Observable<Post | null> {
     return this.http.put<Post>(`${baseUrl}posts/${id}/like`, {}, this.apiService.getReqOptions()).pipe(
       catchError(log.handleError)
     );

@@ -3,7 +3,7 @@ import * as moment from 'moment';
 import { UserComment } from './user-comment.model';
 
 export interface Post {
-    id: number;
+    id: string;
     timestamp: moment.Moment;
     type: string;
     authorName: string;

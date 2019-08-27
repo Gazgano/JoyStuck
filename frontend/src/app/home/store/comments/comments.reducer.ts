@@ -13,8 +13,8 @@ const log = new Logger('CommentsReducer');
 ////////////////////////////////////////////////
 
 export interface CommentsState extends EntityState<UserComment> {
-  loadingCommentsPostsIds: number[];
-  sendingCommentPostsIds: number[];
+  loadingCommentsPostsIds: string[];
+  sendingCommentPostsIds: string[];
 }
 
 export const commentsAdapter = createEntityAdapter({

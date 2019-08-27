@@ -15,9 +15,9 @@ import { buttonConfirmationTrigger } from './user-list.animation';
 })
 export class UserListComponent implements OnInit {
   public users$: Observable<User[]>;
-  public loadingUsers$: Observable<number[]>;
+  public loadingUsers$: Observable<string[]>;
 
-  public deletionConfirmation: number;
+  public deletionConfirmation: string;
 
   constructor(private store: Store<User[]>) { }
 
@@ -27,7 +27,7 @@ export class UserListComponent implements OnInit {
     this.store.dispatch(userListActions.loadUserList());
   }
 
-  deleteUser(id: number) {
+  deleteUser(id: string) {
     if (this.deletionConfirmation === id) {
       this.store.dispatch(userListActions.deleteUser({ id }));
     } else {

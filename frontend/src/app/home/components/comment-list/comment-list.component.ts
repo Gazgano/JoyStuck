@@ -17,7 +17,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
 
   @Input() comments: UserComment[];
   @Input() palette: string;
-  @Input() postId: number;
+  @Input() postId: string;
 
   @ViewChild('userComment', { static: true }) userCommentInput: ElementRef;
 

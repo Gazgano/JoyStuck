@@ -22,7 +22,7 @@ export const selectIsLoading = createSelector(
   (state: PostState) => state.isLoading
 );
 
-export const selectLikesCount = (postId: number) => createSelector(
+export const selectLikesCount = (postId: string) => createSelector(
   selectPostsEntities,
   posts => posts[postId].likesCount || 0
 );

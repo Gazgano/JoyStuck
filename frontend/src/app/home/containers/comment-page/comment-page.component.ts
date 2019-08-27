@@ -12,7 +12,7 @@ import * as commentsSelectors from '@app/home/store/comments/comments.selectors'
 })
 export class CommentPageComponent implements OnInit {
 
-  @Input() postId: number;
+  @Input() postId: string;
   @Input() palette: string;
 
   public areCommentsLoading$: Observable<boolean>;

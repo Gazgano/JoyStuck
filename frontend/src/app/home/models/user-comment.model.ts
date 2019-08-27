@@ -1,8 +1,8 @@
 import * as moment from 'moment';
 
 export interface UserComment {
-    id: number;
-    post_id: number;
+    id: string;
+    post_id: string;
     authorName: string;
     timestamp: moment.Moment;
     content: string;

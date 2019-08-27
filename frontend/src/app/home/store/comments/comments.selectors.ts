@@ -13,22 +13,22 @@ const selectCommentsArray = createSelector(
   commentsAdapter.getSelectors().selectAll,
 );
 
-export const selectCommentsByPostId = (postId: number) => createSelector(
+export const selectCommentsByPostId = (postId: string) => createSelector(
   selectCommentsArray,
   comments => comments.filter(c => c.post_id === postId)
 );
 
-export const selectCommentsCountByPostId = (postId: number) => createSelector(
+export const selectCommentsCountByPostId = (postId: string) => createSelector(
   selectCommentsArray,
   comments => comments.filter(c => c.post_id === postId).length
 );
 
-export const selectLoadingCommentsByPostId = (postId: number) => createSelector(
+export const selectLoadingCommentsByPostId = (postId: string) => createSelector(
   selectComments,
   (state: CommentsState) => state.loadingCommentsPostsIds.includes(postId)
 );
 
-export const selectSendingCommentsByPostId = (postId: number) => createSelector(
+export const selectSendingCommentsByPostId = (postId: string) => createSelector(
   selectComments,
   (state: CommentsState) => state.sendingCommentPostsIds.includes(postId)
 );

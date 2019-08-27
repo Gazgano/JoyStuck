@@ -10,7 +10,7 @@ import { copyArrayAndDeleteFrom } from '@app/shared/utilities';
 ////////////////////////////////////////////////
 
 export interface UserListState extends EntityState<User> {
-  loadingUsersId: number[];
+  loadingUsersId: string[];
 }
 
 const adapter = createEntityAdapter({
@@ -28,18 +28,18 @@ const initialState = adapter.getInitialState({
 
 const userListReducer = createReducer(
   initialState,
-  
+
   on(userListActions.loadUserListSuccess, (state, { users }) => {
     return adapter.addAll(users, state);
   }),
-  
+
   on(userListActions.deleteUser, (state, { id }) => {
     const result =  {...state};
-    result.loadingUsersId = state.loadingUsersId.includes(id)? 
+    result.loadingUsersId = state.loadingUsersId.includes(id)?
         [...state.loadingUsersId] : [...state.loadingUsersId, id];
     return result;
   }),
-  
+
   on(userListActions.deleteUserSuccess, (state, { id }) => {
     const result = adapter.removeOne(id, state);
     result.loadingUsersId = copyArrayAndDeleteFrom(state.loadingUsersId, e => e === id);
