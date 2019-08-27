@@ -29,6 +29,12 @@ export class App {
       .catch(err => res.status(500).send(err));
     });
 
+    this.app.put('/comments/:id/like', (req, res) => {
+      this.dbService.likeComment(`comments/${req.params.id}`)
+      .then(post => res.status(200).json(post))
+      .catch(err => res.status(500).send(err));
+    });
+
     this.app.get('/:collection/:id', (req, res) => {
       this.dbService.getDocumentByPath(`${req.params.collection}/${req.params.id}`)
       .then(post => res.status(200).json(post))

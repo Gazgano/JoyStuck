@@ -54,4 +54,8 @@ export class DbService {
     .then(likesCount => this.db.doc(docPath).set({ likesCount: ++likesCount }, { merge: true }))
     .then(writeResult => this.getDocumentByPath(docPath))
   }
+
+  likeComment(docPath: string): Promise<DocumentData | undefined> {
+    return this.likePost(docPath); // has a likesCount as well
+  }
 }
