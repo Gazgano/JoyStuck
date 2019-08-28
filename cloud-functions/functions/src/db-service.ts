@@ -4,6 +4,7 @@ import { DocumentData, QuerySnapshot, DocumentSnapshot, Firestore, Query } from 
 
 import { DbServiceError } from './models/db-service-error.model';
 import { DbServiceData } from './models/db-service-data.model';
+import { castDocument } from './models/collection-model.map';
 
 export class DbService {
 
@@ -30,6 +31,15 @@ export class DbService {
     .catch(err => { throw this.handleError(err) })
   }
 
+  addDocument(docData: DocumentData, collectionPath: string): Promise<DbServiceData<DocumentData>> {
+    const doc = castDocument(collectionPath, docData);
+    
+    return this.db.collection(collectionPath).add(doc)
+    .then(docRef => docRef.get())
+    .then(docSnapshot => this.formatDocumentSnapshot(docSnapshot))
+    .catch(err => { throw this.handleError(err) })
+  }
+
   likePost(docPath: string): Promise<DbServiceData<DocumentData>> {
     return this.getDocument(docPath)
     .then(dataContainer => this.findField(dataContainer.data, 'likesCount'))
@@ -46,7 +56,7 @@ export class DbService {
   // Private functions
   ///////////////////////////////////
 
-  private buildQuery(collectionPath: string, conditions: {[key: string]: string}): Query {
+  private buildQuery(collectionPath: string, conditions?: {[key: string]: string}): Query {
     let query = this.db.collection(collectionPath).offset(0);
     for(let key in conditions) {
       query = query.where(key, '==', conditions[key]);

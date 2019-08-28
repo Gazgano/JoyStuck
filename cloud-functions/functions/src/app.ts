@@ -47,6 +47,12 @@ export class App {
       .catch((err: DbServiceError) => res.status(err.code).send(err.message));
     });
     
+    this.app.post('/:collection', (req, res) => {
+      this.dbService.addDocument(req.body, req.params.collection)
+      .then(data => res.status(data.code).json(data.data))
+      .catch((err: DbServiceError) => res.status(err.code).send(err.message));
+    });
+
     this.app.get('/:collection', (req, res) => {
       this.dbService.getCollection(req.params.collection, req.query)
       .then(data => res.status(data.code).json(data.data))
