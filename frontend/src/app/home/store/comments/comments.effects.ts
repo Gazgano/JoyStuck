@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Actions, ofType, createEffect, Effect } from '@ngrx/effects';
+import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { EMPTY } from 'rxjs';
-import { switchMap, map, catchError, tap } from 'rxjs/operators';
-import * as moment from 'moment';
+import { switchMap, map, catchError } from 'rxjs/operators';
 
 import * as commentsActions from './comments.actions';
 import { CommentsService } from '../../services/comments.service';
 import { AuthService } from '@app/core/services/auth.service';
-import { UserComment } from '../../models/user-comment.model';
 import { Logger } from '@app/core/services/logger.service';
 
 const log = new Logger('CommentsEffects');
@@ -18,7 +16,7 @@ export class CommentsEffects {
 
   loadComments$ = createEffect(() => this.actions$.pipe(
     ofType(commentsActions.loadComments),
-    switchMap(action => { 
+    switchMap(action => {
       const act = action; // even if comments contain postId, we still provide it to loadSuccess in case of empty response
       return this.commentsService.getCommentsByPostId(action.postId).pipe(
         map(comments => commentsActions.loadCommentsSuccess({ postId: act.postId, comments })),
@@ -43,19 +41,10 @@ export class CommentsEffects {
     ))
   ));
 
-  private createComment(text: string, postId: string): UserComment {
+  private createComment(text: string, postId: string) {
     let authorName: string;
     this.authService.currentUser.subscribe(user => authorName = user.username);
 
-    const comment: UserComment = {
-      id: null,
-      post_id: postId,
-      authorName,
-      timestamp: moment(),
-      content: text,
-      likesCount: 0
-    };
-
-    return comment;
+    return { post_id: postId, authorName, content: text };
   }
 }

@@ -39,6 +39,11 @@ function onLoadCommentsSuccess(state: CommentsState, props: any) {
   return commentsAdapter.addMany(props.comments, {...state, loadingCommentsPostsIds});
 }
 
+function onLoadCommentsFailure(state: CommentsState, props: any) {
+  const loadingCommentsPostsIds = state.loadingCommentsPostsIds.filter(e => e !== props.postId);
+  return {...state, loadingCommentsPostsIds};
+}
+
 function onLikeCommentsSuccess(state: CommentsState, props: any) {
   const update: Update<UserComment> = {
     id: props.comment.id,
@@ -58,6 +63,11 @@ function onSendCommentSuccess(state: CommentsState, props: any) {
   return commentsAdapter.addOne(props.comment, {...state, sendingCommentPostsIds});
 }
 
+function onSendCommentFailure(state: CommentsState, props: any) {
+  const sendingCommentPostsIds = state.sendingCommentPostsIds.filter(id => id !== props.postId);
+  return {...state, sendingCommentPostsIds};
+}
+
 ////////////////////////////////////////////////
 // Reducer
 ////////////////////////////////////////////////
@@ -66,9 +76,11 @@ const reducer = createReducer(
   initialState,
   on(commentsActions.loadComments, (state, props) => onLoadComments(state, props)),
   on(commentsActions.loadCommentsSuccess, (state, props) => onLoadCommentsSuccess(state, props)),
+  on(commentsActions.loadCommentsFailure, (state, props) => onLoadCommentsFailure(state, props)),
   on(commentsActions.likeCommentSuccess, (state, props) => onLikeCommentsSuccess(state, props)),
   on(commentsActions.sendComment, (state, props) => onSendComment(state, props)),
-  on(commentsActions.sendCommentSuccess, (state, props) => onSendCommentSuccess(state, props))
+  on(commentsActions.sendCommentSuccess, (state, props) => onSendCommentSuccess(state, props)),
+  on(commentsActions.sendCommentFailure, (state, props) => onSendCommentFailure(state, props))
 );
 
 export function commentsReducer(state: CommentsState, action: Action) {
