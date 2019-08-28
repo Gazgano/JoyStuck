@@ -1,12 +1,10 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, ReplaySubject, Observable, from } from 'rxjs';
-import { distinctUntilChanged, tap } from 'rxjs/operators';
+import { distinctUntilChanged } from 'rxjs/operators';
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 
-import { ApiService } from '@app/core/services/api.service';
-import { JwtService } from '@app/core/services/jwt.service';
 import { Logger } from '@app/core/services/logger.service';
 import { User } from '@app/core/models/user.model';
 
