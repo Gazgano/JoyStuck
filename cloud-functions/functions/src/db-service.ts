@@ -58,7 +58,7 @@ export class DbService {
     if(!querySnapshot.empty) {
       return new DbServiceData<DocumentData[]>(querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })));
     } else {
-      return new DbServiceData<DocumentData[]>([], 204);
+      return new DbServiceData<DocumentData[]>([]);
     }
   }
 
@@ -66,7 +66,7 @@ export class DbService {
     if(docSnapshot.exists) {
       return new DbServiceData<DocumentData>({...docSnapshot.data(), id: docSnapshot.id});
     } else {
-      return new DbServiceData<DocumentData>({}, 204);
+      return new DbServiceData<DocumentData>({});
     }
   };
 

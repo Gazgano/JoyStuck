@@ -35,8 +35,7 @@ function onLoadComments(state: CommentsState, props: any) {
 }
 
 function onLoadCommentsSuccess(state: CommentsState, props: any) {
-  // we are copying loadingCommentsPostsIds and removing all ids also in comments
-  const loadingCommentsPostsIds = state.loadingCommentsPostsIds.filter(e => !props.comments.map(c => c.post_id).includes(e));
+  const loadingCommentsPostsIds = state.loadingCommentsPostsIds.filter(e => e !== props.postId);
   return commentsAdapter.addMany(props.comments, {...state, loadingCommentsPostsIds});
 }
 

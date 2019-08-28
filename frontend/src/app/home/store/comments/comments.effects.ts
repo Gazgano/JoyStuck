@@ -18,10 +18,13 @@ export class CommentsEffects {
 
   loadComments$ = createEffect(() => this.actions$.pipe(
     ofType(commentsActions.loadComments),
-    switchMap(action => this.commentsService.getCommentsByPostId(action.postId).pipe(
-      map(comments => commentsActions.loadCommentsSuccess({ comments })),
-      catchError(() => EMPTY)
-    ))
+    switchMap(action => { 
+      const act = action; // even if comments contain postId, we still provide it to loadSuccess in case of empty response
+      return this.commentsService.getCommentsByPostId(action.postId).pipe(
+        map(comments => commentsActions.loadCommentsSuccess({ postId: act.postId, comments })),
+        catchError(() => EMPTY)
+      );
+    })
   ));
 
   likeComment$ = createEffect(() => this.actions$.pipe(
