@@ -4,8 +4,7 @@ const cors = require('cors');
 
 import { DbService } from "./db-service";
 import { DbServiceError } from "./models/db-service-error.model";
-import { DbServiceData } from "./models/db-service-data.model";
-import { DocumentData } from "@google-cloud/firestore";
+import { environment } from './environment';
 
 export class App {
 
@@ -20,7 +19,11 @@ export class App {
   }
 
   private configure() {
-    this.app.use(cors({origin: ['http://localhost:4200', 'https://joystuck.firebaseapp.com', 'https://joystuck.web.app']}));
+    this.app.use(cors({
+      origin: environment.production? 
+        ['https://joystuck.firebaseapp.com', 'https://joystuck.web.app']:
+        ['http://localhost:4200']
+    }));
     this.app.use(bodyParser.urlencoded({ extended: true }));
     this.app.use(bodyParser.json());
   }
