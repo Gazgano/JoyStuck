@@ -8,6 +8,6 @@ export class DbServiceError {
         this.message = message || 'Error fetching data';
         this.code = code || 500;
 
-        console.error(`Error code ${this.code} - ${this.message}`, this.err);
+        console.error(`Error code ${this.code} - ${this.message}`, JSON.stringify(this.err));
     }
 }

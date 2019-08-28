@@ -5,6 +5,8 @@ const cors = require('cors');
 import { DbService } from "./db-service";
 import { DbServiceError } from "./models/db-service-error.model";
 import { environment } from './environment';
+import { DbServiceData } from "./models/db-service-data.model";
+import { DocumentData } from "@google-cloud/firestore";
 
 export class App {
 
@@ -29,34 +31,36 @@ export class App {
   }
 
   private defineRoutes() {
-    this.app.put('/posts/:id/like', (req, res) => {
+    this.app.put('/posts/:id/like', this.callDbService((req, res) => 
       this.dbService.likePost(`posts/${req.params.id}`)
-      .then(data => res.status(data.code).json(data.data))
-      .catch((err: DbServiceError) => res.status(err.code).send(err.message));
-    });
+    ));
 
-    this.app.put('/comments/:id/like', (req, res) => {
+    this.app.put('/comments/:id/like', this.callDbService((req, res) => 
       this.dbService.likeComment(`comments/${req.params.id}`)
-      .then(data => res.status(data.code).json(data.data))
-      .catch((err: DbServiceError) => res.status(err.code).send(err.message));
-    });
+    ));
 
-    this.app.get('/:collection/:id', (req, res) => {
+    this.app.get('/:collection/:id', this.callDbService((req, res) => 
       this.dbService.getDocument(`${req.params.collection}/${req.params.id}`)
-      .then(data => res.status(data.code).json(data.data))
-      .catch((err: DbServiceError) => res.status(err.code).send(err.message));
-    });
+    ));
     
-    this.app.post('/:collection', (req, res) => {
+    this.app.post('/:collection', this.callDbService((req, res) => 
       this.dbService.addDocument(req.body, req.params.collection)
-      .then(data => res.status(data.code).json(data.data))
-      .catch((err: DbServiceError) => res.status(err.code).send(err.message));
-    });
+    ));
 
-    this.app.get('/:collection', (req, res) => {
+    this.app.get('/:collection', this.callDbService((req, res) => 
       this.dbService.getCollection(req.params.collection, req.query)
-      .then(data => res.status(data.code).json(data.data))
-      .catch((err: DbServiceError) => res.status(err.code).send(err.message));
-    });
+    ));
+  }
+
+  private callDbService(action: (req, res) => Promise<DbServiceData<DocumentData>>): (req, res) => void {
+    return (req, res) => {
+      try {
+        action(req, res)
+        .then(data => res.status(data.code).json(data.data))
+        .catch((err: DbServiceError) => res.status(err.code).send(err.message));
+      } catch (err) {
+        res.status(err.code).send(err.message)
+      }
+    }
   }
 }

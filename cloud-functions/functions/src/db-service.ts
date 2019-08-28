@@ -4,7 +4,7 @@ import { DocumentData, QuerySnapshot, DocumentSnapshot, Firestore, Query } from 
 
 import { DbServiceError } from './models/db-service-error.model';
 import { DbServiceData } from './models/db-service-data.model';
-import { castDocument } from './models/collection-model.map';
+import { createDocument } from './document-service';
 
 export class DbService {
 
@@ -31,8 +31,8 @@ export class DbService {
     .catch(err => { throw this.handleError(err) })
   }
 
-  addDocument(docData: DocumentData, collectionPath: string): Promise<DbServiceData<DocumentData>> {
-    const doc = castDocument(collectionPath, docData);
+  addDocument(obj: any, collectionPath: string): Promise<DbServiceData<DocumentData>> {
+    const doc = createDocument(collectionPath, obj);
     
     return this.db.collection(collectionPath).add(doc)
     .then(docRef => docRef.get())
