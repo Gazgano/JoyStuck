@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { EMPTY, of } from 'rxjs';
-import { switchMap, map, catchError, onErrorResumeNext } from 'rxjs/operators';
+import { switchMap, map, catchError } from 'rxjs/operators';
 
 import * as commentsActions from './comments.actions';
 import { CommentsService } from '../../services/comments.service';
@@ -16,13 +16,10 @@ export class CommentsEffects {
 
   loadComments$ = createEffect(() => this.actions$.pipe(
     ofType(commentsActions.loadComments),
-    switchMap(action => {
-      const act = action; // even if comments contain postId, we still provide it to loadSuccess in case of empty response
-      return this.commentsService.getCommentsByPostId(action.postId).pipe(
-        map(comments => commentsActions.loadCommentsSuccess({ postId: act.postId, comments })),
-        catchError(() => EMPTY)
-      );
-    })
+    switchMap(action => this.commentsService.getCommentsByPostId(action.postId).pipe(
+      map(comments => commentsActions.loadCommentsSuccess({ postId: action.postId, comments })),
+      catchError(() => of(commentsActions.loadCommentsFailure({ postId: action.postId })))
+    ))
   ));
 
   likeComment$ = createEffect(() => this.actions$.pipe(

@@ -47,6 +47,10 @@ const reducer = createReducer(
     return postAdapter.addAll(posts, {...state, isLoading: false});
   }),
 
+  on(postActions.loadPostsFailure, state => {
+    return {...state, isLoading: false};
+  }),
+
   on(postActions.likePostSuccess, (state, props) => onLikePostSuccess(state, props))
 );
 

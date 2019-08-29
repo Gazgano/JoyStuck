@@ -88,8 +88,10 @@ export class DbService {
     }
   }
 
-  private handleError(err: any): DbServiceError {
-    if (err instanceof DbServiceError) {
+  private handleError(err?: any): DbServiceError {
+    if (!err) {
+      return new DbServiceError();
+    } else if (err instanceof DbServiceError) {
       return err;
     } else {
       return new DbServiceError(err);
