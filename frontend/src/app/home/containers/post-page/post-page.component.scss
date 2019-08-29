@@ -1,5 +1,4 @@
 @import 'mixins';
-@import 'breakpoints';
 
 :host {
  @include full-size;
@@ -12,5 +11,5 @@
 }
 
 .PostPage-Loader {
-    margin: auto;
+  margin: auto;
 }
