@@ -1,5 +1,18 @@
 @import 'mixins';
+@import 'ink-theme';
 
 :host {
  @include full-size;
+}
+
+.Settings-Container {
+  height: 100%;
+}
+
+.Settings-Content {
+  padding: 20px;
+}
+
+.Settings-Menu-Item--selected {
+  background-color: map-get(map-get($ink-theme, background), selected-button);
 }

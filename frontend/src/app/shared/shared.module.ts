@@ -7,8 +7,11 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatRippleModule } from '@angular/material/core';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
 
@@ -34,8 +37,11 @@ import { LoaderComponent } from './components/loader/loader.component';
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
+    MatListModule,
     MatMenuModule,
     MatProgressSpinnerModule,
+    MatRippleModule,
+    MatSidenavModule,
     MatToolbarModule,
     ReactiveFormsModule,
     RouterModule
@@ -50,9 +56,12 @@ import { LoaderComponent } from './components/loader/loader.component';
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
+    MatListModule,
     MatMenuModule,
-    MatToolbarModule,
     MatProgressSpinnerModule,
+    MatRippleModule,
+    MatSidenavModule,
+    MatToolbarModule,
     ReactiveFormsModule,
     ShellComponent
   ]

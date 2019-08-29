@@ -1,13 +1,14 @@
 @import 'mixins';
 
 :host {
- @include full-size;
+  @include full-size;
 }
 
 .PostPageContainer {
   display: flex;
   justify-content: center;
   width: 100%;
+  padding: 20px;
 }
 
 .PostPage-Loader {

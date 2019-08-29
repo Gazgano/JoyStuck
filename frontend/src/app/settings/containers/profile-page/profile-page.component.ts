@@ -12,4 +12,7 @@ export class ProfilePageComponent implements OnInit {
   ngOnInit() {
   }
 
+  onSubmit() {
+
+  }
 }

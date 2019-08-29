@@ -3,3 +3,8 @@
 :host {
   @include full-size;
 }
+
+.Admin-Container {
+  @include full-size;
+  padding: 20px;
+}
