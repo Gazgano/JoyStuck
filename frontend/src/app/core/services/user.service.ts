@@ -18,14 +18,14 @@ export class UserService {
 
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(baseUrl + 'users').pipe(
-      catchError(log.handleError)
+      catchError(err => {throw log.handleError(err);})
     );
   }
 
   deleteUser(id: string): Observable<string> {
     return this.http.delete(baseUrl + 'users/' + id, this.apiService.getReqOptions()).pipe(
       map(() => id),
-      catchError(log.handleError)
+      catchError(err => {throw log.handleError(err);})
     );
   }
 }

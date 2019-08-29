@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
-import { EMPTY } from 'rxjs';
-import { switchMap, map, catchError } from 'rxjs/operators';
+import { EMPTY, of } from 'rxjs';
+import { switchMap, map, catchError, onErrorResumeNext } from 'rxjs/operators';
 
 import * as commentsActions from './comments.actions';
 import { CommentsService } from '../../services/comments.service';
@@ -37,8 +37,8 @@ export class CommentsEffects {
     ofType(commentsActions.sendComment),
     switchMap(action => this.commentsService.postComment(this.createComment(action.text, action.postId)).pipe(
       map(comment => commentsActions.sendCommentSuccess({ comment })),
-      catchError(() => EMPTY)
-    ))
+      catchError(err => of(commentsActions.sendCommentFailure({ postId: action.postId }))
+    )))
   ));
 
   private createComment(text: string, postId: string) {

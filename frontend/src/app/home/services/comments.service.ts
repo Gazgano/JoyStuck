@@ -15,19 +15,19 @@ export class CommentsService {
 
   getCommentsByPostId(postId: string): Observable<UserComment[]> {
     return this.http.get<UserComment[]>(`${baseUrl}comments/?post_id=${postId}`).pipe(
-      catchError(log.handleError)
+      catchError(err => {throw log.handleError(err);})
     );
   }
 
   likeComment(id: string): Observable<UserComment | null> {
     return this.http.put<UserComment>(`${baseUrl}comments/${id}/like`, {}, this.apiService.getReqOptions()).pipe(
-      catchError(log.handleError)
+      catchError(err => {throw log.handleError(err);})
     );
   }
 
   postComment(comment: any): Observable<UserComment | null> {
     return this.http.post<UserComment>(`${baseUrl}comments/`, comment, this.apiService.getReqOptions()).pipe(
-      catchError(log.handleError)
+      catchError(err => {throw log.handleError(err);})
     );
   }
 }

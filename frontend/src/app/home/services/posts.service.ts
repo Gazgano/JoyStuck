@@ -16,13 +16,13 @@ export class PostsService {
 
   getPosts(): Observable<Post[]> {
     return this.http.get<Post[]>(`${baseUrl}posts`).pipe(
-      catchError(log.handleError)
+      catchError(err => {throw log.handleError(err);})
     );
   }
 
   likePost(id: string): Observable<Post | null> {
     return this.http.put<Post>(`${baseUrl}posts/${id}/like`, {}, this.apiService.getReqOptions()).pipe(
-      catchError(log.handleError)
+      catchError(err => {throw log.handleError(err);})
     );
   }
 }
