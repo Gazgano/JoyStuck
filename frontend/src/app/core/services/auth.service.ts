@@ -65,4 +65,12 @@ export class AuthService {
       profileImageSrcUrl: firebaseUser.photoURL
     };
   }
+
+  public async updateProfile(user: User) {
+    firebase.auth().currentUser.updateProfile({
+      displayName: user.username
+    })
+    .then(() => log.info(`User's infos updated successfully`))
+    .catch(err => { throw log.handleError(err); });
+  }
 }
