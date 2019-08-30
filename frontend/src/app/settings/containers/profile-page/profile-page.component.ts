@@ -9,7 +9,5 @@ export class ProfilePageComponent {
 
   constructor() { }
 
-  onSubmit() {
-
-  }
+  onSubmit() { }
 }

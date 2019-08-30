@@ -1,25 +1,31 @@
 <h2>Profile</h2>
+
 <form (ngSubmit)="onSubmit()">
-  <img mat-card-avatar src="assets/images/gazgano-picture-64px.png">
-  <div>
-    <h4>Display name</h4>
-    <span>displayName</span>
+  <img class="Profile-Image" src="assets/images/gazgano-picture-64px.png">
+  
+  <mat-form-field floatLabel="always">
+    <input matInput placeholder="Display name" value="displayName">
+  </mat-form-field>
+
+  <mat-form-field floatLabel="always">
+    <input matInput placeholder="Email" value="email">
+  </mat-form-field>
+
+  <mat-form-field floatLabel="always">
+    <input matInput placeholder="Phone number" value="phoneNumber">
+  </mat-form-field>
+
+  <div class="Profile-PasswordFields">
+    <mat-form-field floatLabel="always">
+      <input matInput placeholder="Password">
+    </mat-form-field>
+  
+    <mat-form-field floatLabel="always">
+      <input matInput placeholder="Confirm password">
+    </mat-form-field>
   </div>
 
-  <div>
-    <h4>Email</h4>
-    <span>email</span>
+  <div class="Profile-ActionButtons">
+    <button color="primary" type="submit" mat-flat-button>Save changes</button>
   </div>
-
-  <div>
-    <h4>Phone number</h4>
-    <span>phoneNumber</span>
-  </div>
-
-  <div>
-    <h4>Password</h4>
-    <span>******</span>
-  </div>
-
-  <button mat-button>Edit</button>
 </form>

@@ -2,8 +2,8 @@
     <mat-drawer-container class="Settings-Container">
         <mat-drawer class="Settings-Menu" mode="side" opened>
           <mat-list>
-            <a (click)="select('profile')" routerLink="./profile"><mat-list-item [ngClass]="'Settings-Menu-Item' + (selectedScreen === 'profile'? '--selected' : '')" matRipple>Profile</mat-list-item></a>
-            <a (click)="select('about')" routerLink="./about"><mat-list-item [ngClass]="'Settings-Menu-Item' + (selectedScreen === 'about'? '--selected' : '')" matRipple>About</mat-list-item></a>
+            <a (click)="select('profile')" class="noHoverDecoration" routerLink="./profile"><mat-list-item [ngClass]="'Settings-Menu-Item' + (selectedScreen === 'profile'? '--selected' : '')" matRipple>Profile</mat-list-item></a>
+            <a (click)="select('about')" class="noHoverDecoration" routerLink="./about"><mat-list-item [ngClass]="'Settings-Menu-Item' + (selectedScreen === 'about'? '--selected' : '')" matRipple>About</mat-list-item></a>
           </mat-list>
         </mat-drawer>
         <mat-drawer-content class="Settings-Content">

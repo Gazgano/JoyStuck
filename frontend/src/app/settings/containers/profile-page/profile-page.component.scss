@@ -1,0 +1,22 @@
+.Profile-Image {
+  margin-bottom: 15px;
+}
+
+.mat-form-field {
+  display: block;
+  width: fit-content;
+}
+
+.Profile-ActionButtons > button:not(:last-child) {
+  margin-right: 10px;
+}
+
+.Profile-PasswordFields {
+  & > .mat-form-field {
+    display: inline-block;
+  }
+
+  & > .mat-form-field:not(:last-child) {
+    margin-right: 10px;
+  }
+}
