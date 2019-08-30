@@ -1,3 +1,27 @@
+@import 'ink-theme';
+
 .Footer-Container {
     font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.Footer-Github {
+    display: flex;
+    align-items: center;
+}
+
+.Footer-Github-Icon {
+    font-size: 30px;
+    margin-right: 5px;
+}
+
+.Footer-Github-ExternalLinkIcon {
+    color: map-get(map-get($ink-theme, foreground), hint-text);
+    margin-left: 3px;
+}
+
+.Footer-Author {
+    line-height: normal;
 }

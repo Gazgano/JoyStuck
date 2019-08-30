@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -30,6 +31,7 @@ import { LoaderComponent } from './components/loader/loader.component';
   ],
   imports: [
     CommonModule,
+    FontAwesomeModule,
     FormsModule,
     MatButtonModule,
     MatCardModule,
@@ -48,6 +50,7 @@ import { LoaderComponent } from './components/loader/loader.component';
   ],
   exports: [
     CommonModule,
+    FontAwesomeModule,
     FormsModule,
     LoaderComponent,
     MatButtonModule,
