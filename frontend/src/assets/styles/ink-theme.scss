@@ -4,7 +4,7 @@
 
 $ink-primary: mat-palette($mat-indigo, 800, 500, 900);
 $ink-accent:  mat-palette($mat-orange, 900);
-$ink-warn:    mat-palette($mat-deep-purple);
+$ink-warn:    mat-palette($mat-red, 700);
 
 $ink-theme: mat-light-theme($ink-primary, $ink-accent, $ink-warn);
 @include angular-material-theme($ink-theme);
