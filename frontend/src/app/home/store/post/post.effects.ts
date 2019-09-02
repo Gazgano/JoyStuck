@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
-import { switchMap, map, catchError } from 'rxjs/operators';
+import { mergeMap, map, catchError } from 'rxjs/operators';
 import { EMPTY, of } from 'rxjs';
 
 import * as postActions from './post.actions';
@@ -13,7 +13,7 @@ export class PostEffects {
 
   loadPosts$ = createEffect(() => this.actions$.pipe(
     ofType(postActions.loadPosts),
-    switchMap(() => this.postsService.getPosts().pipe(
+    mergeMap(() => this.postsService.getPosts().pipe(
       map(posts => postActions.loadPostsSuccess({ posts })),
       catchError(() => of(postActions.loadPostsFailure()))
     ))
@@ -21,7 +21,7 @@ export class PostEffects {
 
   likePost$ = createEffect(() => this.actions$.pipe(
     ofType(postActions.likePost),
-    switchMap(action => this.postsService.likePost(action.id).pipe(
+    mergeMap(action => this.postsService.likePost(action.id).pipe(
       map(post => postActions.likePostSuccess({ post })),
       catchError(() => EMPTY)
     ))

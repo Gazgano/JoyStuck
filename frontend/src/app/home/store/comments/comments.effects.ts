@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { EMPTY, of } from 'rxjs';
-import { switchMap, map, catchError } from 'rxjs/operators';
+import { mergeMap, map, catchError } from 'rxjs/operators';
 
 import * as commentsActions from './comments.actions';
 import { CommentsService } from '../../services/comments.service';
@@ -16,7 +16,7 @@ export class CommentsEffects {
 
   loadComments$ = createEffect(() => this.actions$.pipe(
     ofType(commentsActions.loadComments),
-    switchMap(action => this.commentsService.getCommentsByPostId(action.postId).pipe(
+    mergeMap(action => this.commentsService.getCommentsByPostId(action.postId).pipe(
       map(comments => commentsActions.loadCommentsSuccess({ postId: action.postId, comments })),
       catchError(() => of(commentsActions.loadCommentsFailure({ postId: action.postId })))
     ))
@@ -24,7 +24,7 @@ export class CommentsEffects {
 
   likeComment$ = createEffect(() => this.actions$.pipe(
     ofType(commentsActions.likeComment),
-    switchMap(action => this.commentsService.likeComment(action.id).pipe(
+    mergeMap(action => this.commentsService.likeComment(action.id).pipe(
       map(comment => commentsActions.likeCommentSuccess({ comment })),
       catchError(() => EMPTY)
     ))
@@ -32,7 +32,7 @@ export class CommentsEffects {
 
   sendComment$ = createEffect(() => this.actions$.pipe(
     ofType(commentsActions.sendComment),
-    switchMap(action => this.commentsService.postComment(this.createComment(action.text, action.postId)).pipe(
+    mergeMap(action => this.commentsService.postComment(this.createComment(action.text, action.postId)).pipe(
       map(comment => commentsActions.sendCommentSuccess({ comment })),
       catchError(err => of(commentsActions.sendCommentFailure({ postId: action.postId }))
     )))
