@@ -20,6 +20,8 @@ function createComment(obj: any): DocumentData {
     throw new DbServiceError({}, 'authorName is not valid', 400);
   } else if (!obj.content || !isString(obj.content)) {
     throw new DbServiceError({}, 'content is not valid', 400);
+  } else if (obj.content === '#test') {  
+    throw new DbServiceError({}, 'Failure test', 418);
   } else {
     return {
       post_id: obj.post_id,
