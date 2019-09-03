@@ -65,8 +65,8 @@ function onSendCommentSuccess(state: CommentsState, props: any) {
 }
 
 function onSendCommentFailure(state: CommentsState, props: any) {
-  const sendingCommentPostsIds = state.sendingCommentPostsIds.filter(id => id !== props.commentPayload.post_id);
-  return {...state, sendingCommentPostsIds};
+  const sendingCommentPostsIds = state.sendingCommentPostsIds.filter(id => id !== props.failedComment.post_id);
+  return commentsAdapter.addOne(props.failedComment, {...state, sendingCommentPostsIds});
 }
 
 ////////////////////////////////////////////////

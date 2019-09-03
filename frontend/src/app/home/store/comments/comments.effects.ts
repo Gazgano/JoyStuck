@@ -2,11 +2,14 @@ import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { EMPTY, of } from 'rxjs';
 import { mergeMap, map, catchError } from 'rxjs/operators';
+import * as moment from 'moment';
+import * as uid from 'uid';
 
 import * as commentsActions from './comments.actions';
 import { CommentsService } from '../../services/comments.service';
 import { AuthService } from '@app/core/services/auth.service';
 import { Logger } from '@app/core/services/logger.service';
+import { UserComment } from '@app/home/models/user-comment.model';
 
 const log = new Logger('CommentsEffects');
 
@@ -36,15 +39,36 @@ export class CommentsEffects {
       const commentPayload = this.createComment(action.text, action.postId);
       return this.commentsService.postComment(commentPayload).pipe(
         map(comment => commentsActions.sendCommentSuccess({ comment })),
-        catchError(err => of(commentsActions.sendCommentFailure({ commentPayload })))
+        catchError(err => of(commentsActions.sendCommentFailure({ 
+          failedComment: this.createFailedComment(action.text, action.postId) 
+        })))
       );
     })
   ));
 
   private createComment(text: string, postId: string) {
-    let authorName: string;
-    this.authService.currentUser.subscribe(user => authorName = user.username);
+    return { 
+      post_id: postId, 
+      authorName: this.getUsername(), 
+      content: text 
+    };
+  }
 
-    return { post_id: postId, authorName, content: text };
+  private createFailedComment(text: string, postId: string): UserComment {
+    return {
+      id: uid(20),
+      post_id: postId,
+      authorName: this.getUsername(),
+      timestamp: moment().format(),
+      content: text,
+      likesCount: 0,
+      sentFailed: true
+    };
+  }
+
+  private getUsername(): string {
+    let username: string;
+    this.authService.currentUser.subscribe(user => username = user.username);
+    return username;
   }
 }

@@ -20,7 +20,7 @@ export class CommentsService {
     return this.http.put<UserComment>(`${baseUrl}comments/${id}/like`, {}, this.apiService.getReqOptions());
   }
 
-  postComment(comment: any): Observable<UserComment | null> {
-    return this.http.post<UserComment>(`${baseUrl}comments/`, comment, this.apiService.getReqOptions());
+  postComment(commentPayload: any): Observable<UserComment | null> {
+    return this.http.post<UserComment>(`${baseUrl}comments/`, commentPayload, this.apiService.getReqOptions());
   }
 }

@@ -1,8 +1,15 @@
 <div class="PostComment-Avatar">
     <img mat-card-avatar src="assets/images/gazgano-picture-64px.png">
 </div>
-<div [ngClass]="'PostComment-Content--' + palette">{{ comment.content }}</div>
-<button (click)="likeComment(comment.id)" [ngClass]="'PostComment-LikeButton--' + palette" [ngStyle]="comment.likesCount > 0? {display: 'block'} : {}" mat-icon-button>
+
+<div [ngClass]="comment.sentFailed? 'PostComment-Content-Failed--' + palette : 'PostComment-Content--' + palette">{{ comment.content }}</div>
+
+<button *ngIf="!comment.sentFailed" (click)="likeComment(comment.id)" [ngClass]="'PostComment-LikeButton--' + palette" [ngStyle]="comment.likesCount > 0? {display: 'block'} : {}" mat-icon-button>
     <mat-icon [inline]="true">thumb_up</mat-icon>
     <span *ngIf="comment.likesCount > 0">{{ comment.likesCount }}</span>
+</button>
+
+<button *ngIf="comment.sentFailed" mat-button color="warn" class="PostComment-RetryButton">
+    <mat-icon [inline]="true">error</mat-icon>
+    <span>Error while sending. Click to retry.</span>
 </button>

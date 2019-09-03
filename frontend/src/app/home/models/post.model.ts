@@ -1,8 +1,6 @@
-import * as moment from 'moment';
-
 export interface Post {
     id: string;
-    timestamp: moment.Moment;
+    timestamp: string;
     type: string;
     authorName: string;
     title: string;
