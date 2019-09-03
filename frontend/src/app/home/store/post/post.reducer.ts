@@ -1,5 +1,6 @@
 import { EntityState, createEntityAdapter, Update } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
+import * as moment from 'moment';
 
 import { Post } from '../../models/post.model';
 import * as postActions from './post.actions';
@@ -13,7 +14,8 @@ export interface PostState extends EntityState<Post> {
 }
 
 export const postAdapter = createEntityAdapter({
-  selectId: (p: Post) => p.id
+  selectId: (p: Post) => p.id,
+  sortComparer: (p1: Post, p2: Post) => moment(p2.timestamp).diff(moment(p1.timestamp))
 });
 
 const initialState = postAdapter.getInitialState({

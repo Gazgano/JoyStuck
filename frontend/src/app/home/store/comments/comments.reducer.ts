@@ -1,5 +1,6 @@
 import { EntityState, createEntityAdapter, Update } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
+import * as moment from 'moment';
 
 import { UserComment } from '../../models/user-comment.model';
 import * as commentsActions from './comments.actions';
@@ -17,7 +18,8 @@ export interface CommentsState extends EntityState<UserComment> {
 }
 
 export const commentsAdapter = createEntityAdapter({
-  selectId: (c: UserComment) => c.id
+  selectId: (c: UserComment) => c.id,
+  sortComparer: (c1: UserComment, c2: UserComment) => moment(c1.timestamp).diff(moment(c2.timestamp))
 });
 
 const initialState: CommentsState = commentsAdapter.getInitialState({
