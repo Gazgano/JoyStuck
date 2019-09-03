@@ -3,7 +3,6 @@ import { EntityState, Update, createEntityAdapter } from '@ngrx/entity';
 
 import { User } from '@app/core/models/user.model';
 import * as userListActions from './user-list.actions';
-import { copyArrayAndDeleteFrom } from '@app/shared/utilities';
 
 ////////////////////////////////////////////////
 // State
@@ -42,7 +41,7 @@ const userListReducer = createReducer(
 
   on(userListActions.deleteUserSuccess, (state, { id }) => {
     const result = adapter.removeOne(id, state);
-    result.loadingUsersId = copyArrayAndDeleteFrom(state.loadingUsersId, e => e === id);
+    result.loadingUsersId = state.loadingUsersId.filter(e => e !== id);
     return result;
   })
 );
