@@ -1,10 +1,12 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-import { DocumentData, QuerySnapshot, DocumentSnapshot, Firestore, Query } from '@google-cloud/firestore';
+import { DocumentData, QuerySnapshot, DocumentSnapshot, Firestore, Query, Timestamp } from '@google-cloud/firestore';
+
 
 import { DbServiceError } from './models/db-service-error.model';
 import { DbServiceData } from './models/db-service-data.model';
 import { createDocument } from './document-service';
+import { convertDocDataTimestamp, findField, handleError } from './helper';
 
 export class DbService {
 
@@ -22,13 +24,13 @@ export class DbService {
   async getCollection(collectionPath: string, conditions: {[key: string]: string}): Promise<DbServiceData<DocumentData[]>> {
     return this.buildQuery(collectionPath, conditions).get()
     .then((qs: QuerySnapshot) => this.formatQuerySnapshot(qs))
-    .catch(err => { throw this.handleError(err) })
+    .catch(err => { throw handleError(err) })
   }
 
   async getDocument(docPath: string): Promise<DbServiceData<DocumentData>> {
     return this.db.doc(docPath).get()
     .then((ds: DocumentSnapshot) => this.formatDocumentSnapshot(ds))
-    .catch(err => { throw this.handleError(err) })
+    .catch(err => { throw handleError(err) })
   }
 
   async addDocument(obj: any, collectionPath: string): Promise<DbServiceData<DocumentData>> {
@@ -41,13 +43,13 @@ export class DbService {
     })
     .then(docRef => docRef.get())
     .then(docSnapshot => this.formatDocumentSnapshot(docSnapshot))
-    .catch(err => { throw this.handleError(err) })
+    .catch(err => { throw handleError(err) })
   }
 
   async likePost(docPath: string): Promise<DbServiceData<DocumentData>> {
     return this.incrementData(docPath, 'likesCount')
     .then(writeResult => this.getDocument(docPath))
-    .catch(err => { throw this.handleError(err) });
+    .catch(err => { throw handleError(err) });
   }
 
   async likeComment(docPath: string): Promise<DbServiceData<DocumentData>> {
@@ -68,7 +70,10 @@ export class DbService {
 
   private formatQuerySnapshot(querySnapshot: QuerySnapshot): DbServiceData<DocumentData[]> {
     if(!querySnapshot.empty) {
-      return new DbServiceData<DocumentData[]>(querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })));
+      return new DbServiceData<DocumentData[]>(querySnapshot.docs.map(doc => { 
+        const docData = convertDocDataTimestamp(doc.data());
+        return { ...docData, id: doc.id }; 
+      }));
     } else {
       return new DbServiceData<DocumentData[]>([]);
     }
@@ -76,19 +81,12 @@ export class DbService {
 
   private formatDocumentSnapshot(docSnapshot: DocumentSnapshot): DbServiceData<DocumentData> {
     if(docSnapshot.exists) {
-      return new DbServiceData<DocumentData>({...docSnapshot.data(), id: docSnapshot.id});
+      const docData = convertDocDataTimestamp(docSnapshot.data());
+      return new DbServiceData<DocumentData>({...docData, id: docSnapshot.id});
     } else {
       return new DbServiceData<DocumentData>({});
     }
   };
-
-  private findField(docData: DocumentData, fieldName: string): any {
-    if (!isNaN(docData[fieldName])) {
-      return docData[fieldName];
-    } else {
-      throw new DbServiceError(null, `${fieldName} does not exist on this document`);
-    }
-  }
 
   private async updateDependencies(collectionPath: string, doc: DocumentData) {
     switch (collectionPath) {
@@ -99,22 +97,12 @@ export class DbService {
 
   private async incrementData(docPath: string, field: string) {
     return this.getDocument(docPath)
-    .then(dataContainer => this.findField(dataContainer.data, field))
+    .then(dataContainer => findField(dataContainer.data, field))
     .then(fieldValue => {
       let update = {};
       update[field] = ++fieldValue;
       return this.db.doc(docPath).set(update, { merge: true });
     })
     .catch(err => { throw new DbServiceError(err, 'Error during incrementation'); })
-  }
-
-  private handleError(err?: any): DbServiceError {
-    if (!err) {
-      return new DbServiceError();
-    } else if (err instanceof DbServiceError) {
-      return err;
-    } else {
-      return new DbServiceError(err);
-    }
   }
 }
