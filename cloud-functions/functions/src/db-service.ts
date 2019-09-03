@@ -19,37 +19,39 @@ export class DbService {
   // Public functions
   ///////////////////////////////////
   
-  getCollection(collectionPath: string, conditions: {[key: string]: string}): Promise<DbServiceData<DocumentData[]>> {
+  async getCollection(collectionPath: string, conditions: {[key: string]: string}): Promise<DbServiceData<DocumentData[]>> {
     return this.buildQuery(collectionPath, conditions).get()
     .then((qs: QuerySnapshot) => this.formatQuerySnapshot(qs))
     .catch(err => { throw this.handleError(err) })
   }
 
-  getDocument(docPath: string): Promise<DbServiceData<DocumentData>> {
+  async getDocument(docPath: string): Promise<DbServiceData<DocumentData>> {
     return this.db.doc(docPath).get()
     .then((ds: DocumentSnapshot) => this.formatDocumentSnapshot(ds))
     .catch(err => { throw this.handleError(err) })
   }
 
-  addDocument(obj: any, collectionPath: string): Promise<DbServiceData<DocumentData>> {
+  async addDocument(obj: any, collectionPath: string): Promise<DbServiceData<DocumentData>> {
     const doc = createDocument(collectionPath, obj);
     
     return this.db.collection(collectionPath).add(doc)
+    .then(async docRef => {
+      await this.updateDependencies(collectionPath, doc);
+      return docRef;
+    })
     .then(docRef => docRef.get())
     .then(docSnapshot => this.formatDocumentSnapshot(docSnapshot))
     .catch(err => { throw this.handleError(err) })
   }
 
-  likePost(docPath: string): Promise<DbServiceData<DocumentData>> {
-    return this.getDocument(docPath)
-    .then(dataContainer => this.findField(dataContainer.data, 'likesCount'))
-    .then(likesCount => this.db.doc(docPath).set({ likesCount: ++likesCount }, { merge: true }))
+  async likePost(docPath: string): Promise<DbServiceData<DocumentData>> {
+    return this.incrementData(docPath, 'likesCount')
     .then(writeResult => this.getDocument(docPath))
-    .catch(err => { throw this.handleError(err) })
+    .catch(err => { throw this.handleError(err) });
   }
 
-  likeComment(docPath: string): Promise<DbServiceData<DocumentData>> {
-    return this.likePost(docPath); // has a likesCount as well
+  async likeComment(docPath: string): Promise<DbServiceData<DocumentData>> {
+    return await this.likePost(docPath); // has a likesCount as well
   }
 
   ///////////////////////////////////
@@ -86,6 +88,24 @@ export class DbService {
     } else {
       throw new DbServiceError(null, `${fieldName} does not exist on this document`);
     }
+  }
+
+  private async updateDependencies(collectionPath: string, doc: DocumentData) {
+    switch (collectionPath) {
+      case 'comments':
+        return this.incrementData(`posts/${doc.post_id}`, 'commentsCount');
+    }
+  }
+
+  private async incrementData(docPath: string, field: string) {
+    return this.getDocument(docPath)
+    .then(dataContainer => this.findField(dataContainer.data, field))
+    .then(fieldValue => {
+      let update = {};
+      update[field] = ++fieldValue;
+      return this.db.doc(docPath).set(update, { merge: true });
+    })
+    .catch(err => { throw new DbServiceError(err, 'Error during incrementation'); })
   }
 
   private handleError(err?: any): DbServiceError {
