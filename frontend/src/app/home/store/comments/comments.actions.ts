@@ -38,5 +38,5 @@ export const sendCommentSuccess = createAction(
 
 export const sendCommentFailure = createAction(
   '[Home] Send Comment failed',
-  props<{ postId: string }>()
+  props<{ commentPayload: any }>()
 );

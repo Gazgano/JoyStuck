@@ -32,10 +32,13 @@ export class CommentsEffects {
 
   sendComment$ = createEffect(() => this.actions$.pipe(
     ofType(commentsActions.sendComment),
-    mergeMap(action => this.commentsService.postComment(this.createComment(action.text, action.postId)).pipe(
-      map(comment => commentsActions.sendCommentSuccess({ comment })),
-      catchError(err => of(commentsActions.sendCommentFailure({ postId: action.postId }))
-    )))
+    mergeMap(action => {
+      const commentPayload = this.createComment(action.text, action.postId);
+      return this.commentsService.postComment(commentPayload).pipe(
+        map(comment => commentsActions.sendCommentSuccess({ comment })),
+        catchError(err => of(commentsActions.sendCommentFailure({ commentPayload })))
+      );
+    })
   ));
 
   private createComment(text: string, postId: string) {

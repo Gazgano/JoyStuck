@@ -4,7 +4,6 @@ import { createReducer, on, Action } from '@ngrx/store';
 import { UserComment } from '../../models/user-comment.model';
 import * as commentsActions from './comments.actions';
 import { Logger } from '@app/core/services/logger.service';
-import { copyArrayAndDeleteFrom } from '@app/shared/utilities';
 
 const log = new Logger('CommentsReducer');
 
@@ -64,7 +63,7 @@ function onSendCommentSuccess(state: CommentsState, props: any) {
 }
 
 function onSendCommentFailure(state: CommentsState, props: any) {
-  const sendingCommentPostsIds = state.sendingCommentPostsIds.filter(id => id !== props.postId);
+  const sendingCommentPostsIds = state.sendingCommentPostsIds.filter(id => id !== props.commentPayload.post_id);
   return {...state, sendingCommentPostsIds};
 }
 
