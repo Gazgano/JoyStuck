@@ -1,5 +1,3 @@
-# Unnamed-Project
-Aurelien and Jules project
-
-Launch Backend:
-node main.js
+# JoyStuck
+Created by Aurélien Rasse, 2019.
+Contact : aurelien.rasse28@gmail.com
