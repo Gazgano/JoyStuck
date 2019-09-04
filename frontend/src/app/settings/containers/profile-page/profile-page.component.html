@@ -1,27 +1,27 @@
 <h1>My profile</h1>
 
-<form (ngSubmit)="onSubmit(username.value)">
+<form (ngSubmit)="onSubmit(username.value)" [formGroup]="profileForm">
   <img class="Profile-Image" src="assets/images/gazgano-picture-64px.png">
   
   <mat-form-field floatLabel="always">
-    <input #username matInput placeholder="Display name" [value]="currentUser.username">
+    <input #username formControlName="username" matInput placeholder="Display name" [value]="currentUser.username">
   </mat-form-field>
 
   <mat-form-field floatLabel="always">
-    <input matInput placeholder="Email" [value]="'email'">
+    <input formControlName="email" matInput placeholder="Email" [value]="'email'">
   </mat-form-field>
 
   <mat-form-field floatLabel="always">
-    <input matInput placeholder="Phone number" [value]="'phoneNumber'">
+    <input formControlName="phoneNumber" matInput placeholder="Phone number" [value]="'phoneNumber'">
   </mat-form-field>
 
-  <div class="Profile-PasswordFields">
+  <div class="Profile-PasswordFields" formGroupName="passwords">
     <mat-form-field floatLabel="always">
-      <input matInput placeholder="Password">
+      <input formControlName="password" matInput placeholder="Password">
     </mat-form-field>
   
     <mat-form-field floatLabel="always">
-      <input matInput placeholder="Confirm password">
+      <input formControlName="confirmPassword" matInput placeholder="Confirm password">
     </mat-form-field>
   </div>
 
