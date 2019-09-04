@@ -41,6 +41,25 @@ input {
   border-radius: 2px;
 }
 
+h1 {
+  background-color: get-color(primary, default, null);
+  color: get-color(primary, default-contrast, null);
+  width: fit-content;
+  padding: 0 5px;
+}
+
+h2 {
+  color: get-color(primary, default, null);
+  border-bottom: solid 4px get-color(primary, default, null);
+  width: fit-content;
+  padding-bottom: 4px;
+}
+
+
+h3 {
+  color: get-color(primary, default, null);
+}
+
 ///////////////////////////////////////////////
 // Utils
 ///////////////////////////////////////////////
