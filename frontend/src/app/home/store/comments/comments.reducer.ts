@@ -15,6 +15,7 @@ const log = new Logger('CommentsReducer');
 export interface CommentsState extends EntityState<UserComment> {
   loadingCommentsPostsIds: string[];
   sendingCommentPostsIds: string[];
+  resendingCommentsIds: string[];
 }
 
 export const commentsAdapter = createEntityAdapter({
@@ -24,7 +25,8 @@ export const commentsAdapter = createEntityAdapter({
 
 const initialState: CommentsState = commentsAdapter.getInitialState({
   loadingCommentsPostsIds: [],
-  sendingCommentPostsIds: []
+  sendingCommentPostsIds: [],
+  resendingCommentsIds: []
 });
 
 ////////////////////////////////////////////////
@@ -69,6 +71,22 @@ function onSendCommentFailure(state: CommentsState, props: any) {
   return commentsAdapter.addOne(props.failedComment, {...state, sendingCommentPostsIds});
 }
 
+function onRetrySendComment(state: CommentsState, props: any) {
+  return {...state, resendingCommentsIds: [...state.resendingCommentsIds, props.failedComment.id]};
+}
+
+function onRetrySendCommentSuccess(state: CommentsState, props: any) {
+  let newState = commentsAdapter.removeOne(props.failedComment.id, state);
+  newState = commentsAdapter.addOne(props.comment, newState);
+  newState.resendingCommentsIds = state.resendingCommentsIds.filter(id => id !== props.failedComment.id);
+  return newState;
+}
+
+function onRetrySendCommentFailure(state: CommentsState, props: any) {
+  const resendingCommentsIds = state.resendingCommentsIds.filter(id => id !== props.failedComment.id);
+  return {...state, resendingCommentsIds};
+}
+
 ////////////////////////////////////////////////
 // Reducer
 ////////////////////////////////////////////////
@@ -81,7 +99,10 @@ const reducer = createReducer(
   on(commentsActions.likeCommentSuccess, (state, props) => onLikeCommentsSuccess(state, props)),
   on(commentsActions.sendComment, (state, props) => onSendComment(state, props)),
   on(commentsActions.sendCommentSuccess, (state, props) => onSendCommentSuccess(state, props)),
-  on(commentsActions.sendCommentFailure, (state, props) => onSendCommentFailure(state, props))
+  on(commentsActions.sendCommentFailure, (state, props) => onSendCommentFailure(state, props)),
+  on(commentsActions.retrySendComment, (state, props) => onRetrySendComment(state, props)),
+  on(commentsActions.retrySendCommentSuccess, (state, props) => onRetrySendCommentSuccess(state, props)),
+  on(commentsActions.retrySendCommentFailure, (state, props) => onRetrySendCommentFailure(state, props))
 );
 
 export function commentsReducer(state: CommentsState, action: Action) {

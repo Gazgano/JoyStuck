@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, ReplaySubject, Observable, from } from 'rxjs';
-import { distinctUntilChanged } from 'rxjs/operators';
+import { distinctUntilChanged, take } from 'rxjs/operators';
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 
@@ -45,6 +45,20 @@ export class AuthService {
     this.router.navigate(['login']);
   }
 
+  getUsername(): string {
+    let username: string;
+    this.currentUser.pipe(take(1)).subscribe(user => username = user.username);
+    return username;
+  }
+
+  async updateProfile(user: User) {
+    firebase.auth().currentUser.updateProfile({
+      displayName: user.username
+    })
+    .then(() => log.info(`User's infos updated successfully`))
+    .catch(err => { throw log.handleError(err); });
+  }
+
   private onAuthStateChanged(user: any) {
     if (user) {
       this.currentUserSubject.next(this.mapUser(user));
@@ -64,13 +78,5 @@ export class AuthService {
       token: null,
       profileImageSrcUrl: firebaseUser.photoURL
     };
-  }
-
-  public async updateProfile(user: User) {
-    firebase.auth().currentUser.updateProfile({
-      displayName: user.username
-    })
-    .then(() => log.info(`User's infos updated successfully`))
-    .catch(err => { throw log.handleError(err); });
   }
 }

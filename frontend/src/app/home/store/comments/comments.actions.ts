@@ -40,3 +40,18 @@ export const sendCommentFailure = createAction(
   '[Home] Send Comment failed',
   props<{ failedComment: UserComment }>()
 );
+
+export const retrySendComment = createAction(
+  '[Home] Retry to send Comment',
+  props<{ failedComment: UserComment }>()
+);
+
+export const retrySendCommentSuccess = createAction(
+  '[Home] Sent retry done successfully',
+  props<{ failedComment: UserComment, comment: UserComment }>()
+);
+
+export const retrySendCommentFailure = createAction(
+  '[Home] Sent retry failed',
+  props<{ failedComment: UserComment }>()
+);

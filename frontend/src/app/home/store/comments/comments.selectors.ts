@@ -32,3 +32,8 @@ export const selectSendingCommentsByPostId = (postId: string) => createSelector(
   selectComments,
   (state: CommentsState) => state.sendingCommentPostsIds.includes(postId)
 );
+
+export const isResending = (id: string) => createSelector(
+  selectComments,
+  (state: CommentsState) => state.resendingCommentsIds.includes(id)
+);

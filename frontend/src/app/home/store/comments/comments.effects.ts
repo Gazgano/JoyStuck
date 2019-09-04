@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { EMPTY, of } from 'rxjs';
-import { mergeMap, map, catchError } from 'rxjs/operators';
+import { mergeMap, map, catchError, exhaustMap } from 'rxjs/operators';
 import * as moment from 'moment';
 import * as uid from 'uid';
 
@@ -46,10 +46,23 @@ export class CommentsEffects {
     })
   ));
 
+  retrySendComment$ = createEffect(() => this.actions$.pipe(
+    ofType(commentsActions.retrySendComment),
+    exhaustMap(action => {
+      const commentPayload = this.createComment(action.failedComment.content, action.failedComment.post_id);
+      return this.commentsService.postComment(commentPayload).pipe(
+        map(comment => commentsActions.retrySendCommentSuccess({ failedComment: action.failedComment, comment })),
+        catchError(err => of(commentsActions.retrySendCommentFailure({
+          failedComment: action.failedComment 
+        })))
+      );
+    })
+  ));
+
   private createComment(text: string, postId: string) {
     return { 
       post_id: postId, 
-      authorName: this.getUsername(), 
+      authorName: this.authService.getUsername(), 
       content: text 
     };
   }
@@ -58,17 +71,11 @@ export class CommentsEffects {
     return {
       id: uid(20),
       post_id: postId,
-      authorName: this.getUsername(),
+      authorName: this.authService.getUsername(),
       timestamp: moment().format(),
       content: text,
       likesCount: 0,
       sentFailed: true
     };
-  }
-
-  private getUsername(): string {
-    let username: string;
-    this.authService.currentUser.subscribe(user => username = user.username);
-    return username;
   }
 }

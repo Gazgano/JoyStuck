@@ -9,7 +9,14 @@
     <span *ngIf="comment.likesCount > 0">{{ comment.likesCount }}</span>
 </button>
 
-<button *ngIf="comment.sentFailed" mat-button color="warn" class="PostComment-RetryButton">
-    <mat-icon [inline]="true">error</mat-icon>
-    <span>Error while sending. Click to retry.</span>
-</button>
+<ng-container *ngIf="comment.sentFailed">
+    <mat-spinner *ngIf="(isResending$ | async); else resendButton" color="warn" [diameter]="20"></mat-spinner>
+    <ng-template #resendButton>
+        <button (click)="retrySend()" mat-button color="warn" class="PostComment-RetryButton">
+            <mat-icon [inline]="true">error</mat-icon>
+            <span>Error while sending. Click to retry.</span>
+        </button>
+    </ng-template>
+</ng-container>
+
+
