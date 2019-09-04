@@ -1,3 +1,13 @@
+@function get-color($palette-name, $color-name, $contrast-code) {
+  // contrast-code is null most of the time 
+  // (and must be provided as null, because there is no default arg value in SASS)
+  @if $contrast-code {
+    @return map-get(map-get(map-get($ink-theme, $palette-name), $color-name), $contrast-code);
+  } @else {
+    @return map-get(map-get($ink-theme, $palette-name), $color-name);
+  }
+}
+
 @mixin center-everything {
   align-items: center;
   display: flex;

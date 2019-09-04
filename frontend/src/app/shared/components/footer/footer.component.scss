@@ -1,4 +1,5 @@
 @import 'ink-theme';
+@import 'mixins';
 
 .Footer-Container {
     font-size: 14px;
@@ -18,7 +19,7 @@
 }
 
 .Footer-Github-ExternalLinkIcon {
-    color: map-get(map-get($ink-theme, foreground), hint-text);
+    color: get-color(foreground, hint-text, null);
     margin-left: 3px;
 }
 

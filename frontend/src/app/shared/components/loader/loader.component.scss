@@ -1,4 +1,5 @@
 @import 'ink-theme';
+@import 'mixins';
 
 $width: 150px;
 $font-size: $width*0.157;
@@ -89,18 +90,14 @@ $font-size: $width*0.157;
 
 // adding colors depending of the theme
 @each $name in $palettes {
-    $palette: map-get($ink-theme, $name);
-    $color: map-get($palette, default);
-    $color-contrast: map-get($palette, default-contrast);
-
     #leverSymbol--#{$name}, 
     #bodySymbol--#{$name}, 
     #electricitySymbol--#{$name} {
-        fill: $color;
+        fill: get-color($name, default, null);
     }
 
     .Loader-Joystick-Text--#{$name} {
         @extend %Loader-Joystick-Text;
-        color: $color-contrast;
+        color: get-color($name, default-contrast, null);
     }
 }

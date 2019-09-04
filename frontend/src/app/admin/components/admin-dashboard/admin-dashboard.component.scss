@@ -1,4 +1,5 @@
 @import 'ink-theme';
+@import 'mixins';
 
 .AdminDashboard-Charter {
     display: flex;
@@ -13,11 +14,9 @@
 }
 
 @each $name in $palettes {
-    $palette: map-get($ink-theme, $name);
-
     .AdminDashboard-Charter-Color--#{$name} {
         @extend %AdminDashboard-Charter-Color;
-        color: map-get($palette, default-contrast);
-        background-color: map-get($palette, default);
+        color: get-color($name, default-contrast, null);
+        background-color: get-color($name, default, null);
     }
 }

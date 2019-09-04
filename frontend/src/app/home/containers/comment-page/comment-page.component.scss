@@ -16,7 +16,7 @@
   @include full-size;
   font-size: 13px;
   font-style: italic;
-  color: map-get(map-get($ink-theme, foreground), text);
+  color: get-color(foreground, text, null);
 }
 
 .PostComment-WriteBox {
@@ -32,16 +32,14 @@
   border-radius: 3px;
   margin-right: 10px;
   padding: 10px 15px;
-  border: solid 1px map-get(map-get($ink-theme, foreground), divider);
-  background-color: map-get(map-get($ink-theme, background), background);
+  border: solid 1px get-color(foreground, divider, null);
+  background-color: get-color(background, background, null);
   width: calc(100% - 100px); // to let space for button
 }
 
 // adding colors depending of the theme
 @each $name in $palettes {
-  $palette: map-get($ink-theme, $name);
-
   .PostComment-WriteBox-SendButton--#{$name} {
-    color: map-get($palette, default);
+    color: get-color($name, default, null);
   }
 }
