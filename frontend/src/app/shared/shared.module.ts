@@ -14,12 +14,14 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRippleModule } from '@angular/material/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
 
 import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
 import { ShellComponent } from './components/shell/shell.component';
 import { LoaderComponent } from './components/loader/loader.component';
+import { UppercaseFirstLetterPipe } from './pipes/uppercase-first-letter.pipe';
 
 
 @NgModule({
@@ -27,7 +29,8 @@ import { LoaderComponent } from './components/loader/loader.component';
     FooterComponent,
     HeaderComponent,
     ShellComponent,
-    LoaderComponent
+    LoaderComponent,
+    UppercaseFirstLetterPipe
   ],
   imports: [
     CommonModule,
@@ -45,6 +48,7 @@ import { LoaderComponent } from './components/loader/loader.component';
     MatRippleModule,
     MatSidenavModule,
     MatToolbarModule,
+    MatTooltipModule,
     ReactiveFormsModule,
     RouterModule
   ],
@@ -65,8 +69,10 @@ import { LoaderComponent } from './components/loader/loader.component';
     MatRippleModule,
     MatSidenavModule,
     MatToolbarModule,
+    MatTooltipModule,
     ReactiveFormsModule,
-    ShellComponent
+    ShellComponent,
+    UppercaseFirstLetterPipe
   ]
 })
 export class SharedModule { }

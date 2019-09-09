@@ -1,36 +1,37 @@
 <h1>My profile</h1>
 
-<form (ngSubmit)="onSubmit(username.value)" [formGroup]="profileForm">
-  <img class="Profile-Image" src="assets/images/gazgano-picture-64px.png">
+<form (ngSubmit)="onSubmit(username.value)" [formGroup]="profileForm" class="ProfileForm">
+  <img class="ProfileForm-Image" src="assets/images/gazgano-picture-64px.png">
   
   <mat-form-field floatLabel="always">
     <input #username formControlName="username" matInput placeholder="Display name" [value]="currentUser.username">
-    <mat-error>{{ getErrorMessage(profileForm.get('username'), 'username') | json }}</mat-error>
+    <mat-error>{{ getErrorMessage('username', 'username') | uppercaseFirstLetter }}</mat-error>
   </mat-form-field>
 
   <mat-form-field floatLabel="always">
     <input formControlName="email" matInput placeholder="Email" [value]="'email'">
-    <mat-error>{{ profileForm.get('email').errors | json }}</mat-error>
+    <mat-error>{{ getErrorMessage('email', 'email') | uppercaseFirstLetter }}</mat-error>
   </mat-form-field>
 
   <mat-form-field floatLabel="always">
     <input formControlName="phoneNumber" matInput placeholder="Phone number" [value]="'phoneNumber'">
-    <mat-error>{{ profileForm.get('phoneNumber').errors | json }}</mat-error>
+    <mat-error>{{ getErrorMessage('phoneNumber', 'phone number') | uppercaseFirstLetter }}</mat-error>
   </mat-form-field>
 
-  <div class="Profile-PasswordFields" formGroupName="passwords">
-    <mat-form-field floatLabel="always">
+  <div class="ProfileForm-Passwords" formGroupName="passwords">
+    <mat-form-field class="ProfileForm-Password" floatLabel="always">
+      <mat-icon class="ProfileForm-Password-HelpIcon" color="primary" [inline]="true" matTooltip="Password must have at least eight characters, one letter and one number">help</mat-icon>
       <input formControlName="password" matInput placeholder="Password">
-      <mat-error>{{ profileForm.get(['passwords', 'password']).errors | json }}</mat-error>
+      <mat-error>{{ getErrorMessage(['passwords', 'password'], 'password') | uppercaseFirstLetter }}</mat-error>
     </mat-form-field>
   
     <mat-form-field floatLabel="always">
       <input formControlName="confirmPassword" matInput placeholder="Confirm password">
-      <mat-error>{{ getErrorMessage(profileForm.get(['passwords', 'confirmPassword']), 'password confirmation') | json }}</mat-error>
+      <mat-error>{{ getErrorMessage(['passwords', 'confirmPassword'], 'password confirmation') | uppercaseFirstLetter }}</mat-error>
     </mat-form-field>
   </div>
 
-  <div class="Profile-ActionButtons">
+  <div class="ProfileForm-ActionButtons">
     <button [disabled]="!atLeastOneDirty(profileForm)" color="primary" type="submit" mat-flat-button>Save changes</button>
   </div>
 </form>

@@ -1,4 +1,4 @@
-.Profile-Image {
+.ProfileForm-Image {
   margin-bottom: 15px;
 }
 
@@ -8,11 +8,15 @@
   margin-bottom: 7px;
 }
 
-.Profile-ActionButtons > button:not(:last-child) {
+.mat-error {
+  white-space: nowrap;
+}
+
+.ProfileForm-ActionButtons > button:not(:last-child) {
   margin-right: 10px;
 }
 
-.Profile-PasswordFields {
+.ProfileForm-Passwords {
   & > .mat-form-field {
     display: inline-block;
   }
@@ -20,4 +24,14 @@
   & > .mat-form-field:not(:last-child) {
     margin-right: 10px;
   }
+}
+
+.ProfileForm-Password {
+  position: relative;
+}
+
+.ProfileForm-Password-HelpIcon {
+  position: absolute;
+  top: -16px;
+  left: 57px;
 }
