@@ -51,10 +51,12 @@ export class AuthService {
     return username;
   }
 
-  async updateProfile(user: User) {
-    firebase.auth().currentUser.updateProfile({
-      displayName: user.username
-    })
+  async updateProfile(profileInfos: any) {
+    const currentUser = firebase.auth().currentUser;
+    currentUser.updateProfile({ displayName: profileInfos.displayName })
+    .then(() => currentUser.updateEmail(profileInfos.email))
+    .then(() => currentUser.updatePassword(profileInfos.password))
+    .then(() => currentUser.updatePhoneNumber(profileInfos.phoneNumber))
     .then(() => log.info(`User's infos updated successfully`))
     .catch(err => { throw log.handleError(err); });
   }
@@ -75,7 +77,8 @@ export class AuthService {
     return {
       id: firebaseUser.uid,
       username: firebaseUser.displayName,
-      token: null,
+      email: firebaseUser.email,
+      phoneNumber: firebaseUser.phoneNumber,
       profileImageSrcUrl: firebaseUser.photoURL
     };
   }

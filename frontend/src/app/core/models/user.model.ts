@@ -1,6 +1,7 @@
 export interface User {
   id: string;
   username: string;
-  token: string;
+  email: string;
+  phoneNumber: string;
   profileImageSrcUrl: string;
 }

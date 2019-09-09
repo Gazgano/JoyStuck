@@ -39,29 +39,6 @@ export class ProfilePageComponent implements OnInit {
       mismatch: () => `Both passwords are not identical`
     },
   };
-  
-  constructor(private authService: AuthService, private fb: FormBuilder, private formService: FormService) { }
-
-  ngOnInit() {
-    this.authService.currentUser.subscribe(user => this.currentUser = user);
-    this.profileForm = this.initProfileForm();
-  }
-  
-  onSubmit(username: string) {
-    this.profileForm.markAllAsTouched();
-    if (this.profileForm.valid) {
-      const user: User = {...this.currentUser, username};
-      this.authService.updateProfile(user);
-    }
-  }
-
-  getErrorMessage(path: string | string[], fieldName: string) {
-    this.formService.getErrorMessage(this.profileForm, path, this.errorsMessages, fieldName);
-  }
-
-  atLeastOneDirty(form: AbstractControl): boolean {
-    return this.formService.atLeastOneDirty(form);
-  }
 
   private initProfileForm(): FormGroup {
     return this.fb.group({
@@ -75,5 +52,32 @@ export class ProfilePageComponent implements OnInit {
         confirmPassword: [''] // can contain 'mismatch' error, added by confirmPasswords validator
       }, { validators: this.formService.confirmPasswordsValidator })
     });
+  }
+  
+  constructor(private authService: AuthService, private fb: FormBuilder, private formService: FormService) { }
+
+  ngOnInit() {
+    this.authService.currentUser.subscribe(user => this.currentUser = user);
+    this.profileForm = this.initProfileForm();
+  }
+  
+  getErrorMessage(path: string | string[], fieldName: string) {
+    return this.formService.getErrorMessage(this.profileForm, path, this.errorsMessages, fieldName);
+  }
+
+  atLeastOneDirty(form: AbstractControl): boolean {
+    return this.formService.atLeastOneDirty(form);
+  }
+
+  onSubmit() {
+    this.profileForm.markAllAsTouched();
+    if (this.profileForm.valid) {
+      this.authService.updateProfile({
+        displayName: this.profileForm.get('username').value,
+        email: this.profileForm.get('email').value,
+        password: this.profileForm.get(['passwords', 'password']).value,
+        phoneNumber: this.profileForm.get('phoneNumber').value
+      });
+    }
   }
 }
