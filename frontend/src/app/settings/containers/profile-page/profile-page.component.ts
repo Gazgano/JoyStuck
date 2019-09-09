@@ -19,7 +19,7 @@ export class ProfilePageComponent implements OnInit {
 
   public currentUser: User;
   public profileForm: FormGroup;
-  private errorMessagesFactory = {
+  private errorsMessages = {
     username: {
       required: (fieldName: string) => `${fieldName} is required`,
       pattern: (fieldName: string) => `${fieldName} must contain only spaces and alphanumerical letters`,
@@ -56,7 +56,7 @@ export class ProfilePageComponent implements OnInit {
   }
 
   getErrorMessage(path: string | string[], fieldName: string) {
-    this.formService.getErrorMessage(this.profileForm, path, this.errorMessagesFactory, fieldName);
+    this.formService.getErrorMessage(this.profileForm, path, this.errorsMessages, fieldName);
   }
 
   atLeastOneDirty(form: AbstractControl): boolean {

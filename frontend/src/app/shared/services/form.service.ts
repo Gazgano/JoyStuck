@@ -6,7 +6,12 @@ import { Logger } from '@app/core/services/logger.service';
 
 const log = new Logger('FormService');
 
-@Injectable({ providedIn: 'root' })
+export type ErrorMessageFactory = (fieldName: string, errors?: any) => string;
+export interface ErrorsMap {
+  [errorCode: string]: ErrorMessageFactory;
+}
+
+@Injectable()
 export class FormService {
 
   constructor() { }
@@ -26,14 +31,14 @@ export class FormService {
     }
   }
 
-  getErrorMessage(form: AbstractControl, path: string | string[], errorMessagesFactory: any, fieldName: string) {
+  getErrorMessage(form: AbstractControl, path: string | string[], errorsMessages: {[key: string]: ErrorsMap}, fieldName: string) {
     const field = form.get(path);
     const key = Array.isArray(path)? path.join('/') : path;
     
     if (field.errors && !isEmpty(field.errors)) {
       const errorCode = Object.keys(field.errors)[0]; // get first error
-      if (errorMessagesFactory[key] && errorMessagesFactory[key][errorCode]) {
-        return errorMessagesFactory[key][errorCode](fieldName, field.errors);
+      if (errorsMessages[key] && errorsMessages[key][errorCode]) {
+        return errorsMessages[key][errorCode](fieldName, field.errors);
       } else {
         log.warn(`No message defined for error code '${errorCode}' in field path '${key}'`);
         return `${fieldName} is not valid`;
