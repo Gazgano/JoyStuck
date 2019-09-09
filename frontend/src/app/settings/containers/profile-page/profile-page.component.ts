@@ -1,17 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl, ValidationErrors, AbstractControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import * as _ from 'lodash';
 
 import { AuthService } from '@app/core/services/auth.service';
 import { User } from '@app/core/models/user.model';
 import { Logger } from '@app/core/services/logger.service';
+import { FormService } from '@app/shared/services/form.service';
 
 const log = new Logger('ProfilePage');
 
 @Component({
   selector: 'app-profile-page',
   templateUrl: './profile-page.component.html',
-  styleUrls: ['./profile-page.component.scss']
+  styleUrls: ['./profile-page.component.scss'],
+  providers: [FormService]
 })
 export class ProfilePageComponent implements OnInit {
 
@@ -38,7 +40,7 @@ export class ProfilePageComponent implements OnInit {
     },
   };
   
-  constructor(private authService: AuthService, private fb: FormBuilder) { }
+  constructor(private authService: AuthService, private fb: FormBuilder, private formService: FormService) { }
 
   ngOnInit() {
     this.authService.currentUser.subscribe(user => this.currentUser = user);
@@ -54,35 +56,11 @@ export class ProfilePageComponent implements OnInit {
   }
 
   getErrorMessage(path: string | string[], fieldName: string) {
-    const field = this.profileForm.get(path);
-    const key = Array.isArray(path)? path.join('/') : path;
-    
-    if (field.errors && !_.isEmpty(field.errors)) {
-      const errorCode = Object.keys(field.errors)[0]; // get first error
-      if (this.errorMessagesFactory[key] && this.errorMessagesFactory[key][errorCode]) {
-        return this.errorMessagesFactory[key][errorCode](fieldName, field.errors);
-      } else {
-        log.warn(`No message defined for error code '${errorCode}' in field path '${key}'`);
-        return `${fieldName} is not valid`;
-      }
-    } else {
-      return null;
-    }
+    this.formService.getErrorMessage(this.profileForm, path, this.errorMessagesFactory, fieldName);
   }
 
   atLeastOneDirty(form: AbstractControl): boolean {
-    if (form instanceof FormControl) {
-      return form.dirty;
-    } else if (form instanceof FormGroup) {
-      for (const controlName in form.controls) {
-        if (this.atLeastOneDirty(form.controls[controlName]) === true) {
-          return true;
-        }
-      }
-      return false;
-    } else {
-      throw new Error('Provided form is neither a FormControl nor a FormGroup');
-    }
+    return this.formService.atLeastOneDirty(form);
   }
 
   private initProfileForm(): FormGroup {
@@ -95,21 +73,7 @@ export class ProfilePageComponent implements OnInit {
         // If changed, think to change help sentence in HTML as well
         password: ['', [Validators.pattern('^(?=.*[A-Za-z])(?=.*[0-9])[A-Za-z0-9]{8,}$')]],
         confirmPassword: [''] // can contain 'mismatch' error, added by confirmPasswords validator
-      }, { validators: this.confirmPasswordsValidator })
+      }, { validators: this.formService.confirmPasswordsValidator })
     });
-  }
-
-  private confirmPasswordsValidator(formGroup: FormGroup): ValidationErrors | null { 
-    const passwordControl = formGroup.controls.password; 
-    const confirmPasswordControl = formGroup.controls.confirmPassword;
-    if (passwordControl.value !== confirmPasswordControl.value) {
-        confirmPasswordControl.setErrors({ ...confirmPasswordControl.errors, mismatch: true });
-        return { mismatch: true };
-    } else {
-      if (confirmPasswordControl.errors && confirmPasswordControl.errors.mismatch) {
-        delete confirmPasswordControl.errors.mismatch;
-      }
-      return null;
-    }
   }
 }
