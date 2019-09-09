@@ -2,14 +2,13 @@
   margin-bottom: 15px;
 }
 
-.mat-form-field {
-  display: block;
-  width: fit-content;
-  margin-bottom: 7px;
-}
-
 .mat-error {
   white-space: nowrap;
+}
+
+.ProfileForm-ActionButtons {
+  display: flex;
+  align-items: center;
 }
 
 .ProfileForm-ActionButtons > button:not(:last-child) {

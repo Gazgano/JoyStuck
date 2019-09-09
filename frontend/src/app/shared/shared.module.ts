@@ -13,6 +13,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRippleModule } from '@angular/material/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
@@ -47,6 +48,7 @@ import { UppercaseFirstLetterPipe } from './pipes/uppercase-first-letter.pipe';
     MatProgressSpinnerModule,
     MatRippleModule,
     MatSidenavModule,
+    MatSnackBarModule,
     MatToolbarModule,
     MatTooltipModule,
     ReactiveFormsModule,
@@ -68,6 +70,7 @@ import { UppercaseFirstLetterPipe } from './pipes/uppercase-first-letter.pipe';
     MatProgressSpinnerModule,
     MatRippleModule,
     MatSidenavModule,
+    MatSnackBarModule,
     MatToolbarModule,
     MatTooltipModule,
     ReactiveFormsModule,
