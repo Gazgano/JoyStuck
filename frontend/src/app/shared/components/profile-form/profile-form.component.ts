@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { User } from '@app/core/models/user.model';
-import { AuthService } from '@app/core/services/auth.service';
 import { FormBuilder, Validators, FormGroup, AbstractControl } from '@angular/forms';
 import { FormService } from '@app/shared/services/form.service';
 
@@ -37,8 +36,14 @@ export class ProfileFormComponent implements OnInit {
 
   private initProfileForm(): FormGroup {
     return this.fb.group({
-      username: [this.currentUser.username, [Validators.required, Validators.pattern('^[ a-zA-Z0-9]*$'), Validators.minLength(3)]],
-      email: [this.currentUser.email, [Validators.required, Validators.email]],
+      username: [ 
+        (this.currentUser && this.currentUser.username) || '', 
+        [Validators.required, Validators.pattern('^[ a-zA-Z0-9]*$'), Validators.minLength(3)]
+      ],
+      email: [
+        (this.currentUser && this.currentUser.email) || '', 
+        [Validators.required, Validators.email]
+      ],
       passwords: this.fb.group({
         // Minimum eight characters, if changed, think to change help sentence in HTML as well
         password: ['', [Validators.minLength(8)]],

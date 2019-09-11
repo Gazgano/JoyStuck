@@ -1,9 +1,11 @@
 import { AfterContentInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 
 import { AuthService } from '@app/core/services/auth.service';
 import { Logger } from '@app/core/services/logger.service';
+import { SignupDialogComponent } from '@app/components/signup-dialog/signup-dialog.component';
 
 const log = new Logger('LoginComponent');
 
@@ -18,12 +20,11 @@ export class LoginComponent implements OnInit, AfterContentInit {
 
   @ViewChild('email', { static: true }) emailMatInput: ElementRef;
 
-  public errorMessage: string;
   public isLoading = false;
   public passwordFormControl: FormControl;
   public emailFormControl: FormControl;
 
-  constructor(private router: Router, private authService: AuthService) { }
+  constructor(private router: Router, private authService: AuthService, private matDialog: MatDialog) { }
 
   ngOnInit() {
     this.emailFormControl = new FormControl('', Validators.required);
@@ -47,8 +48,11 @@ export class LoginComponent implements OnInit, AfterContentInit {
       }, err => {
         this.isLoading = false;
         log.info(`Authentication failed (error code ${err.code})`);
-        this.errorMessage = err.message;
       }
     );
+  }
+
+  openSignupPopup() {
+    this.matDialog.open(SignupDialogComponent);
   }
 }
