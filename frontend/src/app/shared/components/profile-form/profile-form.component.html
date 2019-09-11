@@ -29,7 +29,8 @@
   </p>
 
   <div [ngClass]="profileFormType === 'new'? 'ProfileForm-ActionButtons--newStyle' : 'ProfileForm-ActionButtons'">
-    <button [disabled]="isSubmitting || !atLeastOneDirty(profileForm)" class="ProfileForm-SubmitButton" color="primary" type="submit" mat-flat-button>{{ profileFormType === 'new'? 'Next' : 'Save changes' }}</button>
-    <mat-spinner *ngIf="isSubmitting" [diameter]="20" color="primary"></mat-spinner>
+    <button *ngIf="profileFormType === 'new'" (click)="onCancel()" [ngStyle]="{ 'order': profileFormType === 'new'? 2 : 1 }" class="ProfileForm-CancelButton" mat-flat-button>Cancel</button>
+    <button [disabled]="isSubmitting || !atLeastOneDirty(profileForm)" [ngStyle]="{ 'order': profileFormType === 'new'? 3 : 2 }" class="ProfileForm-SubmitButton" color="primary" type="submit" mat-flat-button>{{ profileFormType === 'new'? 'Next' : 'Save changes' }}</button>
+    <mat-spinner *ngIf="isSubmitting" [ngStyle]="{ 'order': profileFormType === 'new'? 1 : 3 }" [diameter]="20" color="primary"></mat-spinner>
   </div>
 </form>

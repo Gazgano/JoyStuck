@@ -24,7 +24,6 @@ $action-buttons-gutter: 10px;
 
 .ProfileForm-ActionButtons--newStyle {
   @extend .ProfileForm-ActionButtons;
-  justify-content: end;
-  flex-direction: row-reverse;
+  justify-content: flex-end;
   margin-right: -$action-buttons-gutter;
 }

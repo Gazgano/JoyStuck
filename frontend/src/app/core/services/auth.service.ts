@@ -51,6 +51,11 @@ export class AuthService {
     return username;
   }
 
+  async createNewUser(userData: any) {
+      return firebase.auth().createUserWithEmailAndPassword(userData.email, userData.password)
+      .then(() => firebase.auth().currentUser.updateProfile({ displayName: userData.displayName }));
+  }
+
   async updateProfile(profileInfos: any) {
     const currentUser = firebase.auth().currentUser;
     return currentUser.updateProfile({ displayName: profileInfos.displayName })

@@ -16,6 +16,7 @@ export class ProfileFormComponent implements OnInit {
   @Input() isSubmitting: boolean;
   @Input() profileFormType: ProfileFormType;
   @Output() formSubmit = new EventEmitter<any>();
+  @Output() formCancel = new EventEmitter<boolean>();
 
   public profileForm: FormGroup;
   private errorsMessages = {
@@ -82,5 +83,9 @@ export class ProfileFormComponent implements OnInit {
         password: this.profileForm.get(['passwords', 'password']).value
       });
     }
+  }
+
+  onCancel() {
+    this.formCancel.emit(true);
   }
 }

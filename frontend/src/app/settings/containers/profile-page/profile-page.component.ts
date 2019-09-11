@@ -19,9 +19,7 @@ export class ProfilePageComponent implements OnInit {
   public currentUser: User;
   public isSubmitting = false;
   
-  constructor(
-    private authService: AuthService, 
-    private matSnackBar: MatSnackBar) { }
+  constructor(private authService: AuthService, private matSnackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.authService.currentUser.subscribe(user => this.currentUser = user);

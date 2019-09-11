@@ -1,2 +1,5 @@
 <h1>Sign up</h1>
-<app-profile-form [profileFormType]="'new'" (formSubmit)="onFormSubmit($event)"></app-profile-form>
+
+<mat-dialog-content>
+  <app-profile-form [profileFormType]="'new'" (formSubmit)="onFormSubmit($event)" (formCancel)="close()" [isSubmitting]="isSubmitting"></app-profile-form>
+</mat-dialog-content>
