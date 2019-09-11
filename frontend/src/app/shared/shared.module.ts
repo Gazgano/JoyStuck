@@ -4,6 +4,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -23,6 +24,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { ShellComponent } from './components/shell/shell.component';
 import { LoaderComponent } from './components/loader/loader.component';
 import { UppercaseFirstLetterPipe } from './pipes/uppercase-first-letter.pipe';
+import { ProfileFormComponent } from './components/profile-form/profile-form.component';
 
 
 @NgModule({
@@ -31,7 +33,8 @@ import { UppercaseFirstLetterPipe } from './pipes/uppercase-first-letter.pipe';
     HeaderComponent,
     ShellComponent,
     LoaderComponent,
-    UppercaseFirstLetterPipe
+    UppercaseFirstLetterPipe,
+    ProfileFormComponent
   ],
   imports: [
     CommonModule,
@@ -39,6 +42,7 @@ import { UppercaseFirstLetterPipe } from './pipes/uppercase-first-letter.pipe';
     FormsModule,
     MatButtonModule,
     MatCardModule,
+    MatDialogModule,
     MatDividerModule,
     MatFormFieldModule,
     MatIconModule,
@@ -61,6 +65,7 @@ import { UppercaseFirstLetterPipe } from './pipes/uppercase-first-letter.pipe';
     LoaderComponent,
     MatButtonModule,
     MatCardModule,
+    MatDialogModule,
     MatDividerModule,
     MatFormFieldModule,
     MatIconModule,
@@ -73,6 +78,7 @@ import { UppercaseFirstLetterPipe } from './pipes/uppercase-first-letter.pipe';
     MatSnackBarModule,
     MatToolbarModule,
     MatTooltipModule,
+    ProfileFormComponent,
     ReactiveFormsModule,
     ShellComponent,
     UppercaseFirstLetterPipe

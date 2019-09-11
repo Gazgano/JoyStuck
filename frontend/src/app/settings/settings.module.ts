@@ -6,10 +6,9 @@ import { ProfilePageComponent } from './containers/profile-page/profile-page.com
 import { SharedModule } from '@app/shared/shared.module';
 import { SettingsComponent } from './containers/settings/settings.component';
 import { AboutComponent } from './components/about/about.component';
-import { ProfileFormComponent } from './components/profile-form/profile-form.component';
 
 @NgModule({
-  declarations: [ProfilePageComponent, SettingsComponent, AboutComponent, ProfileFormComponent],
+  declarations: [ProfilePageComponent, SettingsComponent, AboutComponent],
   imports: [
     CommonModule,
     SharedModule,
