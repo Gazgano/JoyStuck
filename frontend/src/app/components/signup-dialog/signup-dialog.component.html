@@ -1,2 +1,2 @@
 <h1>Sign up</h1>
-<app-profile-form></app-profile-form>
+<app-profile-form [profileFormType]="'new'" (formSubmit)="onFormSubmit($event)"></app-profile-form>

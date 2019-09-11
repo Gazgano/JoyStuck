@@ -13,11 +13,18 @@
   left: 57px;
 }
 
+$action-buttons-gutter: 10px;
 .ProfileForm-ActionButtons {
   display: flex;
   align-items: center;
+  & > * {
+    margin-right: $action-buttons-gutter;
+  }
 }
 
-.ProfileForm-SubmitButton {
-  margin-right: 10px;
+.ProfileForm-ActionButtons--newStyle {
+  @extend .ProfileForm-ActionButtons;
+  justify-content: end;
+  flex-direction: row-reverse;
+  margin-right: -$action-buttons-gutter;
 }

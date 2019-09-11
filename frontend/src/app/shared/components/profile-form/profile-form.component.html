@@ -3,7 +3,7 @@
   
   <p>
     <mat-form-field floatLabel="always">
-      <input #username formControlName="username" matInput placeholder="Display name">
+      <input #username formControlName="username" matInput placeholder="Username">
       <mat-error>{{ getErrorMessage('username', 'username') | uppercaseFirstLetter }}</mat-error>
     </mat-form-field>
   </p>
@@ -28,8 +28,8 @@
     </mat-form-field>
   </p>
 
-  <div class="ProfileForm-ActionButtons">
-    <button [disabled]="isSubmitting || !atLeastOneDirty(profileForm)" class="ProfileForm-SubmitButton" color="primary" type="submit" mat-flat-button>Save changes</button>
+  <div [ngClass]="profileFormType === 'new'? 'ProfileForm-ActionButtons--newStyle' : 'ProfileForm-ActionButtons'">
+    <button [disabled]="isSubmitting || !atLeastOneDirty(profileForm)" class="ProfileForm-SubmitButton" color="primary" type="submit" mat-flat-button>{{ profileFormType === 'new'? 'Next' : 'Save changes' }}</button>
     <mat-spinner *ngIf="isSubmitting" [diameter]="20" color="primary"></mat-spinner>
   </div>
 </form>
