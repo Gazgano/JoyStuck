@@ -53,7 +53,8 @@ export class AuthService {
 
   async createNewUser(userData: any) {
       return firebase.auth().createUserWithEmailAndPassword(userData.email, userData.password)
-      .then(() => firebase.auth().currentUser.updateProfile({ displayName: userData.displayName }));
+    .then(() => firebase.auth().currentUser.updateProfile({ displayName: userData.displayName }))
+    .then(() => this.onAuthStateChanged(firebase.auth().currentUser)); // we refresh this.currentUser with the new profile data
   }
 
   async updateProfile(profileInfos: any) {
@@ -67,7 +68,7 @@ export class AuthService {
     }});
   }
 
-  private onAuthStateChanged(user: any) {
+  private onAuthStateChanged(user: firebase.User) {
     if (user) {
       this.currentUserSubject.next(this.mapUser(user));
       this.isAuthenticatedSubject.next(true);
