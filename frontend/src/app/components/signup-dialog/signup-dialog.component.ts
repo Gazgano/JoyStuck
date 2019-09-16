@@ -3,10 +3,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Logger } from '@app/core/services/logger.service';
 import { AuthService } from '@app/core/services/auth.service';
-import { Router } from '@angular/router';
 import { MatDialogRef } from '@angular/material/dialog';
 
 const log = new Logger('SignupDialogComponent');
+
+type SignupFormStep = 'FORM_FILL' | 'CONFIRMATION';
 
 @Component({
   selector: 'app-signup-dialog',
@@ -16,21 +17,21 @@ const log = new Logger('SignupDialogComponent');
 export class SignupDialogComponent {
 
   public isSubmitting = false;
+  public currentStep: SignupFormStep = 'FORM_FILL';
+  public capturedEmail: string;
 
   constructor(
     public dialogRef: MatDialogRef<SignupDialogComponent>,
     private authService: AuthService, 
-    private matSnackBar: MatSnackBar, 
-    private router: Router
+    private matSnackBar: MatSnackBar
   ) { }
 
   onFormSubmit(formData: any) {
     this.isSubmitting = true;
     this.authService.createNewUser(formData)
     .then(() => {
-      this.matSnackBar.open(`Account creating with success. You're now logged in.`, 'Dismiss', { duration: 3000 });
-      this.dialogRef.close();
-      this.router.navigateByUrl('/');
+      this.capturedEmail = formData.email;
+      this.currentStep = 'CONFIRMATION';
     })
     .catch(err => {
       this.matSnackBar.open('An error happened while creating your account', 'Dismiss', { duration: 3000 });
@@ -41,7 +42,7 @@ export class SignupDialogComponent {
     );
   }
 
-  close() {
+  closeDialog() {
     this.dialogRef.close();
   }
 }
