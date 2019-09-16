@@ -3,7 +3,7 @@ import { User } from '@app/core/models/user.model';
 import { FormBuilder, Validators, FormGroup, AbstractControl } from '@angular/forms';
 import { FormService } from '@app/shared/services/form.service';
 
-export type ProfileFormType = 'update' | 'new';
+export type ProfileFormType = 'UPDATE' | 'NEW';
 
 @Component({
   selector: 'app-profile-form',
@@ -42,16 +42,16 @@ export class ProfileFormComponent implements OnInit {
   private initProfileForm(): FormGroup {
     return this.fb.group({
       username: [ 
-        this.profileFormType === 'update'? this.currentUser.username : '', 
+        this.profileFormType === 'UPDATE'? this.currentUser.username : '', 
         [Validators.required, Validators.pattern('^[ a-zA-Z0-9]*$'), Validators.minLength(3)]
       ],
       email: [
-        this.profileFormType === 'update'? this.currentUser.email : '', 
+        this.profileFormType === 'UPDATE'? this.currentUser.email : '', 
         [Validators.required, Validators.email]
       ],
       passwords: this.fb.group({
         // Minimum eight characters, if changed, think to change help sentence in HTML as well
-        password: ['', [Validators.minLength(8), this.profileFormType === 'new'? Validators.required : Validators.nullValidator]],
+        password: ['', [Validators.minLength(8), this.profileFormType === 'NEW'? Validators.required : Validators.nullValidator]],
         confirmPassword: [''] // can contain 'mismatch' error, added by confirmPasswords validator
       }, { validators: this.formService.confirmPasswordsValidator })
     });
@@ -60,7 +60,7 @@ export class ProfileFormComponent implements OnInit {
   constructor(private fb: FormBuilder, private formService: FormService) { }
 
   ngOnInit() {
-    if (this.profileFormType === 'update' && !this.currentUser) {
+    if (this.profileFormType === 'UPDATE' && !this.currentUser) {
       throw new Error('No user currently logged in');
     }
     this.profileForm = this.initProfileForm();
