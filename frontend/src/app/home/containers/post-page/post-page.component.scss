@@ -14,3 +14,16 @@
 .PostPage-Loader {
   margin: auto;
 }
+
+.PostPage-ErrorPage {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.PostPage-ErrorPage-Icon {
+  font-size: 150px;
+  margin-bottom: -30px; // to compensate icon line spacing
+}

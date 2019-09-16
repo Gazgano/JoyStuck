@@ -11,6 +11,7 @@ import * as postActions from './post.actions';
 
 export interface PostState extends EntityState<Post> {
   isLoading: boolean;
+  inError: boolean;
 }
 
 export const postAdapter = createEntityAdapter({
@@ -19,7 +20,8 @@ export const postAdapter = createEntityAdapter({
 });
 
 const initialState = postAdapter.getInitialState({
-  isLoading: false
+  isLoading: false,
+  inError: false
 });
 
 ////////////////////////////////////////////////
@@ -43,14 +45,14 @@ function onLikePostSuccess(state: PostState, props: any) {
 const reducer = createReducer(
   initialState,
 
-  on(postActions.loadPosts, state => ({ ...state, isLoading: true })),
+  on(postActions.loadPosts, state => ({ ...state, isLoading: true, inError: false })),
 
   on(postActions.loadPostsSuccess, (state, { posts }) => {
-    return postAdapter.addAll(posts, {...state, isLoading: false});
+    return postAdapter.addAll(posts, {...state, isLoading: false, inError: false });
   }),
 
   on(postActions.loadPostsFailure, state => {
-    return {...state, isLoading: false};
+    return {...state, isLoading: false, inError: true };
   }),
 
   on(postActions.likePostSuccess, (state, props) => onLikePostSuccess(state, props))

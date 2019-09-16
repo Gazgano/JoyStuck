@@ -19,12 +19,18 @@ export class PostPageComponent implements OnInit {
 
   public posts$: Observable<Post[]>;
   public isLoading$: Observable<boolean>;
+  public inError$: Observable<boolean>;
 
   constructor(private store: Store<Post[]>) { }
 
   ngOnInit() {
     this.posts$ = this.store.pipe(select(postSelectors.selectPostsArray));
     this.isLoading$ = this.store.pipe(select(postSelectors.selectIsLoading));
+    this.inError$ = this.store.pipe(select(postSelectors.selectInError));
+    this.refresh();
+  }
+
+  refresh() {
     this.store.dispatch(postActions.loadPosts());
   }
 }
