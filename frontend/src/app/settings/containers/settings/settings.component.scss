@@ -18,5 +18,5 @@
 }
 
 .Settings-Menu-Item--selected {
-  background-color: get-color(background, selected-button, null);
+  background-color: get-theme-color($ink-theme, background, selected-button, null);
 }

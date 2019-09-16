@@ -93,11 +93,11 @@ $font-size: $width*0.157;
     #leverSymbol--#{$name}, 
     #bodySymbol--#{$name}, 
     #electricitySymbol--#{$name} {
-        fill: get-color($name, default, null);
+        fill: get-theme-color($ink-theme, $name, default, null);
     }
 
     .Loader-Joystick-Text--#{$name} {
         @extend %Loader-Joystick-Text;
-        color: get-color($name, default-contrast, null);
+        color: get-theme-color($ink-theme, $name, default-contrast, null);
     }
 }

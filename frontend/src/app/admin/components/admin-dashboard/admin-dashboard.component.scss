@@ -16,7 +16,7 @@
 @each $name in $palettes {
     .AdminDashboard-Charter-Color--#{$name} {
         @extend %AdminDashboard-Charter-Color;
-        color: get-color($name, default-contrast, null);
-        background-color: get-color($name, default, null);
+        color: get-theme-color($ink-theme, $name, default-contrast, null);
+        background-color: get-theme-color($ink-theme, $name, default, null);
     }
 }

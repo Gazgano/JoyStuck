@@ -1,10 +1,10 @@
-@function get-color($palette-name, $color-name, $contrast-code) {
+@function get-theme-color($theme, $palette-name, $color-name, $contrast-code) {
   // contrast-code is null most of the time 
   // (and must be provided as null, because there is no default arg value in SASS)
   @if $contrast-code {
-    @return map-get(map-get(map-get($ink-theme, $palette-name), $color-name), $contrast-code);
+    @return map-get(map-get(map-get($theme, $palette-name), $color-name), $contrast-code);
   } @else {
-    @return map-get(map-get($ink-theme, $palette-name), $color-name);
+    @return map-get(map-get($theme, $palette-name), $color-name);
   }
 }
 

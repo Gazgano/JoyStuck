@@ -39,7 +39,7 @@
 }
 
 .LoginForm-SignupButton {
-    color: get-color(primary, default, null);
+    color: get-theme-color($ink-theme, primary, default, null);
     font-size: 13px;
     font-weight: bold;
     text-align: center;
