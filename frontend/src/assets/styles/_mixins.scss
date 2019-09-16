@@ -8,6 +8,16 @@
   }
 }
 
+@function get-extra-color($palette, $color-name, $contrast-code) {
+  // contrast-code is null most of the time 
+  // (and must be provided as null, because there is no default arg value in SASS)
+  @if $contrast-code {
+    @return map-get(map-get($palette, $color-name), $contrast-code);
+  } @else {
+    @return map-get($palette, $color-name);
+  }
+}
+
 @mixin center-everything {
   align-items: center;
   display: flex;
