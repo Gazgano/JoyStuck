@@ -7,6 +7,7 @@ import 'firebase/auth';
 
 import { Logger } from '@app/core/services/logger.service';
 import { User } from '@app/core/models/user.model';
+import { clientUrl } from '@app/core/services/api.service';
 
 const log = new Logger('AuthService');
 
@@ -37,6 +38,15 @@ export class AuthService {
 
   signIn(email: string, password: string): Observable<firebase.auth.UserCredential> {
     return from(firebase.auth().signInWithEmailAndPassword(email, password));
+  }
+
+  sendSigninEmail(email: string) {
+    const actionCodeSettings = {
+      url: `${clientUrl}`,
+      handleCodeInApp: true
+    };
+
+    return firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings);
   }
 
   signOut(): void {

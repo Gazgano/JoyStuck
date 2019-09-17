@@ -28,21 +28,21 @@ export class SignupDialogComponent {
 
   onFormSubmit(formData: any) {
     this.isSubmitting = true;
+    this.capturedEmail = formData.email;
+    
     this.authService.createNewUser(formData)
-    .then(() => {
-      this.capturedEmail = formData.email;
-      this.currentStep = 'CONFIRMATION';
-    })
-    .catch(err => {
-      this.matSnackBar.open('An error happened while creating your account', 'Dismiss', { duration: 3000 });
-      log.handleError(err);
-    })
-    .finally(() => 
-      this.isSubmitting = false
-    );
+    .then(() => this.authService.sendSigninEmail(this.capturedEmail))
+    .then(() => this.currentStep = 'CONFIRMATION')
+    .catch(err => this.handleError(err, 'An error happened while creating your account', 5000))
+    .finally(() => this.isSubmitting = false);
   }
 
   closeDialog() {
     this.dialogRef.close();
+  }
+
+  private handleError(err: any, message: string, duration?: number) {
+    this.matSnackBar.open(message, 'Dismiss', { duration: duration || 3000 });
+    log.handleError(err);
   }
 }
