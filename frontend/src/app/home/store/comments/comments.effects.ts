@@ -62,7 +62,7 @@ export class CommentsEffects {
   private createComment(text: string, postId: string) {
     return { 
       post_id: postId, 
-      authorName: this.authService.getUsername(), 
+      authorName: this.authService.getCurrentUser().username, 
       content: text 
     };
   }
@@ -71,7 +71,7 @@ export class CommentsEffects {
     return {
       id: uid(20),
       post_id: postId,
-      authorName: this.authService.getUsername(),
+      authorName: this.authService.getCurrentUser().username,
       timestamp: moment().format(),
       content: text,
       likesCount: 0,

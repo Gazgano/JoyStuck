@@ -1,0 +1,12 @@
+<h1>Sign up</h1>
+
+<app-profile-form *ngIf="currentStep === 'FORM_FILL'" [profileFormType]="'NEW'" (formSubmit)="onFormSubmit($event)" (formCancel)="closeDialog()" [isSubmitting]="isSubmitting"></app-profile-form>
+
+<div *ngIf="currentStep === 'CONFIRMATION'" class="Signup-Confirmation">
+  <div class="Signup-ConfirmationIcon"><mat-icon [inline]="true">check_circle</mat-icon></div>
+  <p class="Signup-ConfirmationText">
+    Welcome to JoyStuck!<br>
+    A confirmation email has been sent to <b>{{ capturedEmail || '' }}</b>. Please click on the link inside to complete your subscription.
+  </p>
+  <button (click)="continue()" mat-button color="primary">Continue</button>
+</div>

@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import * as _ from 'lodash';
 
 import { AuthService } from '@app/core/services/auth.service';
 import { User } from '@app/core/models/user.model';
@@ -19,71 +17,20 @@ const log = new Logger('ProfilePage');
 export class ProfilePageComponent implements OnInit {
 
   public currentUser: User;
-  public profileForm: FormGroup;
   public isSubmitting = false;
-  private errorsMessages = {
-    username: {
-      required: (fieldName: string) => `${fieldName} is required`,
-      pattern: (fieldName: string) => `${fieldName} must contain only spaces and alphanumerical letters`,
-      minlength: (fieldName: string, errors: any) => `${fieldName} must be at least ${errors.minlength.requiredLength} characters`
-    },
-    email: {
-      required: (fieldName: string) => `${fieldName} is required`,
-      email: (fieldName: string) => `${fieldName} format is not valid`
-    },
-    'passwords/password' : {
-      pattern: (fieldName: string) => `${fieldName} format is not valid`,
-      minlength: (fieldName: string, errors: any) => `${fieldName} must be at least ${errors.minlength.requiredLength} characters`
-    },
-    'passwords/confirmPassword' : {
-      mismatch: () => `Both passwords are not identical`
-    },
-  };
-
-  private initProfileForm(): FormGroup {
-    return this.fb.group({
-      username: [this.currentUser.username, [Validators.required, Validators.pattern('^[ a-zA-Z0-9]*$'), Validators.minLength(3)]],
-      email: [this.currentUser.email, [Validators.required, Validators.email]],
-      passwords: this.fb.group({
-        // Minimum eight characters, if changed, think to change help sentence in HTML as well
-        password: ['', [Validators.minLength(8)]],
-        confirmPassword: [''] // can contain 'mismatch' error, added by confirmPasswords validator
-      }, { validators: this.formService.confirmPasswordsValidator })
-    });
-  }
   
-  constructor(
-    private authService: AuthService, 
-    private fb: FormBuilder, 
-    private formService: FormService, 
-    private matSnackBar: MatSnackBar) { }
+  constructor(private authService: AuthService, private matSnackBar: MatSnackBar) { }
 
   ngOnInit() {
-    this.authService.currentUser.subscribe(user => this.currentUser = user);
-    this.profileForm = this.initProfileForm();
-  }
-  
-  getErrorMessage(path: string | string[], fieldName: string) {
-    return this.formService.getErrorMessage(this.profileForm, path, this.errorsMessages, fieldName);
+    this.currentUser = this.authService.getCurrentUser();
   }
 
-  atLeastOneDirty(form: AbstractControl): boolean {
-    return this.formService.atLeastOneDirty(form);
-  }
-
-  onSubmit() {
-    this.profileForm.markAllAsTouched();
-    if (this.profileForm.valid) {
-      this.updateProfile();
-    }
-  }
-  
-  private updateProfile() {
+  updateProfile(profileData: any) {
     this.isSubmitting = true;
     this.authService.updateProfile({
-      displayName: this.profileForm.get('username').value,
-      email: this.profileForm.get('email').value,
-      password: this.profileForm.get(['passwords', 'password']).value
+      displayName: profileData.username,
+      email: profileData.email,
+      password: profileData.password
     }).then(() => {
       this.matSnackBar.open(`User's infos updated successfully`, 'Dismiss', { duration: 3000 });
       log.info(`User's infos updated successfully`);

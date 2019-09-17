@@ -1,36 +1,3 @@
-.ProfileForm-Image {
-  margin-bottom: 15px;
-}
-
-.mat-error {
-  white-space: nowrap;
-}
-
-.ProfileForm-ActionButtons {
-  display: flex;
-  align-items: center;
-}
-
-.ProfileForm-ActionButtons > button:not(:last-child) {
-  margin-right: 10px;
-}
-
-.ProfileForm-Passwords {
-  & > .mat-form-field {
-    display: inline-block;
-  }
-
-  & > .mat-form-field:not(:last-child) {
-    margin-right: 10px;
-  }
-}
-
-.ProfileForm-Password {
-  position: relative;
-}
-
-.ProfileForm-Password-HelpIcon {
-  position: absolute;
-  top: -16px;
-  left: 57px;
+.ProfileForm-Checklist {
+  margin-bottom: 20px;
 }

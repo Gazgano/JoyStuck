@@ -1,0 +1,4 @@
+<div [ngClass]="condition? 'ProfileForm-ChecklistItem--checked' : 'ProfileForm-ChecklistItem--unchecked'">
+  <mat-icon>{{ condition? 'check_circle' : 'cancel' }}</mat-icon>
+  <span>{{ condition? textIfTrue : textIfFalse }}</span>
+</div>

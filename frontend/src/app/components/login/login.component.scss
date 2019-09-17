@@ -1,3 +1,4 @@
+@import 'ink-theme';
 @import 'mixins';
 
 :host {
@@ -35,4 +36,11 @@
 
 .LoginForm-LoginButton-Loading-Spinner {
     margin: 0 5px;
+}
+
+.LoginForm-SignupButton {
+    color: get-theme-color($ink-theme, primary, default, null);
+    font-size: 13px;
+    font-weight: bold;
+    text-align: center;
 }

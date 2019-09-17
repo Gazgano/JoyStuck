@@ -1,0 +1,25 @@
+<div class="LoginForm">
+  <form (ngSubmit)="onSubmit()">
+    <h1 class="LoginForm-Title">Log in</h1>
+  
+    <mat-form-field class="LoginForm-Field">
+      <input #email [formControl]="emailFormControl" matInput name="email" placeholder="Email" tabindex="1">
+      <mat-error *ngIf="emailFormControl.invalid && emailFormControl.touched">Email is required</mat-error>
+    </mat-form-field>
+  
+    <mat-form-field class="LoginForm-Field">
+      <input [formControl]="passwordFormControl" matInput name="password" placeholder="Password" type="password" tabindex="2">
+      <mat-error *ngIf="passwordFormControl.invalid && passwordFormControl.touched">Password is required</mat-error>
+    </mat-form-field>
+  
+    <div class="LoginForm-LoginButton">
+      <button *ngIf="!isLoading" color="primary" mat-raised-button tabindex="3" type="submit">Log in</button>
+      <div *ngIf="isLoading" class="LoginForm-LoginButton-Loading">
+        <mat-spinner class="LoginForm-LoginButton-Loading-Spinner" diameter="30"></mat-spinner>
+        <span>Loggin in...</span>
+      </div>
+    </div>
+  </form>
+  
+  <p class="LoginForm-SignupButton"><button (click)="openSignupPopup()" mat-button>Don't have an account yet? Sign up!</button></p>
+</div>

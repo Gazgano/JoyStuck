@@ -29,7 +29,7 @@
 }
 
 .PostComment-ErrorButton {
-  color: get-color(warn, default, null);
+  color: get-theme-color($ink-theme, warn, default, null);
 }
 
 .PostComment-RetryButton {
@@ -40,19 +40,19 @@
 @each $name in $palettes {
   .PostComment-Content--#{$name} {
     @extend .PostComment-Content;
-    background-color: get-color($name, 50, null);
-    color: get-color($name, contrast, 50);
+    background-color: get-theme-color($ink-theme, $name, 50, null);
+    color: get-theme-color($ink-theme, $name, contrast, 50);
   }
 
   .PostComment-Content-Failed--#{$name} {
     @extend .PostComment-Content;
-    background-color: get-color(background, disabled-button, null);
-    color: get-color(foreground, disabled, null);
+    background-color: get-theme-color($ink-theme, background, disabled-button, null);
+    color: get-theme-color($ink-theme, foreground, disabled, null);
     margin-right: 3px;
   }
 
   .PostComment-LikeButton--#{$name} {
     @extend .PostComment-LikeButton;
-    color: get-color($name, default, null);
+    color: get-theme-color($ink-theme, $name, default, null);
   }
 }

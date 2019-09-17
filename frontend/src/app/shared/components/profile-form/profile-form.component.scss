@@ -1,0 +1,29 @@
+.mat-error {
+  white-space: nowrap;
+}
+
+.ProfileForm-Password {
+  position: relative;
+  margin-right: 10px;
+}
+
+.ProfileForm-Password-HelpIcon {
+  position: absolute;
+  top: -16px;
+  left: 57px;
+}
+
+$action-buttons-gutter: 10px;
+.ProfileForm-ActionButtons {
+  display: flex;
+  align-items: center;
+  & > * {
+    margin-right: $action-buttons-gutter;
+  }
+}
+
+.ProfileForm-ActionButtons--newStyle {
+  @extend .ProfileForm-ActionButtons;
+  justify-content: flex-end;
+  margin-right: -$action-buttons-gutter;
+}

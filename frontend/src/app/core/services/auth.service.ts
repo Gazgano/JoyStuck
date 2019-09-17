@@ -39,16 +39,26 @@ export class AuthService {
     return from(firebase.auth().signInWithEmailAndPassword(email, password));
   }
 
+  sendVerificationEmail() {
+    return firebase.auth().currentUser.sendEmailVerification();
+  }
+
   signOut(): void {
     firebase.auth().signOut();
     log.info('Signed out');
     this.router.navigate(['login']);
   }
 
-  getUsername(): string {
-    let username: string;
-    this.currentUser.pipe(take(1)).subscribe(user => username = user.username);
-    return username;
+  getCurrentUser(): User {
+    let currentUser: User;
+    this.currentUser.pipe(take(1)).subscribe(user => currentUser = user);
+    return currentUser;
+  }
+
+  async createNewUser(userData: any) {
+    return firebase.auth().createUserWithEmailAndPassword(userData.email, userData.password)
+    .then(() => firebase.auth().currentUser.updateProfile({ displayName: userData.displayName }))
+    .then(() => this.onAuthStateChanged(firebase.auth().currentUser)); // we refresh this.currentUser with the new profile data
   }
 
   async updateProfile(profileInfos: any) {
@@ -62,7 +72,7 @@ export class AuthService {
     }});
   }
 
-  private onAuthStateChanged(user: any) {
+  private onAuthStateChanged(user: firebase.User) {
     if (user) {
       this.currentUserSubject.next(this.mapUser(user));
       this.isAuthenticatedSubject.next(true);
@@ -79,7 +89,8 @@ export class AuthService {
       id: firebaseUser.uid,
       username: firebaseUser.displayName,
       email: firebaseUser.email,
-      profileImageSrcUrl: firebaseUser.photoURL
+      profileImageSrcUrl: firebaseUser.photoURL,
+      emailVerified: firebaseUser.emailVerified
     };
   }
 }

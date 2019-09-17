@@ -19,7 +19,7 @@
 }
 
 .Footer-Github-ExternalLinkIcon {
-    color: get-color(foreground, hint-text, null);
+    color: get-theme-color($ink-theme, foreground, hint-text, null);
     margin-left: 3px;
 }
 

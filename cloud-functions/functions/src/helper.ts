@@ -2,6 +2,19 @@ const moment = require('moment');
 import { DocumentData, Timestamp } from '@google-cloud/firestore';
 
 import { DbServiceError } from './models/db-service-error.model';
+import { DbServiceData } from './models/db-service-data.model';
+
+export function callDbService(action: (req, res) => Promise<DbServiceData<DocumentData>>): (req, res) => void {
+  return (req, res) => {
+    try {
+      action(req, res)
+      .then(data => res.status(data.code).json(data.data))
+      .catch((err: DbServiceError) => res.status(err.code).send(err.message));
+    } catch (err) {
+      res.status(err.code).send(err.message)
+    }
+  }
+}
 
 export function convertDocDataTimestamp(docData: DocumentData | undefined): DocumentData | undefined {
   if (docData === undefined) {

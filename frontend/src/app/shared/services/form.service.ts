@@ -61,4 +61,11 @@ export class FormService {
       return null;
     }
   }
+
+  notEmptyStringValidator(control: FormControl): ValidationErrors | null { 
+    if (!control.value) {
+      return { emptyString: true };
+    }
+    return (control.value as string).trim().length === 0? { emptyString: true } : null;
+  }
 }
