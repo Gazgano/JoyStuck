@@ -22,7 +22,7 @@ export class ProfileFormComponent implements OnInit {
   private errorsMessages = {
     username: {
       required: (fieldName: string) => `${fieldName} is required`,
-      pattern: (fieldName: string) => `${fieldName} must contain only spaces and alphanumerical letters`,
+      emptyString: (fieldName: string) => `${fieldName} must must not be empty`,
       minlength: (fieldName: string, errors: any) => `${fieldName} must be at least ${errors.minlength.requiredLength} characters`
     },
     email: {
@@ -43,7 +43,7 @@ export class ProfileFormComponent implements OnInit {
     return this.fb.group({
       username: [ 
         this.profileFormType === 'UPDATE'? this.currentUser.username : '', 
-        [Validators.required, Validators.pattern('^[ a-zA-Z0-9]*$'), Validators.minLength(3)]
+        [Validators.required, this.formService.notEmptyStringValidator, Validators.minLength(3)]
       ],
       email: [
         this.profileFormType === 'UPDATE'? this.currentUser.email : '', 
