@@ -4,7 +4,7 @@
   
     <mat-form-field class="LoginForm-Field">
       <input #email [formControl]="emailFormControl" matInput name="email" placeholder="Email" tabindex="1">
-      <mat-error *ngIf="emailFormControl.invalid && emailFormControl.touched">Email is required</mat-error>
+      <mat-error *ngIf="emailFormControl.invalid && emailFormControl.touched">Email is address is not valid</mat-error>
     </mat-form-field>
   
     <mat-form-field class="LoginForm-Field">
@@ -12,6 +12,8 @@
       <mat-error *ngIf="passwordFormControl.invalid && passwordFormControl.touched">Password is required</mat-error>
     </mat-form-field>
   
+    <a class="LoginForm-ForgottenPwd" (click)="openForgottenPwdDialog()">Forgotten password?</a>
+    
     <div class="LoginForm-LoginButton">
       <button *ngIf="!isLoading" color="primary" mat-raised-button tabindex="3" type="submit">Log in</button>
       <div *ngIf="isLoading" class="LoginForm-LoginButton-Loading">
@@ -21,5 +23,8 @@
     </div>
   </form>
   
-  <p class="LoginForm-SignupButton"><button (click)="openSignupPopup()" mat-button>Don't have an account yet? Sign up!</button></p>
+  <p class="LoginForm-Signup">
+    Don't have an account yet?
+    <button (click)="openSignupDialog()" class="LoginForm-Signup-Button" color="primary" mat-stroked-button>Sign up!</button>
+  </p>
 </div>

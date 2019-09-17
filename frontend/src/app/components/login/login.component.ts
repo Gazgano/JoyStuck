@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '@app/core/services/auth.service';
 import { Logger } from '@app/core/services/logger.service';
 import { SignupDialogComponent } from '@app/components/signup-dialog/signup-dialog.component';
+import { ForgottenPwdDialogComponent } from '../forgotten-pwd-dialog/forgotten-pwd-dialog.component';
 
 const log = new Logger('LoginComponent');
 
@@ -27,7 +28,7 @@ export class LoginComponent implements OnInit, AfterContentInit {
   constructor(private router: Router, private authService: AuthService, private matDialog: MatDialog) { }
 
   ngOnInit() {
-    this.emailFormControl = new FormControl('', Validators.required);
+    this.emailFormControl = new FormControl('', [Validators.required, Validators.email]);
     this.passwordFormControl = new FormControl('', Validators.required);
   }
 
@@ -52,7 +53,11 @@ export class LoginComponent implements OnInit, AfterContentInit {
     );
   }
 
-  openSignupPopup() {
+  openSignupDialog() {
     this.matDialog.open(SignupDialogComponent);
+  }
+
+  openForgottenPwdDialog() {
+    this.matDialog.open(ForgottenPwdDialogComponent, { data: { email: this.emailFormControl.value } });
   }
 }

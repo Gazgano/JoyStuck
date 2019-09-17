@@ -40,8 +40,12 @@ export class SignupDialogComponent {
   }
 
   continue() {
-    this.dialogRef.close();
+    this.closeDialog();
     this.router.navigate(['/']);
+  }
+
+  closeDialog() {
+    this.dialogRef.close();
   }
 
   private handleError(err: any, message: string, duration?: number) {

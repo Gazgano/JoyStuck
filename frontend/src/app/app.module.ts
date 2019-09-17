@@ -10,13 +10,16 @@ import { SharedModule } from '@app/shared/shared.module';
 import { HttpErrorInterceptor } from '@app/core/interceptors/http-error.interceptor';
 import { FormService } from './shared/services/form.service';
 import { SignupDialogComponent } from './components/signup-dialog/signup-dialog.component';
+import { ForgottenPwdDialogComponent } from './components/forgotten-pwd-dialog/forgotten-pwd-dialog.component';
+import { WINDOW_PROVIDERS } from './core/providers/window.provider';
 
 @ NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     PageNotFoundComponent,
-    SignupDialogComponent
+    SignupDialogComponent,
+    ForgottenPwdDialogComponent
   ],
   imports: [
     AppRoutingModule,
@@ -28,9 +31,10 @@ import { SignupDialogComponent } from './components/signup-dialog/signup-dialog.
     useClass: HttpErrorInterceptor,
     multi: true
   },
-  FormService  
+  FormService,
+  WINDOW_PROVIDERS
 ],
   bootstrap: [AppComponent],
-  entryComponents: [SignupDialogComponent]
+  entryComponents: [SignupDialogComponent, ForgottenPwdDialogComponent]
 })
 export class AppModule { }

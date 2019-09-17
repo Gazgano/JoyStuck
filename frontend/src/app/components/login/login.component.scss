@@ -11,7 +11,7 @@
     border-radius: 4px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     margin: auto;
-    padding: 40px;
+    padding: 40px 40px 10px 40px;
     width: 400px;
 }
 
@@ -38,9 +38,17 @@
     margin: 0 5px;
 }
 
-.LoginForm-SignupButton {
+.LoginForm-ForgottenPwd {
     color: get-theme-color($ink-theme, primary, default, null);
-    font-size: 13px;
-    font-weight: bold;
+    font-size: 11px;
+}
+
+.LoginForm-Signup {
+    color: get-theme-color($ink-theme, primary, default, null);
+    font-size: 14px;
     text-align: center;
+}
+
+.LoginForm-Signup-Button {
+    margin-left: 5px;
 }

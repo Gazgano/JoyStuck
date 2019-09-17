@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, ReplaySubject, Observable, from } from 'rxjs';
 import { distinctUntilChanged, take } from 'rxjs/operators';
@@ -7,6 +7,7 @@ import 'firebase/auth';
 
 import { Logger } from '@app/core/services/logger.service';
 import { User } from '@app/core/models/user.model';
+import { WINDOW } from '../providers/window.provider';
 
 const log = new Logger('AuthService');
 
@@ -29,7 +30,7 @@ export class AuthService {
   private isAuthenticatedSubject = new ReplaySubject<boolean>(1);
   public isAuthenticated = this.isAuthenticatedSubject.asObservable();
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, @Inject(WINDOW) private window: Window) { }
 
   initializeAuth() { // called in app.component.ts
     firebase.auth().onAuthStateChanged(user => this.onAuthStateChanged(user));
@@ -41,6 +42,16 @@ export class AuthService {
 
   sendVerificationEmail() {
     return firebase.auth().currentUser.sendEmailVerification();
+  }
+
+  sendPwdResetEmail(email: string) {
+    const continueUrl = `${this.window.location.origin}/`;
+    const actionCodeSettings = {
+      url: continueUrl,
+      handleCodeInApp: true
+    };
+    
+    return firebase.auth().sendPasswordResetEmail(email, actionCodeSettings);
   }
 
   signOut(): void {

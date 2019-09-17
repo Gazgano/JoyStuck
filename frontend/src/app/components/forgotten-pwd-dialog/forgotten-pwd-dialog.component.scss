@@ -1,0 +1,29 @@
+@import 'extra-palettes';
+@import 'mixins';
+
+.ForgottenPwd-ButtonContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  .mat-spinner {
+    margin-left: 10px;
+  }
+}
+
+.ForgottenPwd-Confirmation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ForgottenPwd-ConfirmationIcon {
+  font-size: 100px;
+  margin-bottom: -30px; // to compensate line space of the icon
+  color: get-extra-color($green, default, null);
+}
+
+.ForgottenPwd-ConfirmationText {
+  text-align: center;
+  width: 300px;
+}
