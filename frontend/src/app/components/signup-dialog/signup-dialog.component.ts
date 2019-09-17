@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialogRef } from '@angular/material/dialog';
 
 import { Logger } from '@app/core/services/logger.service';
 import { AuthService } from '@app/core/services/auth.service';
-import { MatDialogRef } from '@angular/material/dialog';
 
 const log = new Logger('SignupDialogComponent');
 
@@ -23,7 +24,8 @@ export class SignupDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<SignupDialogComponent>,
     private authService: AuthService, 
-    private matSnackBar: MatSnackBar
+    private matSnackBar: MatSnackBar,
+    private router: Router
   ) { }
 
   onFormSubmit(formData: any) {
@@ -31,14 +33,15 @@ export class SignupDialogComponent {
     this.capturedEmail = formData.email;
     
     this.authService.createNewUser(formData)
-    .then(() => this.authService.sendSigninEmail(this.capturedEmail))
+    .then(() => this.authService.sendVerificationEmail())
     .then(() => this.currentStep = 'CONFIRMATION')
     .catch(err => this.handleError(err, 'An error happened while creating your account', 5000))
     .finally(() => this.isSubmitting = false);
   }
 
-  closeDialog() {
+  continue() {
     this.dialogRef.close();
+    this.router.navigate(['/']);
   }
 
   private handleError(err: any, message: string, duration?: number) {

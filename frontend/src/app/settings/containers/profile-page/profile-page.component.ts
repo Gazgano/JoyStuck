@@ -22,7 +22,7 @@ export class ProfilePageComponent implements OnInit {
   constructor(private authService: AuthService, private matSnackBar: MatSnackBar) { }
 
   ngOnInit() {
-    this.authService.currentUser.subscribe(user => this.currentUser = user);
+    this.currentUser = this.authService.getCurrentUser();
   }
 
   updateProfile(profileData: any) {

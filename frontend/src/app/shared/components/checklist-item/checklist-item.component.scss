@@ -1,0 +1,20 @@
+@import 'ink-theme';
+@import 'mixins';
+
+%ProfileForm-ChecklistItem {
+  display: flex;
+  align-items: center;
+  & .mat-icon {
+    margin-right: 5px;
+  }
+}
+
+.ProfileForm-ChecklistItem--checked {
+  @extend %ProfileForm-ChecklistItem;
+  color: get-theme-color($ink-theme, primary, default, null);
+}
+
+.ProfileForm-ChecklistItem--unchecked {
+  @extend %ProfileForm-ChecklistItem;
+  color: get-theme-color($ink-theme, foreground, disabled, null);
+}

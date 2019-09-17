@@ -7,7 +7,6 @@ import 'firebase/auth';
 
 import { Logger } from '@app/core/services/logger.service';
 import { User } from '@app/core/models/user.model';
-import { clientUrl } from '@app/core/services/api.service';
 
 const log = new Logger('AuthService');
 
@@ -40,13 +39,8 @@ export class AuthService {
     return from(firebase.auth().signInWithEmailAndPassword(email, password));
   }
 
-  sendSigninEmail(email: string) {
-    const actionCodeSettings = {
-      url: `${clientUrl}`,
-      handleCodeInApp: true
-    };
-
-    return firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings);
+  sendVerificationEmail() {
+    return firebase.auth().currentUser.sendEmailVerification();
   }
 
   signOut(): void {
@@ -55,14 +49,14 @@ export class AuthService {
     this.router.navigate(['login']);
   }
 
-  getUsername(): string {
-    let username: string;
-    this.currentUser.pipe(take(1)).subscribe(user => username = user.username);
-    return username;
+  getCurrentUser(): User {
+    let currentUser: User;
+    this.currentUser.pipe(take(1)).subscribe(user => currentUser = user);
+    return currentUser;
   }
 
   async createNewUser(userData: any) {
-      return firebase.auth().createUserWithEmailAndPassword(userData.email, userData.password)
+    return firebase.auth().createUserWithEmailAndPassword(userData.email, userData.password)
     .then(() => firebase.auth().currentUser.updateProfile({ displayName: userData.displayName }))
     .then(() => this.onAuthStateChanged(firebase.auth().currentUser)); // we refresh this.currentUser with the new profile data
   }
@@ -95,7 +89,8 @@ export class AuthService {
       id: firebaseUser.uid,
       username: firebaseUser.displayName,
       email: firebaseUser.email,
-      profileImageSrcUrl: firebaseUser.photoURL
+      profileImageSrcUrl: firebaseUser.photoURL,
+      emailVerified: firebaseUser.emailVerified
     };
   }
 }

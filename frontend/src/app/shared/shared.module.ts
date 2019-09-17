@@ -25,6 +25,7 @@ import { ShellComponent } from './components/shell/shell.component';
 import { LoaderComponent } from './components/loader/loader.component';
 import { UppercaseFirstLetterPipe } from './pipes/uppercase-first-letter.pipe';
 import { ProfileFormComponent } from './components/profile-form/profile-form.component';
+import { ChecklistItemComponent } from './components/checklist-item/checklist-item.component';
 
 
 @NgModule({
@@ -34,7 +35,8 @@ import { ProfileFormComponent } from './components/profile-form/profile-form.com
     ShellComponent,
     LoaderComponent,
     UppercaseFirstLetterPipe,
-    ProfileFormComponent
+    ProfileFormComponent,
+    ChecklistItemComponent
   ],
   imports: [
     CommonModule,
@@ -59,6 +61,7 @@ import { ProfileFormComponent } from './components/profile-form/profile-form.com
     RouterModule
   ],
   exports: [
+    ChecklistItemComponent,
     CommonModule,
     FontAwesomeModule,
     FormsModule,

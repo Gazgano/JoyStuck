@@ -7,10 +7,6 @@ export const baseUrl = environment.production?
   'https://us-central1-joystuck.cloudfunctions.net/api/':
   'http://localhost:5000/joystuck/us-central1/api/';
 
-export const clientUrl = environment.production?
-  'https://joystuck.firebaseapp.com/':
-  'http://localhost:4200/';
-
 @Injectable({
   providedIn: 'root'
 })
