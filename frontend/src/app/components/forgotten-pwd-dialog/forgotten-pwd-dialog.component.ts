@@ -1,10 +1,12 @@
-import { Component, Input, Inject, Output } from '@angular/core';
+import { Component, Input, Inject, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { filter } from 'rxjs/operators';
 
 import { Logger } from '@app/core/services/logger.service';
 import { AuthService } from '@app/core/services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { stepTransitionTrigger } from './forgotten-pwd-dialog.animation';
 
 const log = new Logger('ForgottenPwdDialogComponent');
 
@@ -13,9 +15,10 @@ type ForgottenPwdFormStep = 'FORM_FILL' | 'CONFIRMATION';
 @Component({
   selector: 'app-forgotten-pwd-dialog',
   templateUrl: './forgotten-pwd-dialog.component.html',
-  styleUrls: ['./forgotten-pwd-dialog.component.scss']
+  styleUrls: ['./forgotten-pwd-dialog.component.scss'],
+  animations: [stepTransitionTrigger]
 })
-export class ForgottenPwdDialogComponent {
+export class ForgottenPwdDialogComponent implements OnInit {
   @Input() isSubmitting = false;
   public emailFromLogin: string;
   public currentStep: ForgottenPwdFormStep = 'FORM_FILL';
@@ -27,9 +30,12 @@ export class ForgottenPwdDialogComponent {
     private authService: AuthService, 
     private matSnackBar: MatSnackBar,
     public dialogRef: MatDialogRef<ForgottenPwdDialogComponent>,
-  ) { 
-    this.emailFromLogin = data.email;
+  ) { }
+
+  ngOnInit() {
+    this.emailFromLogin = this.data.email;
     this.recoveryEmailControl = new FormControl(this.emailFromLogin || '', [Validators.required, Validators.email]);
+    this.reactToEnterKey();
   }
 
   sendRecoveryEmail() {
@@ -48,5 +54,13 @@ export class ForgottenPwdDialogComponent {
 
   onCancel() {
     this.dialogRef.close();
+  }
+
+  reactToEnterKey() {
+    this.dialogRef.keydownEvents()
+    .pipe(filter(keyEvent => keyEvent.key === 'Enter'))
+    .subscribe(keyEvent => {
+        this.sendRecoveryEmail();
+    });
   }
 }

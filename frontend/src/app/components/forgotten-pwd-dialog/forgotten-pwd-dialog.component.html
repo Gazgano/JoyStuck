@@ -1,24 +1,25 @@
 <h2>Forgotten password</h2>
 
-<form *ngIf="currentStep === 'FORM_FILL'" (ngSubmit)="sendRecoveryEmail()">
-  <p>Please provide your email address. An email with a link to reset your password will be sent:</p>
-  
-  <mat-form-field>
-    <input [formControl]="recoveryEmailControl" matInput name="email" placeholder="Email" tabindex="0" floatLabel="always">
-    <mat-error *ngIf="recoveryEmailControl.invalid && recoveryEmailControl.touched">Email is address is not valid</mat-error>
-  </mat-form-field>
-  
-  
-  <div class="ForgottenPwd-ButtonContainer">
-    <button (click)="onCancel()" mat-flat-button>Cancel</button>
-    <button [disabled]="recoveryEmailControl.invalid" mat-raised-button color="primary" type="submit">Send recovery email</button>
-    <mat-spinner *ngIf="isSubmitting" [diameter]="20" color="primary"></mat-spinner>
+<div [@stepTransitionTrigger]="currentStep" class="ForgottenPwd-AnimationContainer">
+  <div *ngIf="currentStep === 'FORM_FILL'" class="ForgottenPwd-Form">
+    <p>Please provide your email address. An email with a link to reset your password will be sent:</p>
+    
+    <mat-form-field>
+      <input [formControl]="recoveryEmailControl" matInput name="email" placeholder="Email" tabindex="0" floatLabel="always">
+      <mat-error *ngIf="recoveryEmailControl.invalid && recoveryEmailControl.touched">Email is address is not valid</mat-error>
+    </mat-form-field>
+    
+    <div class="ForgottenPwd-ButtonContainer">
+      <button (click)="onCancel()" mat-flat-button>Cancel</button>
+      <button [disabled]="recoveryEmailControl.invalid" mat-raised-button color="primary" (click)="sendRecoveryEmail()">Send recovery email</button>
+      <mat-spinner *ngIf="isSubmitting" [diameter]="20" color="primary"></mat-spinner>
+    </div>
   </div>
-</form>
-
-<div *ngIf="currentStep === 'CONFIRMATION'" class="ForgottenPwd-Confirmation">
+  
+  <div *ngIf="currentStep === 'CONFIRMATION'" class="ForgottenPwd-Confirmation">
     <div class="ForgottenPwd-ConfirmationIcon"><mat-icon [inline]="true">check_circle</mat-icon></div>
     <p class="ForgottenPwd-ConfirmationText">
       A recovery email has been sent to <b>{{ capturedEmail || '' }}</b>. Follow instructions inside the email to define a new password.
     </p>
   </div>
+</div>
