@@ -6,7 +6,7 @@ import { filter } from 'rxjs/operators';
 import { Logger } from '@app/core/services/logger.service';
 import { AuthService } from '@app/core/services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { stepTransitionTrigger } from './forgotten-pwd-dialog.animation';
+import { stepTransition } from '@app/shared/animations/step-transition.animation';
 
 const log = new Logger('ForgottenPwdDialogComponent');
 
@@ -16,7 +16,13 @@ type ForgottenPwdFormStep = 'FORM_FILL' | 'CONFIRMATION';
   selector: 'app-forgotten-pwd-dialog',
   templateUrl: './forgotten-pwd-dialog.component.html',
   styleUrls: ['./forgotten-pwd-dialog.component.scss'],
-  animations: [stepTransitionTrigger]
+  animations: [stepTransition(
+    'moveStepForwardTrigger',
+    'right',
+    'FORM_FILL => CONFIRMATION', 
+    '.ForgottenPwd-Form', 
+    '.ForgottenPwd-Confirmation'
+  )]
 })
 export class ForgottenPwdDialogComponent implements OnInit {
   @Input() isSubmitting = false;
@@ -59,8 +65,6 @@ export class ForgottenPwdDialogComponent implements OnInit {
   reactToEnterKey() {
     this.dialogRef.keydownEvents()
     .pipe(filter(keyEvent => keyEvent.key === 'Enter'))
-    .subscribe(keyEvent => {
-        this.sendRecoveryEmail();
-    });
+    .subscribe(() => this.sendRecoveryEmail());
   }
 }

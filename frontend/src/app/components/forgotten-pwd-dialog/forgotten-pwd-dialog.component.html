@@ -1,6 +1,6 @@
 <h2>Forgotten password</h2>
 
-<div [@stepTransitionTrigger]="currentStep" class="ForgottenPwd-AnimationContainer">
+<div [@moveStepForwardTrigger]="currentStep" class="ForgottenPwd-AnimationContainer">
   <div *ngIf="currentStep === 'FORM_FILL'" class="ForgottenPwd-Form">
     <p>Please provide your email address. An email with a link to reset your password will be sent:</p>
     
