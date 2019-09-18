@@ -36,8 +36,8 @@ export class AuthService {
     firebase.auth().onAuthStateChanged(user => this.onAuthStateChanged(user));
   }
 
-  signIn(email: string, password: string): Observable<firebase.auth.UserCredential> {
-    return from(firebase.auth().signInWithEmailAndPassword(email, password));
+  signIn(email: string, password: string): Promise<firebase.auth.UserCredential> {
+    return firebase.auth().signInWithEmailAndPassword(email, password);
   }
 
   sendVerificationEmail() {
@@ -61,9 +61,7 @@ export class AuthService {
   }
 
   getCurrentUser(): User {
-    let currentUser: User;
-    this.currentUser.pipe(take(1)).subscribe(user => currentUser = user);
-    return currentUser;
+    return this.currentUserSubject.getValue();
   }
 
   async createNewUser(userData: any) {

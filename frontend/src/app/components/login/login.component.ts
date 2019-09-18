@@ -42,15 +42,15 @@ export class LoginComponent implements OnInit, AfterContentInit {
   }
 
   signIn(email: string, password: string) {
-    this.authService.signIn(email, password).subscribe(
-      () => {
+    this.authService.signIn(email, password)
+    .then(() => {
         this.isLoading = false;
         this.router.navigateByUrl('/');
-      }, err => {
+      })
+    .catch(err => {
         this.isLoading = false;
         log.info(`Authentication failed (error code ${err.code})`);
-      }
-    );
+    });
   }
 
   openSignupDialog() {
