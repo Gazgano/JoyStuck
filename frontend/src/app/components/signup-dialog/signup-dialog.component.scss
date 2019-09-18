@@ -1,10 +1,23 @@
 @import 'extra-palettes';
 @import 'mixins';
 
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.Signup-AnimationContainer {
+  overflow: hidden;
+  flex-grow: 1;
+}
+
 .Signup-Confirmation {
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
 .Signup-ConfirmationIcon {

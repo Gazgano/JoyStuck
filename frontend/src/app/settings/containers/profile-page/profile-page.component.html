@@ -3,4 +3,6 @@
   <app-checklist-item [condition]="currentUser.emailVerified" [textIfTrue]="'Email verified'" [textIfFalse]="'Email not verified'"></app-checklist-item>
 </div>
 <img class="ProfileForm-Image" src="assets/images/gazgano-picture-64px.png">
-<app-profile-form [profileFormType]="'UPDATE'" [currentUser]="currentUser" (formSubmit)="updateProfile($event)" [isSubmitting]="isSubmitting"></app-profile-form>
+<div class="ProfileForm-Form">
+  <app-profile-form [profileFormType]="'UPDATE'" [currentUser]="currentUser" (formSubmit)="updateProfile($event)" [isSubmitting]="isSubmitting"></app-profile-form>
+</div>

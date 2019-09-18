@@ -1,3 +1,9 @@
+:host {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 .mat-error {
   white-space: nowrap;
 }
@@ -14,9 +20,11 @@
 }
 
 $action-buttons-gutter: 10px;
+
 .ProfileForm-ActionButtons {
   display: flex;
   align-items: center;
+  margin-top: auto;
   & > * {
     margin-right: $action-buttons-gutter;
   }

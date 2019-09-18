@@ -54,7 +54,11 @@ export class LoginComponent implements OnInit, AfterContentInit {
   }
 
   openSignupDialog() {
-    this.matDialog.open(SignupDialogComponent);
+    this.matDialog.open(SignupDialogComponent, { 
+      width: '420px',
+      height: '480px',
+      data: { email: this.emailFormControl.value } 
+    });
   }
 
   openForgottenPwdDialog() {

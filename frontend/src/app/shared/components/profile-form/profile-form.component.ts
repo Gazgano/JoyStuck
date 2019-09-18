@@ -1,16 +1,22 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { User } from '@app/core/models/user.model';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, AbstractControl } from '@angular/forms';
+import { Subscription, fromEvent } from 'rxjs';
+import { filter } from 'rxjs/operators';
+
 import { FormService } from '@app/shared/services/form.service';
+import { User } from '@app/core/models/user.model';
+import { Logger } from '@app/core/services/logger.service';
 
 export type ProfileFormType = 'UPDATE' | 'NEW';
+
+const log = new Logger('ProfileFormComponent');
 
 @Component({
   selector: 'app-profile-form',
   templateUrl: './profile-form.component.html',
   styleUrls: ['./profile-form.component.scss']
 })
-export class ProfileFormComponent implements OnInit {
+export class ProfileFormComponent implements OnInit, OnDestroy {
 
   @Input() currentUser: User;
   @Input() isSubmitting: boolean;
@@ -19,6 +25,7 @@ export class ProfileFormComponent implements OnInit {
   @Output() formCancel = new EventEmitter<boolean>();
 
   public profileForm: FormGroup;
+  private enterKeySubscription: Subscription;
   private errorsMessages = {
     username: {
       required: (fieldName: string) => `${fieldName} is required`,
@@ -64,6 +71,7 @@ export class ProfileFormComponent implements OnInit {
       throw new Error('No user currently logged in');
     }
     this.profileForm = this.initProfileForm();
+    this.reactToEnterKey();
   }
 
   getErrorMessage(path: string | string[], fieldName: string) {
@@ -87,5 +95,15 @@ export class ProfileFormComponent implements OnInit {
 
   onCancel() {
     this.formCancel.emit(true);
+  }
+
+  private reactToEnterKey() {
+    this.enterKeySubscription = fromEvent<KeyboardEvent>(document, 'keypress')
+    .pipe(filter(keyEvent => keyEvent.key === 'Enter'))
+    .subscribe(() => this.onSubmit());
+  }
+
+  ngOnDestroy() {
+    this.enterKeySubscription.unsubscribe();
   }
 }

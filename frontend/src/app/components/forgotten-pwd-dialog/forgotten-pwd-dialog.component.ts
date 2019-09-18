@@ -1,6 +1,7 @@
-import { Component, Input, Inject, OnInit } from '@angular/core';
+import { Component, Input, Inject, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { Logger } from '@app/core/services/logger.service';
@@ -24,12 +25,13 @@ type ForgottenPwdFormStep = 'FORM_FILL' | 'CONFIRMATION';
     '.ForgottenPwd-Confirmation'
   )]
 })
-export class ForgottenPwdDialogComponent implements OnInit {
+export class ForgottenPwdDialogComponent implements OnInit, OnDestroy {
   @Input() isSubmitting = false;
   public emailFromLogin: string;
   public currentStep: ForgottenPwdFormStep = 'FORM_FILL';
   public recoveryEmailControl: FormControl;
   public capturedEmail: string;
+  private enterKeySubscription: Subscription;
   
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any, 
@@ -62,9 +64,13 @@ export class ForgottenPwdDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  reactToEnterKey() {
-    this.dialogRef.keydownEvents()
+  private reactToEnterKey() {
+    this.enterKeySubscription = this.dialogRef.keydownEvents()
     .pipe(filter(keyEvent => keyEvent.key === 'Enter'))
     .subscribe(() => this.sendRecoveryEmail());
+  }
+
+  ngOnDestroy() {
+    this.enterKeySubscription.unsubscribe();
   }
 }

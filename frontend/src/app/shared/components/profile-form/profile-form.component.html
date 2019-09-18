@@ -1,4 +1,4 @@
-<form (ngSubmit)="onSubmit()" [formGroup]="profileForm" class="ProfileForm">
+<ng-container [formGroup]="profileForm">
   <p>
     <mat-form-field floatLabel="always">
       <input #username formControlName="username" matInput placeholder="Username">
@@ -28,7 +28,7 @@
 
   <div [ngClass]="profileFormType === 'NEW'? 'ProfileForm-ActionButtons--newStyle' : 'ProfileForm-ActionButtons'">
     <button *ngIf="profileFormType === 'NEW'" (click)="onCancel()" [ngStyle]="{ 'order': profileFormType === 'NEW'? 2 : 1 }" class="ProfileForm-CancelButton" mat-flat-button>Cancel</button>
-    <button [disabled]="isSubmitting || !atLeastOneDirty(profileForm)" [ngStyle]="{ 'order': profileFormType === 'NEW'? 3 : 2 }" class="ProfileForm-SubmitButton" color="primary" type="submit" mat-flat-button>{{ profileFormType === 'NEW'? 'Create my account' : 'Save changes' }}</button>
+    <button [disabled]="isSubmitting || !atLeastOneDirty(profileForm)" (click)="onSubmit()" [ngStyle]="{ 'order': profileFormType === 'NEW'? 3 : 2 }" class="ProfileForm-SubmitButton" color="primary" mat-flat-button>{{ profileFormType === 'NEW'? 'Create my account' : 'Save changes' }}</button>
     <mat-spinner *ngIf="isSubmitting" [ngStyle]="{ 'order': profileFormType === 'NEW'? 1 : 3 }" [diameter]="20" color="primary"></mat-spinner>
   </div>
-</form>
+</ng-container>
