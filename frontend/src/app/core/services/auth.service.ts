@@ -1,9 +1,8 @@
 import { Injectable, Inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, ReplaySubject, Observable, from } from 'rxjs';
-import { distinctUntilChanged, take } from 'rxjs/operators';
+import { BehaviorSubject, ReplaySubject } from 'rxjs';
+import { distinctUntilChanged } from 'rxjs/operators';
 import * as firebase from 'firebase/app';
-import 'firebase/auth';
 
 import { Logger } from '@app/core/services/logger.service';
 import { User } from '@app/core/models/user.model';

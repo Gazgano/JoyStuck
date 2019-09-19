@@ -2,6 +2,35 @@
   margin-bottom: 20px;
 }
 
+$image-size: 64px;
+
+.ProfileForm-ImageContainer {
+  width: $image-size;
+  height: $image-size;
+}
+
+.ProfileForm-Image {
+  width: $image-size;
+}
+
+@keyframes animatedBackground {
+  0% { background-position-x: 0px; }
+  100% { background-position-x: 2*$image-size; }
+}
+
+.ProfileForm-Loader {
+  width: $image-size;
+  height: $image-size;
+  border-radius: $image-size/2;
+  background: linear-gradient(to right, #eeeeee 0%, #dddddd 30%, #eeeeee 60%);
+  background-size: 2*$image-size $image-size;
+
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-name: animatedBackground;
+  animation-timing-function: linear;
+}
+
 .ProfileForm-Form {
   height: 350px;
 }

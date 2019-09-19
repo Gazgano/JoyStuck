@@ -5,6 +5,7 @@ import { AuthService } from '@app/core/services/auth.service';
 import { User } from '@app/core/models/user.model';
 import { Logger } from '@app/core/services/logger.service';
 import { FormService } from '@app/shared/services/form.service';
+import { StorageService } from '@app/core/services/storage.service';
 
 const log = new Logger('ProfilePage');
 
@@ -18,11 +19,17 @@ export class ProfilePageComponent implements OnInit {
 
   public currentUser: User;
   public isSubmitting = false;
+  public profileImageUrl$: Promise<string>;
   
-  constructor(private authService: AuthService, private matSnackBar: MatSnackBar) { }
+  constructor(
+    private authService: AuthService, 
+    private matSnackBar: MatSnackBar, 
+    private storageService: StorageService
+  ) { }
 
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUser();
+    this.profileImageUrl$ = this.storageService.storageTest();
   }
 
   updateProfile(profileData: any) {

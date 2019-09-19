@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '@app/core/services/auth.service';
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
+import 'firebase/storage';
 
 import { Logger } from './core/services/logger.service';
+import { AuthService } from '@app/core/services/auth.service';
 
 const log = new Logger('AppComponent');
 
@@ -13,7 +14,7 @@ const firebaseConfig = {
   authDomain: 'joystuck.firebaseapp.com',
   databaseURL: 'https://joystuck.firebaseio.com',
   projectId: 'joystuck',
-  storageBucket: '',
+  storageBucket: 'joystuck.appspot.com',
   messagingSenderId: '612325519517',
   appId: '1:612325519517:web:e0a724f26bad259b'
 };
