@@ -22,8 +22,6 @@ export class ProfilePageComponent implements OnInit {
 
   public currentUser: User;
   public isSubmitting = false;
-  public defaultImage = false;
-  public profileImageUrl$: Promise<any>;
   private submissionSubject = new Subject<boolean>();
   public submissionObservable = this.submissionSubject.asObservable();
 
@@ -35,7 +33,6 @@ export class ProfilePageComponent implements OnInit {
 
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUser();
-    this.getProfileImage();
   }
 
   submitForm() {
@@ -47,15 +44,6 @@ export class ProfilePageComponent implements OnInit {
     this.uploadProfileImage()
     .then(imageUrl => this.updateProfile({...profileData, imageUrl }))
     .finally(() => this.isSubmitting = false);
-  }
-
-  private getProfileImage() {
-    const profileImagePromise = this.storageService.getProfileImage(this.currentUser);
-    if (profileImagePromise) {
-      this.profileImageUrl$ = this.storageService.getProfileImage(this.currentUser);
-    } else {
-      this.defaultImage = true;
-    }
   }
 
   private async updateProfile(profileData: any): Promise<void> {

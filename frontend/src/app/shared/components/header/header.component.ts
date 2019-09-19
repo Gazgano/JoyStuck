@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { AuthService } from '@app/core/services/auth.service';
+import { User } from '@app/core/models/user.model';
 
 @Component({
   selector: 'app-header',
@@ -9,14 +10,12 @@ import { AuthService } from '@app/core/services/auth.service';
 })
 export class HeaderComponent implements OnInit {
 
-  public displayDefaultImage = false;
-  public userName: string;
-  public userPicturePath = 'assets/images/gazgano-picture-64px.png';
+  public currentUser: User;
 
   constructor(private authService: AuthService) { }
 
   ngOnInit() {
-    this.userName = this.authService.getCurrentUser().username;
+    this.currentUser = this.authService.getCurrentUser();
   }
 
   logout() {

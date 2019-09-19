@@ -1,18 +1,19 @@
 @import 'breakpoints';
+@import 'mixins';
 
 .mat-toolbar {
   line-height: 0px;
   height: 64px;
 }
 
-.Logo {
+.Header-Logo {
   margin-right: auto;
   img {
     height: 40px;
   }
 }
 
-.SearchBar {
+.Header-SearchBar {
   $side-padding: 15px;
 
   display: none;
@@ -28,29 +29,43 @@
     width: 100%;
   }
 
-  .SearchBar-Icon {
+  .Header-SearchBar-Icon {
     position: absolute;
     right: $side-padding;
   }
 }
 
-.UserMenu-Image {
-  height: 30px;
-  margin-right: 5px;
-  width: 30px;
+$image-size: 30px;
+
+.Header-DefaultImage {
+  width: $image-size;
+  height: $image-size;
+  border-radius: $image-size/2;
+  background-color: limegreen;
+  color: white;
+  font-size: $image-size/2;
+  text-transform: uppercase;
+  @include center-everything;
 }
 
-.UserMenu-Name {
+.Header-Image {
+  height: $image-size;
+  width: $image-size;
+  border-radius: $image-size/2;
+  margin-right: 5px;
+}
+
+.Header-Name {
   display: none;
 }
 
 // Breakpoints
 @media (min-width: $sm) {
-  .SearchBar {
+  .Header-SearchBar {
     display: block;
   }
 
-  .UserMenu-Name {
+  .Header-Name {
     display: inline;
   }
 }

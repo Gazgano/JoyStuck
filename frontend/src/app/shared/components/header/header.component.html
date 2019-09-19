@@ -1,9 +1,9 @@
 <mat-toolbar color="primary">
-  <a class="Logo" routerLink="/"><img src="assets/images/logo.svg"></a>
+  <a class="Header-Logo" routerLink="/"><img src="assets/images/logo.svg"></a>
 
-  <!-- <div class="SearchBar">
+  <!-- <div class="Header-SearchBar">
     <input type="text" placeholder="Rechercher">
-    <mat-icon class="SearchBar-Icon" color="primary">search</mat-icon>
+    <mat-icon class="Header-SearchBar-Icon" color="primary">search</mat-icon>
   </div>
 
   <button mat-icon-button>
@@ -15,8 +15,14 @@
   </button> -->
 
   <button mat-button [matMenuTriggerFor]="menu">
-    <img class="UserMenu-Image" *ngIf="!displayDefaultImage" [src]="userPicturePath">
-    <span class="UserMenu-Name">{{userName}}</span>
+    <div *ngIf="!currentUser.profileImageSrcUrl; else profileImage" class="Header-DefaultImage">
+      <span>{{ currentUser.username.substring(0,1) }}</span>
+    </div>
+    <ng-template #profileImage>
+      <img class="Header-Image" [attr.src]="currentUser.profileImageSrcUrl">
+    </ng-template>
+
+    <span class="Header-Name">{{ currentUser.username }}</span>
     <mat-icon>arrow_drop_down</mat-icon>
   </button>
   <mat-menu #menu="matMenu" xPosition="before">
