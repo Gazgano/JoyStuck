@@ -1,19 +1,15 @@
 <ng-container [formGroup]="profileForm">
-  <p>
     <mat-form-field floatLabel="always">
       <input #username formControlName="username" matInput placeholder="Username">
       <mat-error>{{ getErrorMessage('username', 'username') | uppercaseFirstLetter }}</mat-error>
     </mat-form-field>
-  </p>
 
-  <p>
     <mat-form-field floatLabel="always">
       <input formControlName="email" matInput placeholder="Email">
       <mat-error>{{ getErrorMessage('email', 'email') | uppercaseFirstLetter }}</mat-error>
     </mat-form-field>
-  </p>
 
-  <p class="ProfileForm-Passwords" formGroupName="passwords">
+  <div class="ProfileForm-Passwords" formGroupName="passwords">
     <mat-form-field class="ProfileForm-Password" floatLabel="always">
       <mat-icon class="ProfileForm-Password-HelpIcon" color="primary" [inline]="true" matTooltip="Password must have at least eight characters">help</mat-icon>
       <input formControlName="password" matInput placeholder="Password" type="password">
@@ -24,7 +20,7 @@
       <input formControlName="confirmPassword" matInput placeholder="Confirm password" type="password">
       <mat-error>{{ getErrorMessage(['passwords', 'confirmPassword'], 'password confirmation') | uppercaseFirstLetter }}</mat-error>
     </mat-form-field>
-  </p>
+  </div>
 
   <div [ngClass]="profileFormType === 'NEW'? 'ProfileForm-ActionButtons--newStyle' : 'ProfileForm-ActionButtons'">
     <button *ngIf="profileFormType === 'NEW'" (click)="onCancel()" [ngStyle]="{ 'order': profileFormType === 'NEW'? 2 : 1 }" class="ProfileForm-CancelButton" mat-flat-button>Cancel</button>

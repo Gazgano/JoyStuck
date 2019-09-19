@@ -1,15 +1,27 @@
-.ProfileForm-Checklist {
+.ProfilePage-Form {
+  height: 250px;
+}
+
+.ProfilePage-Checklist {
+  margin-bottom: 20px;
+}
+
+.ProfilePage-UploadImage {
+  display: flex;
+  align-items: center;
   margin-bottom: 20px;
 }
 
 $image-size: 64px;
 
-.ProfileForm-ImageContainer {
+.ProfilePage-UploadImage-ImageContainer {
   width: $image-size;
   height: $image-size;
+  overflow: hidden;
+  margin-right: 10px;
 }
 
-.ProfileForm-Image {
+.ProfilePage-UploadImage-Image {
   width: $image-size;
 }
 
@@ -18,7 +30,7 @@ $image-size: 64px;
   100% { background-position-x: 2*$image-size; }
 }
 
-.ProfileForm-Loader {
+.ProfilePage-UploadImage-ImagePlaceholder {
   width: $image-size;
   height: $image-size;
   border-radius: $image-size/2;
@@ -31,6 +43,12 @@ $image-size: 64px;
   animation-timing-function: linear;
 }
 
-.ProfileForm-Form {
-  height: 350px;
+.ProfilePage-UploadImage-Actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  & > *:not(:last-child) {
+    margin-bottom: 5px;
+  }
 }

@@ -2,6 +2,11 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+}
+
+.mat-form-field {
+  margin-bottom: 7px;
 }
 
 .mat-error {
@@ -32,6 +37,6 @@ $action-buttons-gutter: 10px;
 
 .ProfileForm-ActionButtons--newStyle {
   @extend .ProfileForm-ActionButtons;
-  justify-content: flex-end;
+  align-self: flex-end;
   margin-right: -$action-buttons-gutter;
 }

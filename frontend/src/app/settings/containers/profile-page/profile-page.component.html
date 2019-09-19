@@ -1,18 +1,25 @@
 <h1>My profile</h1>
 
-<div class="ProfileForm-Checklist">
+<div class="ProfilePage-Checklist">
   <app-checklist-item [condition]="currentUser.emailVerified" [textIfTrue]="'Email verified'" [textIfFalse]="'Email not verified'"></app-checklist-item>
 </div>
 
-<div class="ProfileForm-ImageContainer">
-  <ng-container *ngIf="profileImageUrl$ | async as profileImageUrl; else imageLoading">
-    <img class="ProfileForm-Image" [attr.src]="profileImageUrl">
-  </ng-container>
-  <ng-template #imageLoading>
-    <div class="ProfileForm-Loader"></div>
-  </ng-template>
+<div class="ProfilePage-UploadImage">
+  <div class="ProfilePage-UploadImage-ImageContainer">
+    <ng-container *ngIf="profileImageUrl$ | async as profileImageUrl; else imageLoading">
+      <img class="ProfilePage-UploadImage-Image" [attr.src]="profileImageUrl">
+    </ng-container>
+    <ng-template #imageLoading>
+      <div class="ProfilePage-UploadImage-ImagePlaceholder"></div>
+    </ng-template>
+  </div>
+
+  <div class="ProfilePage-UploadImage-Actions">
+    <div>Accepted formats: .jpg, .png</div>
+    <input mat-button type="file">
+  </div>
 </div>
 
-<div class="ProfileForm-Form">
+<div class="ProfilePage-Form">
   <app-profile-form [profileFormType]="'UPDATE'" [currentUser]="currentUser" (formSubmit)="updateProfile($event)" [isSubmitting]="isSubmitting"></app-profile-form>
 </div>
