@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { AuthService } from '@app/core/services/auth.service';
@@ -17,6 +17,8 @@ const log = new Logger('ProfilePage');
 })
 export class ProfilePageComponent implements OnInit {
 
+  @ViewChild('file', { static: true }) fileInput: ElementRef;
+  
   public currentUser: User;
   public isSubmitting = false;
   public profileImageUrl$: Promise<string>;
@@ -32,9 +34,15 @@ export class ProfilePageComponent implements OnInit {
     this.profileImageUrl$ = this.storageService.storageTest();
   }
 
-  updateProfile(profileData: any) {
+  onSubmit(profileData: any) {
     this.isSubmitting = true;
-    this.authService.updateProfile({
+    this.uploadProfileImage()
+    .then(() => this.updateProfile(profileData))
+    .finally(() => this.isSubmitting = false);
+  }
+  
+  private async updateProfile(profileData: any): Promise<void> {
+    return this.authService.updateProfile({
       displayName: profileData.username,
       email: profileData.email,
       password: profileData.password
@@ -44,8 +52,20 @@ export class ProfilePageComponent implements OnInit {
     }).catch(err => {
       this.matSnackBar.open('An error happened while updating profile', 'Dismiss', { duration: 3000 });
       log.handleError(err);
-    }).finally(() => {
-      this.isSubmitting = false;
     });
+  }
+
+  private async uploadProfileImage(): Promise<void> {
+    const file = this.fileInput.nativeElement.files[0];
+    if (file) {
+      return this.storageService.uploadProfileImage(file, this.currentUser)
+      .then(() => log.info('Profile image uploaded successfully'))
+      .catch(err => {
+        this.matSnackBar.open('An error happened while uploading profile image', 'Dismiss', { duration: 3000 });
+        log.handleError(err);
+      });
+    } else {
+      return new Promise(resolve => resolve());
+    }
   }
 }

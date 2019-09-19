@@ -79,7 +79,8 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
   }
 
   atLeastOneDirty(form: AbstractControl): boolean {
-    return this.formService.atLeastOneDirty(form);
+    // return this.formService.atLeastOneDirty(form);
+    return true;
   }
 
   onSubmit() {

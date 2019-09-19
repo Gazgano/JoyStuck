@@ -15,11 +15,11 @@
   </div>
 
   <div class="ProfilePage-UploadImage-Actions">
-    <div>Accepted formats: .jpg, .png</div>
-    <input mat-button type="file">
+    <div>Accepted formats: <i>.jpg</i>, <i>.png</i></div>
+    <input #file mat-button type="file">
   </div>
 </div>
 
 <div class="ProfilePage-Form">
-  <app-profile-form [profileFormType]="'UPDATE'" [currentUser]="currentUser" (formSubmit)="updateProfile($event)" [isSubmitting]="isSubmitting"></app-profile-form>
+  <app-profile-form [profileFormType]="'UPDATE'" [currentUser]="currentUser" (formSubmit)="onSubmit($event)" [isSubmitting]="isSubmitting"></app-profile-form>
 </div>
