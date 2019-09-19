@@ -19,40 +19,51 @@ const log = new Logger('ProfilePage');
 export class ProfilePageComponent implements OnInit {
 
   @ViewChild('file', { static: true }) fileInput: ElementRef;
-  
+
   public currentUser: User;
   public isSubmitting = false;
-  public profileImageUrl$: Promise<string>;
+  public defaultImage = false;
+  public profileImageUrl$: Promise<any>;
   private submissionSubject = new Subject<boolean>();
   public submissionObservable = this.submissionSubject.asObservable();
-  
+
   constructor(
-    private authService: AuthService, 
-    private matSnackBar: MatSnackBar, 
+    private authService: AuthService,
+    private matSnackBar: MatSnackBar,
     private storageService: StorageService
   ) { }
 
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUser();
-    this.profileImageUrl$ = this.storageService.storageTest();
+    this.getProfileImage();
   }
 
   submitForm() {
     this.submissionSubject.next(true);
   }
-  
+
   onSubmit(profileData: any) {
     this.isSubmitting = true;
     this.uploadProfileImage()
-    .then(() => this.updateProfile(profileData))
+    .then(imageUrl => this.updateProfile({...profileData, imageUrl }))
     .finally(() => this.isSubmitting = false);
   }
-  
+
+  private getProfileImage() {
+    const profileImagePromise = this.storageService.getProfileImage(this.currentUser);
+    if (profileImagePromise) {
+      this.profileImageUrl$ = this.storageService.getProfileImage(this.currentUser);
+    } else {
+      this.defaultImage = true;
+    }
+  }
+
   private async updateProfile(profileData: any): Promise<void> {
     return this.authService.updateProfile({
       displayName: profileData.username,
       email: profileData.email,
-      password: profileData.password
+      password: profileData.password,
+      photoURL: profileData.imageUrl
     }).then(() => {
       this.matSnackBar.open(`User's infos updated successfully`, 'Dismiss', { duration: 3000 });
       log.info(`User's infos updated successfully`);
@@ -62,17 +73,22 @@ export class ProfilePageComponent implements OnInit {
     });
   }
 
-  private async uploadProfileImage(): Promise<void> {
+  private async uploadProfileImage(): Promise<string | null> {
     const file = this.fileInput.nativeElement.files[0];
     if (file) {
-      return this.storageService.uploadProfileImage(file, this.currentUser)
-      .then(() => log.info('Profile image uploaded successfully'))
-      .catch(err => {
-        this.matSnackBar.open('An error happened while uploading profile image', 'Dismiss', { duration: 3000 });
-        log.handleError(err);
-      });
+      const uploadTask = this.storageService.uploadProfileImage(file, this.currentUser);
+      return uploadTask
+        .then(() => uploadTask.snapshot.ref.getDownloadURL())
+        .then(downloadUrl => {
+          log.info(`Profile image uploaded successfully.`);
+          return downloadUrl;
+        })
+        .catch(err => {
+          this.matSnackBar.open('An error happened while uploading profile image', 'Dismiss', { duration: 3000 });
+          log.handleError(err);
+        });
     } else {
-      return new Promise(resolve => resolve());
+      return new Promise(resolve => resolve(null));
     }
   }
 }

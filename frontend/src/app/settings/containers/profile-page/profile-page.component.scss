@@ -1,3 +1,5 @@
+@import 'mixins';
+
 .ProfilePage-Form {
   height: 250px;
 }
@@ -19,6 +21,17 @@ $image-size: 64px;
   height: $image-size;
   overflow: hidden;
   margin-right: 10px;
+}
+
+.ProfilePage-UploadImage-DefaultImage {
+  width: $image-size;
+  height: $image-size;
+  border-radius: $image-size/2;
+  background-color: limegreen;
+  color: white;
+  font-size: $image-size/2;
+  text-transform: uppercase;
+  @include center-everything;
 }
 
 .ProfilePage-UploadImage-Image {

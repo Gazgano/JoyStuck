@@ -6,9 +6,14 @@
 
 <div class="ProfilePage-UploadImage">
   <div class="ProfilePage-UploadImage-ImageContainer">
-    <ng-container *ngIf="profileImageUrl$ | async as profileImageUrl; else imageLoading">
+    <div *ngIf="defaultImage; else profileImage" class="ProfilePage-UploadImage-DefaultImage">
+      <span>{{ currentUser.username.substring(0,1) }}</span>
+    </div>
+
+    <ng-template #profileImage><ng-container *ngIf="profileImageUrl$ | async as profileImageUrl; else imageLoading">
       <img class="ProfilePage-UploadImage-Image" [attr.src]="profileImageUrl">
-    </ng-container>
+    </ng-container></ng-template>
+
     <ng-template #imageLoading>
       <div class="ProfilePage-UploadImage-ImagePlaceholder"></div>
     </ng-template>

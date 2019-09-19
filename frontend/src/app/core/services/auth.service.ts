@@ -49,7 +49,7 @@ export class AuthService {
       url: continueUrl,
       handleCodeInApp: true
     };
-    
+
     return firebase.auth().sendPasswordResetEmail(email, actionCodeSettings);
   }
 
@@ -71,7 +71,10 @@ export class AuthService {
 
   async updateProfile(profileInfos: any) {
     const currentUser = firebase.auth().currentUser;
-    return currentUser.updateProfile({ displayName: profileInfos.displayName })
+    return currentUser.updateProfile({
+      displayName: profileInfos.displayName,
+      photoURL: profileInfos.photoURL
+    })
     .then(() => currentUser.updateEmail(profileInfos.email))
     .then(() => { if (profileInfos.password) {
         return currentUser.updatePassword(profileInfos.password);
