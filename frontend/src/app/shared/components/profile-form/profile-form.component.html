@@ -21,10 +21,4 @@
       <mat-error>{{ getErrorMessage(['passwords', 'confirmPassword'], 'password confirmation') | uppercaseFirstLetter }}</mat-error>
     </mat-form-field>
   </div>
-
-  <div [ngClass]="profileFormType === 'NEW'? 'ProfileForm-ActionButtons--newStyle' : 'ProfileForm-ActionButtons'">
-    <button *ngIf="profileFormType === 'NEW'" (click)="onCancel()" [ngStyle]="{ 'order': profileFormType === 'NEW'? 2 : 1 }" class="ProfileForm-CancelButton" mat-flat-button>Cancel</button>
-    <button [disabled]="isSubmitting || !atLeastOneDirty(profileForm)" (click)="onSubmit()" [ngStyle]="{ 'order': profileFormType === 'NEW'? 3 : 2 }" class="ProfileForm-SubmitButton" color="primary" mat-flat-button>{{ profileFormType === 'NEW'? 'Create my account' : 'Save changes' }}</button>
-    <mat-spinner *ngIf="isSubmitting" [ngStyle]="{ 'order': profileFormType === 'NEW'? 1 : 3 }" [diameter]="20" color="primary"></mat-spinner>
-  </div>
 </ng-container>

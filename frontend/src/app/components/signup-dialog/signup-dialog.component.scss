@@ -10,6 +10,18 @@
 .Signup-AnimationContainer {
   overflow: hidden;
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.Signup-ActionButtons {
+  margin-top: auto;
+  align-self: flex-end;
+  display: flex;
+  align-items: center;
+  & > *:not(:last-child) {
+    margin-right: 5px;
+  }
 }
 
 .Signup-Confirmation {

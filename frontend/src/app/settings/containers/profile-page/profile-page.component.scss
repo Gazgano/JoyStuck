@@ -52,3 +52,12 @@ $image-size: 64px;
     margin-bottom: 5px;
   }
 }
+
+.ProfilePage-ActionButtons {
+  display: flex;
+  align-items: center;
+  margin-top: auto;
+  & > * {
+    margin-right: 10px;
+  }
+}

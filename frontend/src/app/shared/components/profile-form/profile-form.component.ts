@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, AbstractControl } from '@angular/forms';
-import { Subscription, fromEvent } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { Subscription, Observable } from 'rxjs';
 
 import { FormService } from '@app/shared/services/form.service';
 import { User } from '@app/core/models/user.model';
@@ -19,13 +18,12 @@ const log = new Logger('ProfileFormComponent');
 export class ProfileFormComponent implements OnInit, OnDestroy {
 
   @Input() currentUser: User;
-  @Input() isSubmitting: boolean;
   @Input() profileFormType: ProfileFormType;
+  @Input() triggerSubmission: Observable<boolean>;
   @Output() formSubmit = new EventEmitter<any>();
-  @Output() formCancel = new EventEmitter<boolean>();
 
+  private triggerSubmissionSubscription: Subscription;
   public profileForm: FormGroup;
-  private enterKeySubscription: Subscription;
   private errorsMessages = {
     username: {
       required: (fieldName: string) => `${fieldName} is required`,
@@ -46,6 +44,16 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
     },
   };
 
+  constructor(private fb: FormBuilder, private formService: FormService) { }
+
+  ngOnInit() {
+    if (this.profileFormType === 'UPDATE' && !this.currentUser) {
+      throw new Error('No user currently logged in');
+    }
+    this.profileForm = this.initProfileForm();
+    this.reactToSubmissionTrigger();
+  }
+  
   private initProfileForm(): FormGroup {
     return this.fb.group({
       username: [ 
@@ -63,24 +71,9 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
       }, { validators: this.formService.confirmPasswordsValidator })
     });
   }
-  
-  constructor(private fb: FormBuilder, private formService: FormService) { }
-
-  ngOnInit() {
-    if (this.profileFormType === 'UPDATE' && !this.currentUser) {
-      throw new Error('No user currently logged in');
-    }
-    this.profileForm = this.initProfileForm();
-    this.reactToEnterKey();
-  }
 
   getErrorMessage(path: string | string[], fieldName: string) {
     return this.formService.getErrorMessage(this.profileForm, path, this.errorsMessages, fieldName);
-  }
-
-  atLeastOneDirty(form: AbstractControl): boolean {
-    // return this.formService.atLeastOneDirty(form);
-    return true;
   }
 
   onSubmit() {
@@ -94,17 +87,11 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  onCancel() {
-    this.formCancel.emit(true);
-  }
-
-  private reactToEnterKey() {
-    this.enterKeySubscription = fromEvent<KeyboardEvent>(document, 'keypress')
-    .pipe(filter(keyEvent => keyEvent.key === 'Enter'))
-    .subscribe(() => this.onSubmit());
+  private reactToSubmissionTrigger() {
+    this.triggerSubmissionSubscription = this.triggerSubmission.subscribe(() => this.onSubmit());
   }
 
   ngOnDestroy() {
-    this.enterKeySubscription.unsubscribe();
+    this.triggerSubmissionSubscription.unsubscribe();
   }
 }

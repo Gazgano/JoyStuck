@@ -1,7 +1,14 @@
 <h2>Sign up</h2>
 
 <div [@moveStepForwardTrigger]="currentStep" class="Signup-AnimationContainer">
-  <app-profile-form *ngIf="currentStep === 'FORM_FILL'" class="Signup-Form" [profileFormType]="'NEW'" (formSubmit)="onFormSubmit($event)" (formCancel)="closeDialog()" [isSubmitting]="isSubmitting"></app-profile-form>
+  <ng-container *ngIf="currentStep === 'FORM_FILL'">
+    <app-profile-form class="Signup-Form" [profileFormType]="'NEW'" (formSubmit)="onFormSubmit($event)" [triggerSubmission]="submissionObservable"></app-profile-form>
+    <div class="Signup-ActionButtons">
+      <mat-spinner *ngIf="isSubmitting" [diameter]="20" color="primary"></mat-spinner>
+      <button (click)="closeDialog()" class="Signup-CancelButton" mat-flat-button>Cancel</button>
+      <button [disabled]="false" (click)="submitForm()" class="Signup-SubmitButton" color="primary" mat-flat-button>Create my account</button>
+    </div>
+  </ng-container>
 
   <div *ngIf="currentStep === 'CONFIRMATION'" class="Signup-Confirmation">
     <div class="Signup-ConfirmationIcon"><mat-icon [inline]="true">check_circle</mat-icon></div>

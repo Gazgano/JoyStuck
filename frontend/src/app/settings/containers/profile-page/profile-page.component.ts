@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Subject } from 'rxjs';
 
 import { AuthService } from '@app/core/services/auth.service';
 import { User } from '@app/core/models/user.model';
@@ -22,6 +23,8 @@ export class ProfilePageComponent implements OnInit {
   public currentUser: User;
   public isSubmitting = false;
   public profileImageUrl$: Promise<string>;
+  private submissionSubject = new Subject<boolean>();
+  public submissionObservable = this.submissionSubject.asObservable();
   
   constructor(
     private authService: AuthService, 
@@ -34,6 +37,10 @@ export class ProfilePageComponent implements OnInit {
     this.profileImageUrl$ = this.storageService.storageTest();
   }
 
+  submitForm() {
+    this.submissionSubject.next(true);
+  }
+  
   onSubmit(profileData: any) {
     this.isSubmitting = true;
     this.uploadProfileImage()

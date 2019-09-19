@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Subscription, fromEvent } from 'rxjs';
+import { Subscription, fromEvent, Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { Logger } from '@app/core/services/logger.service';
@@ -31,6 +31,8 @@ export class SignupDialogComponent implements OnInit, OnDestroy {
   public currentStep: SignupFormStep = 'FORM_FILL';
   public capturedEmail: string;
   private enterKeySubscription: Subscription;
+  private submissionSubject = new Subject<boolean>();
+  public submissionObservable = this.submissionSubject.asObservable();
 
   constructor(
     public dialogRef: MatDialogRef<SignupDialogComponent>,
@@ -43,6 +45,10 @@ export class SignupDialogComponent implements OnInit, OnDestroy {
     this.reactToEnterKey();
   }
   
+  submitForm() {
+    this.submissionSubject.next(true);
+  }
+
   onFormSubmit(formData: any) {
     this.isSubmitting = true;
     this.capturedEmail = formData.email;
@@ -67,8 +73,13 @@ export class SignupDialogComponent implements OnInit, OnDestroy {
     this.enterKeySubscription = fromEvent<KeyboardEvent>(document, 'keypress')
     .pipe(filter(keyEvent => keyEvent.key === 'Enter'))
     .subscribe(() => {
-      if (this.currentStep === 'CONFIRMATION') {
-        this.continue();
+      switch (this.currentStep) {
+        case 'FORM_FILL':
+          this.submissionSubject.next(true);
+          break;
+        case 'CONFIRMATION':
+          this.continue();
+          break;
       }
     });
   }
