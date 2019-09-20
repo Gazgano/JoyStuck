@@ -5,12 +5,18 @@
   display: inline-flex;
 }
 
-.ProfileImage-Default {
-  background-color: get-theme-color($ink-theme, accent, default, null);
+%ProfileImage-Default {
   color: white;
   text-transform: uppercase;
   justify-content: center;
   align-items: center;
+}
+
+@for $i from 0 to 37 {
+  .ProfileImage-Default--#{$i*10} {
+    @extend %ProfileImage-Default;
+    background-color: hsl(calc(#{$i*10}), 50%, 66%);
+  }
 }
 
 /*

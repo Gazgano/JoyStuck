@@ -1,8 +1,8 @@
-<div 
-  *ngIf="!user.profileImageSrcUrl; else profileImage" 
-  class="ProfileImage-Default"
+<div
+  *ngIf="!user.profileImageSrcUrl; else profileImage"
+  [ngClass]="'ProfileImage-Default--' + hue"
   [ngStyle]="{
-    width: sizeInPixel+'px', 
+    width: sizeInPixel+'px',
     height: sizeInPixel+'px',
     borderRadius: sizeInPixel/2+'px',
     fontSize: sizeInPixel/2+'px',
@@ -13,11 +13,11 @@
 </div>
 
 <ng-template #profileImage>
-  <img 
-    class="ProfileImage-Image" 
+  <img
+    class="ProfileImage-Image"
     [attr.src]="user.profileImageSrcUrl"
     [ngStyle]="{
-      width: sizeInPixel+'px', 
+      width: sizeInPixel+'px',
       borderRadius: sizeInPixel/2+'px'
     }"
   >
