@@ -1,20 +1,25 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-import { DocumentData, QuerySnapshot, DocumentSnapshot, Firestore, Query, Timestamp } from '@google-cloud/firestore';
+import { DocumentData, QuerySnapshot, DocumentSnapshot, Firestore, Query } from '@google-cloud/firestore';
 
 
 import { DbServiceError } from './models/db-service-error.model';
 import { DbServiceData } from './models/db-service-data.model';
 import { createDocument } from './document-service';
+import { JoinService } from './join-service';
 import { convertDocDataTimestamp, findField, handleError } from './helper';
 
 export class DbService {
 
   private db: Firestore;
+  private auth: any;
+  private joinService: JoinService;
 
   constructor() {
     admin.initializeApp(functions.config().firebase);
     this.db = admin.firestore();
+    this.auth = admin.auth();
+    this.joinService = new JoinService(this.auth);
   }
 
   ///////////////////////////////////
@@ -23,7 +28,7 @@ export class DbService {
   
   async getCollection(collectionPath: string, conditions: {[key: string]: string}): Promise<DbServiceData<DocumentData[]>> {
     return this.buildQuery(collectionPath, conditions).get()
-    .then((qs: QuerySnapshot) => this.formatQuerySnapshot(qs))
+    .then((qs: QuerySnapshot) => this.formatQuerySnapshot(qs, collectionPath))
     .catch(err => { throw handleError(err) })
   }
 
@@ -68,12 +73,15 @@ export class DbService {
     return query;
   }
 
-  private formatQuerySnapshot(querySnapshot: QuerySnapshot): DbServiceData<DocumentData[]> {
+  private async formatQuerySnapshot(querySnapshot: QuerySnapshot, collectionPath: string): Promise<DbServiceData<DocumentData[]>> {
     if(!querySnapshot.empty) {
-      return new DbServiceData<DocumentData[]>(querySnapshot.docs.map(doc => { 
-        const docData = convertDocDataTimestamp(doc.data());
-        return { ...docData, id: doc.id }; 
-      }));
+      return Promise.all(
+        querySnapshot.docs.map(doc => { 
+          let docData = convertDocDataTimestamp(doc.data());
+          docData.id = doc.id;
+          return this.joinService.applyJoins(docData, collectionPath);
+      }))
+      .then(docDatas => new DbServiceData<DocumentData[]>(docDatas));
     } else {
       return new DbServiceData<DocumentData[]>([]);
     }

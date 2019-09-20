@@ -16,11 +16,7 @@ export function callDbService(action: (req, res) => Promise<DbServiceData<Docume
   }
 }
 
-export function convertDocDataTimestamp(docData: DocumentData | undefined): DocumentData | undefined {
-  if (docData === undefined) {
-    return undefined;
-  }
-  
+export function convertDocDataTimestamp(docData: DocumentData | undefined): DocumentData {
   const result = {...docData};
   for(let key in result) {
     if (result[key] instanceof Timestamp) {
