@@ -1,0 +1,30 @@
+@import 'mixins';
+@import 'ink-theme';
+
+.ProfileImage-Default {
+  background-color: get-theme-color($ink-theme, accent, default, null);
+  color: white;
+  text-transform: uppercase;
+  justify-content: center;
+  align-items: center;
+}
+
+/*
+@keyframes animatedBackground {
+  0% { background-position-x: 0px; }
+  100% { background-position-x: 2*$image-size; }
+}
+
+.ProfileImage-Placeholder {
+  width: $image-size;
+  height: $image-size;
+  border-radius: $image-size/2;
+  background: linear-gradient(to right, #eeeeee 0%, #dddddd 30%, #eeeeee 60%);
+  background-size: 2*$image-size $image-size;
+
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-name: animatedBackground;
+  animation-timing-function: linear;
+}
+*/

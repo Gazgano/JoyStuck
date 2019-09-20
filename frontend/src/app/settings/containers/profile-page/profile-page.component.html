@@ -5,15 +5,7 @@
 </div>
 
 <div class="ProfilePage-UploadImage">
-  <div class="ProfilePage-UploadImage-ImageContainer">
-    <div *ngIf="!currentUser.profileImageSrcUrl; else profileImage" class="ProfilePage-UploadImage-DefaultImage">
-      <span>{{ currentUser.username.substring(0,1) }}</span>
-    </div>
-
-    <ng-template #profileImage>
-      <img class="ProfilePage-UploadImage-Image" [attr.src]="currentUser.profileImageSrcUrl">
-    </ng-template>
-  </div>
+  <app-profile-image class="ProfilePage-UploadImage-Image" [user]="currentUser" [sizeInPixel]="'64'"></app-profile-image>
 
   <div class="ProfilePage-UploadImage-Actions">
     <div>Accepted formats: <i>.jpg</i>, <i>.png</i></div>

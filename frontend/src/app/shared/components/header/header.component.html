@@ -15,12 +15,7 @@
   </button> -->
 
   <button mat-button [matMenuTriggerFor]="menu">
-    <div *ngIf="!currentUser.profileImageSrcUrl; else profileImage" class="Header-DefaultImage">
-      <span>{{ currentUser.username.substring(0,1) }}</span>
-    </div>
-    <ng-template #profileImage>
-      <img class="Header-Image" [attr.src]="currentUser.profileImageSrcUrl">
-    </ng-template>
+    <app-profile-image class="Header-Image" [user]="currentUser" [inline]="true"></app-profile-image>
 
     <span class="Header-Name">{{ currentUser.username }}</span>
     <mat-icon>arrow_drop_down</mat-icon>

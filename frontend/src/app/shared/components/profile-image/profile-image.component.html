@@ -1,0 +1,24 @@
+<div 
+  *ngIf="!user.profileImageSrcUrl; else profileImage" 
+  class="ProfileImage-Default"
+  [ngStyle]="{
+    width: sizeInPixel+'px', 
+    height: sizeInPixel+'px',
+    borderRadius: sizeInPixel/2+'px',
+    fontSize: sizeInPixel/2+'px',
+    display: inline? 'inline-flex' : 'flex'
+  }"
+>
+  <span>{{ user.username.substring(0,1) }}</span>
+</div>
+
+<ng-template #profileImage>
+  <img 
+    class="ProfileImage-Image" 
+    [attr.src]="user.profileImageSrcUrl"
+    [ngStyle]="{
+      width: sizeInPixel+'px', 
+      borderRadius: sizeInPixel/2+'px'
+    }"
+  >
+</ng-template>

@@ -26,6 +26,7 @@ import { LoaderComponent } from './components/loader/loader.component';
 import { UppercaseFirstLetterPipe } from './pipes/uppercase-first-letter.pipe';
 import { ProfileFormComponent } from './components/profile-form/profile-form.component';
 import { ChecklistItemComponent } from './components/checklist-item/checklist-item.component';
+import { ProfileImageComponent } from './components/profile-image/profile-image.component';
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import { ChecklistItemComponent } from './components/checklist-item/checklist-it
     LoaderComponent,
     UppercaseFirstLetterPipe,
     ProfileFormComponent,
-    ChecklistItemComponent
+    ChecklistItemComponent,
+    ProfileImageComponent
   ],
   imports: [
     CommonModule,
@@ -82,6 +84,7 @@ import { ChecklistItemComponent } from './components/checklist-item/checklist-it
     MatToolbarModule,
     MatTooltipModule,
     ProfileFormComponent,
+    ProfileImageComponent,
     ReactiveFormsModule,
     ShellComponent,
     UppercaseFirstLetterPipe
