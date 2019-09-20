@@ -1,6 +1,10 @@
 @import 'mixins';
 @import 'ink-theme';
 
+:host {
+  display: inline-flex;
+}
+
 .ProfileImage-Default {
   background-color: get-theme-color($ink-theme, accent, default, null);
   color: white;
