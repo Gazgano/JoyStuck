@@ -1,11 +1,12 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { Actions } from '@ngrx/effects';
 
 import { UserComment } from '@app/home/models/user-comment.model';
 import * as commentsSelectors from '@app/home/store/comments/comments.selectors';
 import * as commentsActions from '@app/home/store/comments/comments.actions';
+import { AuthService } from '@app/core/services/auth.service';
+import { User } from '@app/core/models/user.model';
 
 @Component({
   selector: 'app-comment-page',
@@ -17,16 +18,19 @@ export class CommentPageComponent implements OnInit {
   @Input() postId: string;
   @Input() palette: string;
   @ViewChild('userComment', { static: true }) userCommentInput: ElementRef;
+
   public isCommentSending$: Observable<boolean>;
   public areCommentsLoading$: Observable<boolean>;
   public comments$: Observable<UserComment[]>;
+  public currentUser: User;
 
-  constructor(private store: Store<UserComment[]>, private actions$: Actions) { }
+  constructor(private store: Store<UserComment[]>, private authService: AuthService) { }
 
   ngOnInit() {
     this.areCommentsLoading$ = this.store.pipe(select(commentsSelectors.selectLoadingCommentsByPostId(this.postId)));
     this.comments$ = this.store.pipe(select(commentsSelectors.selectCommentsByPostId(this.postId)));
     this.isCommentSending$ = this.store.pipe(select(commentsSelectors.selectSendingCommentsByPostId(this.postId)));
+    this.currentUser = this.authService.getCurrentUser();
   }
 
   sendComment(text: string) {
