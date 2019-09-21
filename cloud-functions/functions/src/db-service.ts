@@ -32,9 +32,9 @@ export class DbService {
     .catch(err => { throw handleError(err) })
   }
 
-  async getDocument(docPath: string): Promise<DbServiceData<DocumentData>> {
-    return this.db.doc(docPath).get()
-    .then((ds: DocumentSnapshot) => this.formatDocumentSnapshot(ds))
+  async getDocument(collectionPath: string, id: string): Promise<DbServiceData<DocumentData>> {
+    return this.db.doc(`${collectionPath}/${id}`).get()
+    .then((ds: DocumentSnapshot) => this.formatDocumentSnapshot(ds, collectionPath))
     .catch(err => { throw handleError(err) })
   }
 
@@ -47,18 +47,18 @@ export class DbService {
       return docRef;
     })
     .then(docRef => docRef.get())
-    .then(docSnapshot => this.formatDocumentSnapshot(docSnapshot))
+    .then(docSnapshot => this.formatDocumentSnapshot(docSnapshot, collectionPath))
     .catch(err => { throw handleError(err) })
   }
 
-  async likePost(docPath: string): Promise<DbServiceData<DocumentData>> {
-    return this.incrementData(docPath, 'likesCount')
-    .then(writeResult => this.getDocument(docPath))
+  async likePost(collectionPath: string, id: string): Promise<DbServiceData<DocumentData>> {
+    return this.incrementData(collectionPath, id, 'likesCount')
+    .then(writeResult => this.getDocument(collectionPath, id))
     .catch(err => { throw handleError(err) });
   }
 
-  async likeComment(docPath: string): Promise<DbServiceData<DocumentData>> {
-    return await this.likePost(docPath); // has a likesCount as well
+  async likeComment(collectionPath: string, id: string): Promise<DbServiceData<DocumentData>> {
+    return await this.likePost(collectionPath, id); // has a likesCount as well
   }
 
   ///////////////////////////////////
@@ -83,33 +83,39 @@ export class DbService {
       }))
       .then(docDatas => new DbServiceData<DocumentData[]>(docDatas));
     } else {
-      return new DbServiceData<DocumentData[]>([]);
+      return new Promise(resolve => resolve(
+        new DbServiceData<DocumentData[]>([])
+      ));
     }
   }
 
-  private formatDocumentSnapshot(docSnapshot: DocumentSnapshot): DbServiceData<DocumentData> {
+  private formatDocumentSnapshot(docSnapshot: DocumentSnapshot, collectionPath: string): Promise<DbServiceData<DocumentData>> {
     if(docSnapshot.exists) {
       const docData = convertDocDataTimestamp(docSnapshot.data());
-      return new DbServiceData<DocumentData>({...docData, id: docSnapshot.id});
+      docData.id = docSnapshot.id;
+      return this.joinService.applyJoins(docData, collectionPath)
+      .then(docData => new DbServiceData<DocumentData>(docData));
     } else {
-      return new DbServiceData<DocumentData>({});
+      return new Promise(resolve => resolve(
+        new DbServiceData<DocumentData>({})
+      ));
     }
   };
 
   private async updateDependencies(collectionPath: string, doc: DocumentData) {
     switch (collectionPath) {
       case 'comments':
-        return this.incrementData(`posts/${doc.post_id}`, 'commentsCount');
+        return this.incrementData('posts', doc.post_id, 'commentsCount');
     }
   }
 
-  private async incrementData(docPath: string, field: string) {
-    return this.getDocument(docPath)
+  private async incrementData(collectionPath: string, id: string, field: string) {
+    return this.getDocument(collectionPath, id)
     .then(dataContainer => findField(dataContainer.data, field))
     .then(fieldValue => {
       let update = {};
       update[field] = ++fieldValue;
-      return this.db.doc(docPath).set(update, { merge: true });
+      return this.db.doc(`${collectionPath}/${id}`).set(update, { merge: true });
     })
     .catch(err => { throw new DbServiceError(err, 'Error during incrementation'); })
   }

@@ -39,8 +39,8 @@ export class CommentsEffects {
       const commentPayload = this.createComment(action.text, action.postId);
       return this.commentsService.postComment(commentPayload).pipe(
         map(comment => commentsActions.sendCommentSuccess({ comment })),
-        catchError(err => of(commentsActions.sendCommentFailure({ 
-          failedComment: this.createFailedComment(action.text, action.postId) 
+        catchError(err => of(commentsActions.sendCommentFailure({
+          failedComment: this.createFailedComment(action.text, action.postId)
         })))
       );
     })
@@ -53,25 +53,30 @@ export class CommentsEffects {
       return this.commentsService.postComment(commentPayload).pipe(
         map(comment => commentsActions.retrySendCommentSuccess({ failedComment: action.failedComment, comment })),
         catchError(err => of(commentsActions.retrySendCommentFailure({
-          failedComment: action.failedComment 
+          failedComment: action.failedComment
         })))
       );
     })
   ));
 
   private createComment(text: string, postId: string) {
-    return { 
-      post_id: postId, 
-      authorName: this.authService.getCurrentUser().username, 
-      content: text 
+    return {
+      post_id: postId,
+      author_id: this.authService.getCurrentUser().id,
+      content: text
     };
   }
 
   private createFailedComment(text: string, postId: string): UserComment {
+    const user = this.authService.getCurrentUser();
     return {
       id: uid(20),
       post_id: postId,
-      authorName: this.authService.getCurrentUser().username,
+      author: {
+        uid: user.id,
+        displayName: user.username,
+        photoURL: user.profileImageSrcUrl
+      },
       timestamp: moment().format(),
       content: text,
       likesCount: 0,

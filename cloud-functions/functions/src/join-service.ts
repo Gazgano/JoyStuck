@@ -13,15 +13,17 @@ export class JoinService {
     applyJoins(docData: DocumentData | undefined, collectionPath: string): Promise<DocumentData> {
         switch (collectionPath) {
             case 'posts':
-                return this.applyPostsJoins(docData);
+                return this.applyAuthorJoins(docData);
+            case 'comments':
+                return this.applyAuthorJoins(docData);
             default: 
                 return new Promise(resolve => resolve(docData));
         }
     }
 
-    private async applyPostsJoins(docData: DocumentData | undefined): Promise<DocumentData> {
+    private async applyAuthorJoins(docData: DocumentData | undefined): Promise<DocumentData> {
         if (!docData) {
-            throw new DbServiceError(null, 'Provided post is undefined');
+            throw new DbServiceError(null, 'Provided docData is undefined');
         }
 
         if (!docData.author_id) {
@@ -35,9 +37,12 @@ export class JoinService {
                 displayName: userRecord.displayName,
                 photoURL: userRecord.photoURL || null
             };
-            return {...docData, author};
+            const result = {...docData};
+            result.author = author;
+            delete result.author_id;
+            return result;
         }).catch(err => { 
-            throw new DbServiceError(err, 'Error while fetching post user data'); 
+            throw new DbServiceError(err, 'Error while fetching user data'); 
         });
     }
 }

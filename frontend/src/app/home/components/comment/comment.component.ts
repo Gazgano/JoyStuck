@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import { Logger } from '@app/core/services/logger.service';
 import { UserComment } from '../../models/user-comment.model';
+import { User } from '@app/core/models/user.model';
 import * as commentsActions from '../../store/comments/comments.actions';
 import * as commentsSelectors from '../../store/comments/comments.selectors';
 
@@ -21,13 +22,19 @@ export class CommentComponent implements OnInit {
   @Input() postId: string;
 
   public isResending$: Observable<boolean>;
+  public author: User;
 
   constructor(private store: Store<UserComment[]>) { }
 
   ngOnInit() {
     this.isResending$ = this.store.pipe(select(commentsSelectors.isResending(this.comment.id)));
+    this.author = {
+      id: this.comment.author.uid,
+      username: this.comment.author.displayName,
+      profileImageSrcUrl: this.comment.author.photoURL
+    };
   }
-  
+
   likeComment(id: string) {
     this.store.dispatch(commentsActions.likeComment({ id }));
   }

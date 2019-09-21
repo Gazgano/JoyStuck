@@ -1,5 +1,5 @@
 <div class="PostComment-Avatar">
-    <img mat-card-avatar src="assets/images/gazgano-picture-64px.png">
+  <app-profile-image [user]="author" [sizeInPixel]="'40'"></app-profile-image>
 </div>
 
 <div [ngClass]="comment.sentFailed? 'PostComment-Content-Failed--' + palette : 'PostComment-Content--' + palette">{{ comment.content }}</div>

@@ -30,15 +30,15 @@ export class App {
 
   private defineRoutes() {
     this.app.put('/posts/:id/like', callDbService((req, res) => 
-      this.dbService.likePost(`posts/${req.params.id}`)
+      this.dbService.likePost('posts', req.params.id)
     ));
 
     this.app.put('/comments/:id/like', callDbService((req, res) => 
-      this.dbService.likeComment(`comments/${req.params.id}`)
+      this.dbService.likeComment('comments', req.params.id)
     ));
 
     this.app.get('/:collection/:id', callDbService((req, res) => 
-      this.dbService.getDocument(`${req.params.collection}/${req.params.id}`)
+      this.dbService.getDocument(req.params.collection, req.params.id)
     ));
     
     this.app.post('/:collection', callDbService((req, res) => 
