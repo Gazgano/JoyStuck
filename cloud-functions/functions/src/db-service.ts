@@ -66,7 +66,7 @@ export class DbService {
   ///////////////////////////////////
 
   private buildQuery(collectionPath: string, conditions?: {[key: string]: string}): Query {
-    let query = this.db.collection(collectionPath).offset(0);
+    let query = this.db.collection(collectionPath).limit(100);
     for(let key in conditions) {
       query = query.where(key, '==', conditions[key]);
     }
