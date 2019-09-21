@@ -1,4 +1,4 @@
-<div class="PostComment-Avatar">
+<div class="PostComment-Avatar" [matTooltip]="author.username + ' - ' + timestamp" matTooltipPosition="right">
   <app-profile-image [user]="author" [sizeInPixel]="'40'"></app-profile-image>
 </div>
 

@@ -7,6 +7,7 @@ import { UserComment } from '../../models/user-comment.model';
 import { User } from '@app/core/models/user.model';
 import * as commentsActions from '../../store/comments/comments.actions';
 import * as commentsSelectors from '../../store/comments/comments.selectors';
+import * as moment from 'moment';
 
 const log = new Logger('CommentComponent');
 
@@ -23,6 +24,7 @@ export class CommentComponent implements OnInit {
 
   public isResending$: Observable<boolean>;
   public author: User;
+  public timestamp: string;
 
   constructor(private store: Store<UserComment[]>) { }
 
@@ -33,6 +35,7 @@ export class CommentComponent implements OnInit {
       username: this.comment.author.displayName,
       profileImageSrcUrl: this.comment.author.photoURL
     };
+    this.timestamp = moment(this.comment.timestamp).format('D MMM HH:mm');
   }
 
   likeComment(id: string) {

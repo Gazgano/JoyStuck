@@ -16,14 +16,14 @@ export function createDocument(collectionPath: string, obj: any): DocumentData {
 function createComment(obj: any): DocumentData {
   if (!obj.post_id || !isString(obj.post_id)) {
     throw new DbServiceError({}, 'post_id is not valid', 400);
-  } else if (!obj.authorName || !isString(obj.authorName)) {
-    throw new DbServiceError({}, 'authorName is not valid', 400);
+  } else if (!obj.author_id || !isString(obj.author_id)) {
+    throw new DbServiceError({}, 'author_id is not valid', 400);
   } else if (!obj.content || !isString(obj.content)) {
     throw new DbServiceError({}, 'content is not valid', 400);
   } else {
     return {
       post_id: obj.post_id,
-      authorName: obj.authorName,
+      author_id: obj.author_id,
       timestamp: Timestamp.now(),
       content: obj.content,
       likesCount: 0
@@ -34,8 +34,8 @@ function createComment(obj: any): DocumentData {
 function createPost(obj: any): DocumentData {
   if (!obj.type || !isString(obj.type)) {
     throw new DbServiceError({}, 'type is not valid', 400);
-  } else if (!obj.authorName || !isString(obj.authorName)) {
-    throw new DbServiceError({}, 'authorName is not valid', 400);
+  } else if (!obj.author_id || !isString(obj.author_id)) {
+    throw new DbServiceError({}, 'author_id is not valid', 400);
   } else if (!obj.title || !isString(obj.title)) {
     throw new DbServiceError({}, 'title is not valid', 400);
   } else if (obj.content && !isString(obj.content)) {
@@ -44,7 +44,7 @@ function createPost(obj: any): DocumentData {
     return {
       timestamp: Timestamp.now(),
       type: obj.type,
-      authorName: obj.authorName,
+      author_id: obj.author_id,
       title: obj.title,
       likesCount: 0,
       commentsCount: 0,
