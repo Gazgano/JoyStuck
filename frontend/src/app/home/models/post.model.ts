@@ -2,7 +2,11 @@ export interface Post {
     id: string;
     timestamp: string;
     type: string;
-    authorName: string;
+    author: {
+      uid: string,
+      displayName: string,
+      photoURL: string
+    };
     title: string;
     likesCount: number;
     commentsCount: number;

@@ -95,13 +95,14 @@ $ribbon-icon-size: 30px;
 }
 
 .PostCardLight-Avatar {
-  @extend .PostCard-Avatar !optional;
-  margin-right: 10px;
+  font-size: 30px;
+  @include center-everything;
 }
 
 .PostCardLight-Title {
   @extend .PostCard-Title;
   text-transform: none;
+  margin: 0 16px;
 }
 
 .PostCardLight-Actions {

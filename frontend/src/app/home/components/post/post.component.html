@@ -1,7 +1,7 @@
 <!-- Usual card -->
 <mat-card *ngIf="postDesign.componentStyle === 0" class="PostCard">
     <mat-card-header>
-        <img mat-card-avatar src="assets/images/gazgano-picture-64px.png">
+        <app-profile-image mat-card-avatar [user]="author" [sizeInPixel]="'40'"></app-profile-image>
         <mat-card-title class="PostCard-Title">
                <div *ngFor="let word of post.title.split(' ')" [ngClass]="'PostCard-Title-Word--' + postDesign.palette">{{ word }}</div>
         </mat-card-title>
@@ -39,8 +39,9 @@
 
 <!-- Light card (no content, just title) -->
 <mat-card *ngIf="postDesign.componentStyle === 1" [ngClass]="'PostCardLight--' + postDesign.palette">
-    <div class="PostCardLight-Avatar">
-        <img mat-card-avatar src="assets/images/gazgano-picture-64px.png">
+
+    <div mat-card-avatar class="PostCardLight-Avatar">
+      <fa-icon [icon]="faBullhorn"></fa-icon>
     </div>
 
     <div class="PostCardLight-Title">{{ post.title }}</div>

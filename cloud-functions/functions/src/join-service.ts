@@ -30,8 +30,12 @@ export class JoinService {
         
         return this.auth.getUser(docData.author_id)
         .then(userRecord => {
-            console.log('Successfully fetched user data:', userRecord.toJSON());
-            return {...docData, author: userRecord};
+            const author = {
+                uid: userRecord.uid,
+                displayName: userRecord.displayName,
+                photoURL: userRecord.photoURL || null
+            };
+            return {...docData, author};
         }).catch(err => { 
             throw new DbServiceError(err, 'Error while fetching post user data'); 
         });

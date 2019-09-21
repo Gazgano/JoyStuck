@@ -2,9 +2,11 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
+import { faBullhorn } from '@fortawesome/free-solid-svg-icons';
 
 import { Logger } from '@app/core/services/logger.service';
 import { Post } from '../../models/post.model';
+import { User } from '@app/core/models/user.model';
 import { PostDesign, POST_TYPES_DESIGNS } from './post.config';
 import { openCloseTrigger } from './post.animation';
 import { UserComment } from '../../models/user-comment.model';
@@ -27,12 +29,19 @@ export class PostComponent implements OnInit {
   public postDesign: PostDesign;
   public commentsOpen = false;
   public commentsCount$: Observable<number>;
+  public author: User;
+  public faBullhorn = faBullhorn;
 
   constructor(private store: Store<UserComment[]>) { }
 
   ngOnInit() {
     this.postDesign = POST_TYPES_DESIGNS[this.post.type];
     this.commentsCount$ = this.store.pipe(select(commentsSelectors.selectCommentsCountByPostId(this.post.id)));
+    this.author = {
+      id: this.post.author.uid,
+      username: this.post.author.displayName,
+      profileImageSrcUrl: this.post.author.photoURL
+    };
   }
 
   get elapsedTime(): string {
