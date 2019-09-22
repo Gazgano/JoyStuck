@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, from } from 'rxjs';
+import { map, mergeMap } from 'rxjs/operators';
 
 import { ApiService, baseUrl } from '@app/core/services/api.service';
 import { Logger } from './logger.service';
@@ -21,7 +21,8 @@ export class UserService {
   }
 
   deleteUser(id: string): Observable<string> {
-    return this.http.delete(baseUrl + 'users/' + id, this.apiService.getReqOptions()).pipe(
+    return from(this.apiService.getReqOptions()).pipe(
+      mergeMap(options => this.http.delete(baseUrl + 'users/' + id, options)),
       map(() => id)
     );
   }

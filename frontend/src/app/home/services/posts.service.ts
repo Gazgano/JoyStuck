@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
 
 import { baseUrl, ApiService } from '@app/core/services/api.service';
 import { Logger } from '@app/core/services/logger.service';
@@ -14,10 +15,14 @@ export class PostsService {
   constructor(private http: HttpClient, private apiService: ApiService) { }
 
   getPosts(): Observable<Post[]> {
-    return this.http.get<Post[]>(`${baseUrl}posts`);
+    return from(this.apiService.getReqOptions()).pipe(
+      mergeMap(options => this.http.get<Post[]>(`${baseUrl}posts`, options))
+    );
   }
 
   likePost(id: string): Observable<Post | null> {
-    return this.http.put<Post>(`${baseUrl}posts/${id}/like`, {}, this.apiService.getReqOptions());
+    return from(this.apiService.getReqOptions()).pipe(
+      mergeMap(options => this.http.put<Post>(`${baseUrl}posts/${id}/like`, {}, options))
+    );
   }
 }

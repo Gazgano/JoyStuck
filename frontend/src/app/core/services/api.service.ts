@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
+import * as firebase from 'firebase/app';
 
 import { environment } from 'src/environments/environment';
 
@@ -14,9 +15,15 @@ export class ApiService {
 
   constructor() {}
 
-  getReqOptions(): {headers: HttpHeaders} {
-    return { headers: new HttpHeaders({
+  async getReqOptions(): Promise<{ headers: HttpHeaders }> {
+    return this.getHeaders().then(headers => ({ headers }));
+  }
+
+  private async getHeaders(): Promise<HttpHeaders> {
+    return firebase.auth().currentUser.getIdToken()
+    .then(authToken => new HttpHeaders({
+      Authorization: 'Bearer ' + authToken,
       'Content-Type': 'application/json; charset=utf-8'
-    })};
+    }));
   }
 }

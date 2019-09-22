@@ -13,8 +13,8 @@ export class App {
 
   constructor() {
     this.app = express();
-    this.configure();
     this.dbService = new DbService();
+    this.configure();
     this.defineRoutes();
   }
 
@@ -26,15 +26,16 @@ export class App {
     }));
     this.app.use(bodyParser.urlencoded({ extended: true }));
     this.app.use(bodyParser.json());
+    this.app.use(this.dbService.validateFirebaseIdToken);
   }
 
   private defineRoutes() {
     this.app.put('/posts/:id/like', callDbService((req, res) => 
-      this.dbService.likePost('posts', req.params.id)
+      this.dbService.likePost('posts', req.params.id, req.user.user_id)
     ));
 
     this.app.put('/comments/:id/like', callDbService((req, res) => 
-      this.dbService.likeComment('comments', req.params.id)
+      this.dbService.likeComment('comments', req.params.id, req.user.user_id)
     ));
 
     this.app.get('/:collection/:id', callDbService((req, res) => 
