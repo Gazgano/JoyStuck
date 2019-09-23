@@ -14,7 +14,6 @@ const log = new Logger('CommentsReducer');
 
 export interface CommentsState extends EntityState<UserComment> {
   loadingCommentsPostsIds: string[];
-  sendingCommentPostsIds: string[];
   resendingCommentsIds: string[];
 }
 
@@ -25,7 +24,6 @@ export const commentsAdapter = createEntityAdapter({
 
 const initialState: CommentsState = commentsAdapter.getInitialState({
   loadingCommentsPostsIds: [],
-  sendingCommentPostsIds: [],
   resendingCommentsIds: []
 });
 
@@ -49,9 +47,9 @@ function onLoadCommentsFailure(state: CommentsState, props: any) {
 
 function addLike(state: CommentsState, props: any) {
   let likeIds = props.comment.likeIds || [];
-  likeIds = likeIds.includes(props.currentUserId)? 
-    props.comment.likeIds: 
-    [...props.comment.likeIds, props.currentUserId];
+  likeIds = likeIds.includes(props.currentUserId)?
+    likeIds:
+    [...likeIds, props.currentUserId];
 
   const update: Update<UserComment> = {
     id: props.comment.id,
@@ -62,10 +60,10 @@ function addLike(state: CommentsState, props: any) {
 
 function removeLike(state: CommentsState, props: any) {
   let likeIds = props.comment.likeIds || [];
-  likeIds = likeIds.includes(props.currentUserId)? 
-    props.comment.likeIds.filter((e: string) => e !== props.currentUserId): 
-    props.comment.likeIds;
-  
+  likeIds = likeIds.includes(props.currentUserId)?
+    likeIds.filter((e: string) => e !== props.currentUserId):
+    likeIds;
+
   const update: Update<UserComment> = {
     id: props.comment.id,
     changes: { likeIds }
@@ -74,17 +72,16 @@ function removeLike(state: CommentsState, props: any) {
 }
 
 function onSendComment(state: CommentsState, props: any) {
-  return {...state, sendingCommentPostsIds: [...state.sendingCommentPostsIds, props.postId]};
+  return commentsAdapter.addOne(props.pendingComment, state);
 }
 
 function onSendCommentSuccess(state: CommentsState, props: any) {
-  const sendingCommentPostsIds = state.sendingCommentPostsIds.filter(id => id !== props.comment.post_id);
-  return commentsAdapter.addOne(props.comment, {...state, sendingCommentPostsIds});
+  const newState = commentsAdapter.removeOne(props.pendingComment.id, state);
+  return commentsAdapter.addOne(props.comment, newState);
 }
 
 function onSendCommentFailure(state: CommentsState, props: any) {
-  const sendingCommentPostsIds = state.sendingCommentPostsIds.filter(id => id !== props.failedComment.post_id);
-  return commentsAdapter.addOne(props.failedComment, {...state, sendingCommentPostsIds});
+  return commentsAdapter.addOne(props.failedComment, state);
 }
 
 function onRetrySendComment(state: CommentsState, props: any) {

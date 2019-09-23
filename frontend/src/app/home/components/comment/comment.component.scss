@@ -38,13 +38,23 @@
 
 // adding colors depending of the theme
 @each $name in $palettes {
-  .PostComment-Content--#{$name} {
+  .PostComment-Content--SENT--#{$name} {
     @extend .PostComment-Content;
     background-color: get-theme-color($ink-theme, $name, 50, null);
     color: get-theme-color($ink-theme, $name, contrast, 50);
   }
 
-  .PostComment-Content-Failed--#{$name} {
+  .PostComment-Content--PENDING--#{$name} {
+    @extend .PostComment-Content;
+    background-color: adjust-color(
+      get-theme-color($ink-theme, $name, 50, null),
+      $lightness: -15%,
+      $saturation: -50%
+    );
+    color: get-theme-color($ink-theme, $name, contrast, 50);
+  }
+
+  .PostComment-Content--FAILED--#{$name} {
     @extend .PostComment-Content;
     background-color: get-theme-color($ink-theme, background, disabled-button, null);
     color: get-theme-color($ink-theme, foreground, disabled, null);

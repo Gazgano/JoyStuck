@@ -38,8 +38,8 @@ export class DbService {
     .catch(err => { throw handleError(err) })
   }
 
-  async addDocument(obj: any, collectionPath: string): Promise<DbServiceData<DocumentData>> {
-    const doc = createDocument(collectionPath, obj);
+  async addDocument(obj: any, collectionPath: string, userId: string): Promise<DbServiceData<DocumentData>> {
+    const doc = createDocument(collectionPath, obj, userId);
     
     return this.db.collection(collectionPath).add(doc)
     .then(docRef => docRef.get())

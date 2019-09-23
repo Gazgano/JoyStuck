@@ -9,5 +9,5 @@ export interface UserComment {
     timestamp: string;
     content: string;
     likeIds: string[];
-    sentFailed?: boolean;
+    status: 'FAILED' | 'SENT' | 'PENDING';
 }

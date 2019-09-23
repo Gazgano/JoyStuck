@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
+import * as uid from 'uid';
+import * as moment from 'moment';
 
 import { UserComment } from '@app/home/models/user-comment.model';
 import * as commentsSelectors from '@app/home/store/comments/comments.selectors';
@@ -19,7 +21,6 @@ export class CommentPageComponent implements OnInit {
   @Input() palette: string;
   @ViewChild('userComment', { static: true }) userCommentInput: ElementRef;
 
-  public isCommentSending$: Observable<boolean>;
   public areCommentsLoading$: Observable<boolean>;
   public comments$: Observable<UserComment[]>;
   public currentUser: User;
@@ -29,14 +30,31 @@ export class CommentPageComponent implements OnInit {
   ngOnInit() {
     this.areCommentsLoading$ = this.store.pipe(select(commentsSelectors.selectLoadingCommentsByPostId(this.postId)));
     this.comments$ = this.store.pipe(select(commentsSelectors.selectCommentsByPostId(this.postId)));
-    this.isCommentSending$ = this.store.pipe(select(commentsSelectors.selectSendingCommentsByPostId(this.postId)));
     this.currentUser = this.authService.getCurrentUser();
   }
 
   sendComment(text: string) {
     if (text.trim().length > 0) {
-      this.store.dispatch(commentsActions.sendComment({ text, postId: this.postId }));
+      const pendingComment = this.createPendingComment(text, this.postId);
+      this.store.dispatch(commentsActions.sendComment({ pendingComment }));
       this.userCommentInput.nativeElement.value = '';
     }
+  }
+
+  private createPendingComment(text: string, postId: string): UserComment {
+    const user = this.authService.getCurrentUser();
+    return {
+      id: uid(20),
+      post_id: postId,
+      author: {
+        uid: user.id,
+        displayName: user.username,
+        photoURL: user.profileImageSrcUrl
+      },
+      timestamp: moment().format(),
+      content: text,
+      likeIds: [],
+      status: 'PENDING'
+    };
   }
 }

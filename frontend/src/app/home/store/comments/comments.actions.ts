@@ -1,6 +1,10 @@
 import { createAction, props } from '@ngrx/store';
 import { UserComment } from '../../models/user-comment.model';
 
+////////////////////////////////////////
+// Load comments
+////////////////////////////////////////
+
 export const loadComments = createAction(
   '[Home] Load Comments',
   props<{ postId: string }>()
@@ -15,6 +19,10 @@ export const loadCommentsFailure = createAction(
   '[Home] Load Comments failed',
   props<{ postId: string }>()
 );
+
+////////////////////////////////////////
+// Like/Unlike comments
+////////////////////////////////////////
 
 export const likeComment = createAction(
   '[Home] Like Comment',
@@ -44,14 +52,18 @@ export const unlikeCommentFailure = createAction(
   props<{ comment: UserComment, currentUserId: string }>()
 );
 
+////////////////////////////////////////
+// Send comments
+////////////////////////////////////////
+
 export const sendComment = createAction(
   '[Home] Send Comment',
-  props<{ text: string, postId: string }>()
+  props<{ pendingComment: UserComment }>()
 );
 
 export const sendCommentSuccess = createAction(
   '[Home] Comment sent successfully',
-  props<{ comment: UserComment }>()
+  props<{ pendingComment: UserComment, comment: UserComment }>()
 );
 
 export const sendCommentFailure = createAction(

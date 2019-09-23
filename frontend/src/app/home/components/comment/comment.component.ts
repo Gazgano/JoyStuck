@@ -41,7 +41,7 @@ export class CommentComponent implements OnInit {
     this.currentUser = this.authService.getCurrentUser();
   }
 
-  toggleLikeComment(id: string) {
+  toggleLikeComment() {
     if (this.comment.likeIds && this.comment.likeIds.includes(this.currentUser.id)) {
       this.store.dispatch(commentsActions.unlikeComment({ comment: this.comment, currentUserId: this.currentUser.id }));
     } else {
