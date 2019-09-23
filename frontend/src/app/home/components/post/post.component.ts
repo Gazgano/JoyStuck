@@ -51,8 +51,7 @@ export class PostComponent implements OnInit {
   }
 
   likePost() {
-    const id = this.post.id;
-    this.store.dispatch(postActions.likePost({ id }));
+    this.store.dispatch(postActions.likePost({ post: this.post, currentUserId: this.currentUser.id }));
   }
 
   toggleComments() {

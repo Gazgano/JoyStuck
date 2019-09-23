@@ -28,12 +28,26 @@ const initialState = postAdapter.getInitialState({
 // Reducer helpers
 ////////////////////////////////////////////////
 
-function onLikePostSuccess(state: PostState, props: any) {
+function onLikePost(state: PostState, props: any) {
+  const likeIds = props.post.likeIds.includes(props.currentUserId)? 
+    props.post.likeIds: 
+    [...props.post.likeIds, props.currentUserId];
+  
   const update: Update<Post> = {
     id: props.post.id,
-    changes: {
-      likeIds: props.post.likeIds
-    }
+    changes: { likeIds }
+  };
+  return postAdapter.updateOne(update, state);
+}
+
+function onLikePostFailure(state: PostState, props: any) {
+  const likeIds = props.post.likeIds.includes(props.currentUserId)? 
+    props.post.likeIds.filter((e: string) => e !== props.currentUserId): 
+    props.post.likeIds;
+  
+  const update: Update<Post> = {
+    id: props.post.id,
+    changes: { likeIds }
   };
   return postAdapter.updateOne(update, state);
 }
@@ -55,7 +69,9 @@ const reducer = createReducer(
     return {...state, isLoading: false, inError: true };
   }),
 
-  on(postActions.likePostSuccess, (state, props) => onLikePostSuccess(state, props))
+  on(postActions.likePost, (state, props) => onLikePost(state, props)),
+  
+  on(postActions.likePostFailure, (state, props) => onLikePostFailure(state, props))
 );
 
 export function postReducer(state: PostState | undefined, action: Action) {
