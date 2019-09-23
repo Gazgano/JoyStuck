@@ -4,9 +4,9 @@
 
 <div [ngClass]="comment.sentFailed? 'PostComment-Content-Failed--' + palette : 'PostComment-Content--' + palette">{{ comment.content }}</div>
 
-<button *ngIf="!comment.sentFailed" (click)="likeComment(comment.id)" [ngClass]="'PostComment-LikeButton--' + palette" [ngStyle]="comment.likesCount > 0? {display: 'block'} : {}" mat-icon-button>
+<button *ngIf="!comment.sentFailed" (click)="toggleLikeComment(comment.id)" [ngClass]="'PostComment-LikeButton--' + palette" [ngStyle]="comment.likeIds?.length > 0? {display: 'block'} : {}" mat-icon-button>
     <mat-icon [inline]="true">thumb_up</mat-icon>
-    <span *ngIf="comment.likesCount > 0">{{ comment.likesCount }}</span>
+    <span *ngIf="comment.likeIds?.length > 0">{{ comment.likeIds?.length }}</span>
 </button>
 
 <ng-container *ngIf="comment.sentFailed">

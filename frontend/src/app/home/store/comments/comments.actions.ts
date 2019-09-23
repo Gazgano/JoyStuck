@@ -18,12 +18,16 @@ export const loadCommentsFailure = createAction(
 
 export const likeComment = createAction(
   '[Home] Like Comment',
-  props<{ id: string }>()
+  props<{ comment: UserComment, currentUserId: string }>()
 );
 
 export const likeCommentSuccess = createAction(
-  '[Home] Comment liked successfully',
-  props<{ comment: UserComment }>()
+  '[Home] Comment liked successfully'
+);
+
+export const likeCommentFailure = createAction(
+  '[Home] Like Comment failed',
+  props<{ comment: UserComment, currentUserId: string }>()
 );
 
 export const sendComment = createAction(

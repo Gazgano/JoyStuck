@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { EMPTY, of } from 'rxjs';
-import { mergeMap, map, catchError, exhaustMap } from 'rxjs/operators';
+import { mergeMap, map, catchError, exhaustMap, switchMap } from 'rxjs/operators';
 import * as moment from 'moment';
 import * as uid from 'uid';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import * as commentsActions from './comments.actions';
 import { CommentsService } from '../../services/comments.service';
@@ -15,7 +16,12 @@ const log = new Logger('CommentsEffects');
 
 @Injectable()
 export class CommentsEffects {
-  constructor(private actions$: Actions, private commentsService: CommentsService, private authService: AuthService) {}
+  constructor(
+    private actions$: Actions, 
+    private commentsService: CommentsService, 
+    private authService: AuthService,
+    private matSnackBar: MatSnackBar
+  ) {}
 
   loadComments$ = createEffect(() => this.actions$.pipe(
     ofType(commentsActions.loadComments),
@@ -27,9 +33,13 @@ export class CommentsEffects {
 
   likeComment$ = createEffect(() => this.actions$.pipe(
     ofType(commentsActions.likeComment),
-    mergeMap(action => this.commentsService.likeComment(action.id).pipe(
-      map(comment => commentsActions.likeCommentSuccess({ comment })),
-      catchError(() => EMPTY)
+    switchMap(action => this.commentsService.likeComment(action.comment.id).pipe(
+      map(comment => commentsActions.likeCommentSuccess()),
+      catchError(err => {
+        this.matSnackBar.open('An error happened while liking the comment', 'Dismiss', { duration: 3000 });
+        log.handleError(err);
+        return of(commentsActions.likeCommentFailure({ comment: action.comment, currentUserId: action.currentUserId }));
+      })
     ))
   ));
 
@@ -79,7 +89,7 @@ export class CommentsEffects {
       },
       timestamp: moment().format(),
       content: text,
-      likesCount: 0,
+      likeIds: [],
       sentFailed: true
     };
   }

@@ -47,12 +47,26 @@ function onLoadCommentsFailure(state: CommentsState, props: any) {
   return {...state, loadingCommentsPostsIds};
 }
 
-function onLikeCommentsSuccess(state: CommentsState, props: any) {
+function addLike(state: CommentsState, props: any) {
+  const likeIds = props.comment.likeIds.includes(props.currentUserId)? 
+    props.comment.likeIds: 
+    [...props.comment.likeIds, props.currentUserId];
+
   const update: Update<UserComment> = {
     id: props.comment.id,
-    changes: {
-      likesCount: props.comment.likesCount
-    }
+    changes: { likeIds }
+  };
+  return commentsAdapter.updateOne(update, state);
+}
+
+function removeLike(state: CommentsState, props: any) {
+  const likeIds = props.comment.likeIds.includes(props.currentUserId)? 
+    props.comment.likeIds.filter((e: string) => e !== props.currentUserId): 
+    props.comment.likeIds;
+  
+  const update: Update<UserComment> = {
+    id: props.comment.id,
+    changes: { likeIds }
   };
   return commentsAdapter.updateOne(update, state);
 }
@@ -96,7 +110,8 @@ const reducer = createReducer(
   on(commentsActions.loadComments, (state, props) => onLoadComments(state, props)),
   on(commentsActions.loadCommentsSuccess, (state, props) => onLoadCommentsSuccess(state, props)),
   on(commentsActions.loadCommentsFailure, (state, props) => onLoadCommentsFailure(state, props)),
-  on(commentsActions.likeCommentSuccess, (state, props) => onLikeCommentsSuccess(state, props)),
+  on(commentsActions.likeComment, (state, props) => addLike(state, props)),
+  on(commentsActions.likeCommentFailure, (state, props) => removeLike(state, props)),
   on(commentsActions.sendComment, (state, props) => onSendComment(state, props)),
   on(commentsActions.sendCommentSuccess, (state, props) => onSendCommentSuccess(state, props)),
   on(commentsActions.sendCommentFailure, (state, props) => onSendCommentFailure(state, props)),

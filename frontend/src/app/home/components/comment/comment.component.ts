@@ -8,6 +8,7 @@ import { User } from '@app/core/models/user.model';
 import * as commentsActions from '../../store/comments/comments.actions';
 import * as commentsSelectors from '../../store/comments/comments.selectors';
 import * as moment from 'moment';
+import { AuthService } from '@app/core/services/auth.service';
 
 const log = new Logger('CommentComponent');
 
@@ -25,8 +26,9 @@ export class CommentComponent implements OnInit {
   public isResending$: Observable<boolean>;
   public author: User;
   public timestamp: string;
+  public currentUser: User;
 
-  constructor(private store: Store<UserComment[]>) { }
+  constructor(private store: Store<UserComment[]>, private authService: AuthService) { }
 
   ngOnInit() {
     this.isResending$ = this.store.pipe(select(commentsSelectors.isResending(this.comment.id)));
@@ -36,10 +38,13 @@ export class CommentComponent implements OnInit {
       profileImageSrcUrl: this.comment.author.photoURL
     };
     this.timestamp = moment(this.comment.timestamp).format('D MMM HH:mm');
+    this.currentUser = this.authService.getCurrentUser();
   }
 
-  likeComment(id: string) {
-    this.store.dispatch(commentsActions.likeComment({ id }));
+  toggleLikeComment(id: string) {
+    if (!this.comment.likeIds || !this.comment.likeIds.includes(this.currentUser.id)) {
+      this.store.dispatch(commentsActions.likeComment({ comment: this.comment, currentUserId: this.currentUser.id }));
+    }
   }
 
   retrySend() {

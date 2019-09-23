@@ -8,6 +8,6 @@ export interface UserComment {
     };
     timestamp: string;
     content: string;
-    likesCount: number;
+    likeIds: string[];
     sentFailed?: boolean;
 }
