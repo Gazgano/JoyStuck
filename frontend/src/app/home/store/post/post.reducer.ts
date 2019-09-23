@@ -32,7 +32,7 @@ function onLikePostSuccess(state: PostState, props: any) {
   const update: Update<Post> = {
     id: props.post.id,
     changes: {
-      likesCount: props.post.likesCount
+      likeIds: props.post.likeIds
     }
   };
   return postAdapter.updateOne(update, state);

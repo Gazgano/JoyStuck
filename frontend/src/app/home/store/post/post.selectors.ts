@@ -27,7 +27,7 @@ export const selectInError = createSelector(
   (state: PostState) => state.inError
 );
 
-export const selectLikesCount = (postId: string) => createSelector(
+export const selectLikeIds = (postId: string) => createSelector(
   selectPostsEntities,
-  posts => posts[postId].likesCount || 0
+  posts => posts[postId].likeIds || []
 );

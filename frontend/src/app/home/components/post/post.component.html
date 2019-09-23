@@ -16,10 +16,10 @@
         <p>{{ post.content }}</p>
     </mat-card-content>
 
-    <mat-card-actions [ngClass]="'PostCard-Actions--' + postDesign.palette">
-        <button (click)="likePost()" mat-button>
+    <mat-card-actions class="PostCard-Actions">
+        <button [ngClass]="post.likeIds && post.likeIds.includes(currentUser.id)? 'PostCard-LikeButton--Liked--' + postDesign.palette : 'PostCard-LikeButton'" (click)="likePost()" mat-button>
             <mat-icon>thumb_up</mat-icon>
-            <span *ngIf="post.likesCount > 0">{{ post.likesCount }}</span>
+            <span *ngIf="post.likeIds && post.likeIds.length > 0">{{ post.likeIds.length }}</span>
         </button>
         <button mat-button (click)="toggleComments()">
             <mat-icon>chat_bubble</mat-icon>

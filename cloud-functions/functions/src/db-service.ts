@@ -48,7 +48,7 @@ export class DbService {
   }
 
   async toggleLikePost(collectionPath: string, documentId: string, userId: string): Promise<DbServiceData<DocumentData>> {
-    return this.toggleId(collectionPath, documentId, 'like_ids', userId)
+    return this.toggleId(collectionPath, documentId, 'likeIds', userId)
     .then(docData => new DbServiceData<DocumentData>(docData))
     .catch(err => { throw handleError(err) });
   }

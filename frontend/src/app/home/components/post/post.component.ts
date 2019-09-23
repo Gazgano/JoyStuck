@@ -13,6 +13,7 @@ import { UserComment } from '../../models/user-comment.model';
 import * as commentsActions from '../../store/comments/comments.actions';
 import * as commentsSelectors from '../../store/comments/comments.selectors';
 import * as postActions from '../../store/post/post.actions';
+import { AuthService } from '@app/core/services/auth.service';
 
 const log = new Logger('PostComponent');
 
@@ -25,14 +26,14 @@ const log = new Logger('PostComponent');
 export class PostComponent implements OnInit {
 
   @Input() post: Post;
-  public isTitleArray: boolean;
   public postDesign: PostDesign;
   public commentsOpen = false;
   public commentsCount$: Observable<number>;
   public author: User;
   public faBullhorn = faBullhorn;
+  public currentUser: User;
 
-  constructor(private store: Store<UserComment[]>) { }
+  constructor(private store: Store<UserComment[]>, private authService: AuthService) { }
 
   ngOnInit() {
     this.postDesign = POST_TYPES_DESIGNS[this.post.type];
@@ -42,6 +43,7 @@ export class PostComponent implements OnInit {
       username: this.post.author.displayName,
       profileImageSrcUrl: this.post.author.photoURL
     };
+    this.currentUser = this.authService.getCurrentUser();
   }
 
   get elapsedTime(): string {

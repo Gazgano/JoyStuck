@@ -8,7 +8,7 @@ export interface Post {
       photoURL: string
     };
     title: string;
-    likesCount: number;
+    likeIds?: string[];
     commentsCount: number;
     content?: string;
 }
