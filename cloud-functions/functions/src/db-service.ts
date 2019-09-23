@@ -47,14 +47,28 @@ export class DbService {
     .catch(err => { throw handleError(err) })
   }
 
-  async toggleLikePost(collectionPath: string, documentId: string, userId: string): Promise<DbServiceData<DocumentData>> {
-    return this.toggleId(collectionPath, documentId, 'likeIds', userId)
+  async likePost(collectionPath: string, documentId: string, userId: string): Promise<DbServiceData<DocumentData>> {
+    return this.alterArrayField('append', collectionPath, documentId, 'likeIds', userId)
     .then(docData => new DbServiceData<DocumentData>(docData))
     .catch(err => { throw handleError(err) });
   }
 
-  async toggleLikeComment(collectionPath: string, documentId: string, userId: string): Promise<DbServiceData<DocumentData>> {
-    return await this.toggleLikePost(collectionPath, documentId, userId); // has like_ids as well
+  async likeComment(collectionPath: string, documentId: string, userId: string): Promise<DbServiceData<DocumentData>> {
+    return this.alterArrayField('append', collectionPath, documentId, 'likeIds', userId)
+    .then(docData => new DbServiceData<DocumentData>(docData))
+    .catch(err => { throw handleError(err) });
+  }
+
+  async unlikePost(collectionPath: string, documentId: string, userId: string): Promise<DbServiceData<DocumentData>> {
+    return this.alterArrayField('remove', collectionPath, documentId, 'likeIds', userId)
+    .then(docData => new DbServiceData<DocumentData>(docData))
+    .catch(err => { throw handleError(err) });
+  }
+
+  async unlikeComment(collectionPath: string, documentId: string, userId: string): Promise<DbServiceData<DocumentData>> {
+    return this.alterArrayField('remove', collectionPath, documentId, 'likeIds', userId)
+    .then(docData => new DbServiceData<DocumentData>(docData))
+    .catch(err => { throw handleError(err) });
   }
 
   async validateFirebaseIdToken(req, res, next) {
@@ -132,8 +146,7 @@ export class DbService {
     return this.joinService.applyJoins(docData, collectionPath);
   }
 
-
-  private toggleId(collectionPath: string, documentId: string, fieldName: string, id: string): Promise<DocumentData> {
+  private alterArrayField(type: 'append' | 'remove', collectionPath: string, documentId: string, fieldName: string, id: string): Promise<DocumentData> {
     const docRef = this.db.doc(`${collectionPath}/${documentId}`);
     return this.db.runTransaction(t => {
       return t.get(docRef).then(doc => {
@@ -141,19 +154,20 @@ export class DbService {
         if (!data) { throw new DbServiceError(null, 'This document has no data'); }
         
         let fieldValue: string[] = data[fieldName] || [];
-        if (fieldValue.includes(id)) { 
-          fieldValue = fieldValue.filter(e => e !== id);
-        } else {
+        if (type === 'append' && !fieldValue.includes(id)) { 
           fieldValue.push(id);
+        } else if (type === 'remove' && fieldValue.includes(id)) {
+          fieldValue = fieldValue.filter(e => e !== id);
         }
         
         let update = {};
         update[fieldName] = fieldValue;
         t.update(docRef, update);
         
-        let result = {...data};
+        let result = convertDocDataTimestamp(data);
+        result.id = doc.id;
         result[fieldName] = fieldValue;
-        return this.formatDocumentData(doc, collectionPath)
+        return this.joinService.applyJoins(result, collectionPath);
       })
     });
   }
