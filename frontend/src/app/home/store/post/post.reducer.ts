@@ -28,7 +28,7 @@ const initialState = postAdapter.getInitialState({
 // Reducer helpers
 ////////////////////////////////////////////////
 
-function onLikePost(state: PostState, props: any) {
+function addLike(state: PostState, props: any) {
   const likeIds = props.post.likeIds.includes(props.currentUserId)? 
     props.post.likeIds: 
     [...props.post.likeIds, props.currentUserId];
@@ -40,7 +40,7 @@ function onLikePost(state: PostState, props: any) {
   return postAdapter.updateOne(update, state);
 }
 
-function onLikePostFailure(state: PostState, props: any) {
+function removeLike(state: PostState, props: any) {
   const likeIds = props.post.likeIds.includes(props.currentUserId)? 
     props.post.likeIds.filter((e: string) => e !== props.currentUserId): 
     props.post.likeIds;
@@ -60,18 +60,18 @@ const reducer = createReducer(
   initialState,
 
   on(postActions.loadPosts, state => ({ ...state, isLoading: true, inError: false })),
-
   on(postActions.loadPostsSuccess, (state, { posts }) => {
     return postAdapter.addAll(posts, {...state, isLoading: false, inError: false });
   }),
-
   on(postActions.loadPostsFailure, state => {
     return {...state, isLoading: false, inError: true };
   }),
 
-  on(postActions.likePost, (state, props) => onLikePost(state, props)),
-  
-  on(postActions.likePostFailure, (state, props) => onLikePostFailure(state, props))
+  on(postActions.likePost, (state, props) => addLike(state, props)),
+  on(postActions.likePostFailure, (state, props) => removeLike(state, props)),
+
+  on(postActions.unlikePost, (state, props) => removeLike(state, props)),
+  on(postActions.unlikePostFailure, (state, props) => addLike(state, props))
 );
 
 export function postReducer(state: PostState | undefined, action: Action) {

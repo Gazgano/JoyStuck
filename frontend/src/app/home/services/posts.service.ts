@@ -25,4 +25,10 @@ export class PostsService {
       mergeMap(options => this.http.put<Post>(`${baseUrl}posts/${id}/like`, {}, options))
     );
   }
+
+  unlikePost(id: string): Observable<Post | null> {
+    return from(this.apiService.getReqOptions()).pipe(
+      mergeMap(options => this.http.put<Post>(`${baseUrl}posts/${id}/unlike`, {}, options))
+    );
+  }
 }

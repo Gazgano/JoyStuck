@@ -26,4 +26,12 @@ export class PostEffects {
       catchError(() => of(postActions.likePostFailure({ post: action.post, currentUserId: action.currentUserId })))
     ))
   ));
+
+  unlikePost$ = createEffect(() => this.actions$.pipe(
+    ofType(postActions.unlikePost),
+    switchMap(action => this.postsService.unlikePost(action.post.id).pipe(
+      map(post => postActions.unlikePostSuccess({ post })),
+      catchError(() => of(postActions.unlikePostFailure({ post: action.post, currentUserId: action.currentUserId })))
+    ))
+  ));
 }

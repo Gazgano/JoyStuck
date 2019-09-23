@@ -50,8 +50,12 @@ export class PostComponent implements OnInit {
     return moment(this.post.timestamp).fromNow();
   }
 
-  likePost() {
-    this.store.dispatch(postActions.likePost({ post: this.post, currentUserId: this.currentUser.id }));
+  toggleLikePost() {
+    if (this.post.likeIds && this.post.likeIds.includes(this.currentUser.id)) {
+      this.store.dispatch(postActions.unlikePost({ post: this.post, currentUserId: this.currentUser.id }));
+    } else {
+      this.store.dispatch(postActions.likePost({ post: this.post, currentUserId: this.currentUser.id }));
+    }
   }
 
   toggleComments() {
