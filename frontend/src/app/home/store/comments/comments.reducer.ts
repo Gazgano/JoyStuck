@@ -48,7 +48,8 @@ function onLoadCommentsFailure(state: CommentsState, props: any) {
 }
 
 function addLike(state: CommentsState, props: any) {
-  const likeIds = props.comment.likeIds.includes(props.currentUserId)? 
+  let likeIds = props.comment.likeIds || [];
+  likeIds = likeIds.includes(props.currentUserId)? 
     props.comment.likeIds: 
     [...props.comment.likeIds, props.currentUserId];
 
@@ -60,7 +61,8 @@ function addLike(state: CommentsState, props: any) {
 }
 
 function removeLike(state: CommentsState, props: any) {
-  const likeIds = props.comment.likeIds.includes(props.currentUserId)? 
+  let likeIds = props.comment.likeIds || [];
+  likeIds = likeIds.includes(props.currentUserId)? 
     props.comment.likeIds.filter((e: string) => e !== props.currentUserId): 
     props.comment.likeIds;
   

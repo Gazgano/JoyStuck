@@ -29,7 +29,8 @@ const initialState = postAdapter.getInitialState({
 ////////////////////////////////////////////////
 
 function addLike(state: PostState, props: any) {
-  const likeIds = props.post.likeIds.includes(props.currentUserId)? 
+  let likeIds = props.post.likeIds || [];
+  likeIds = likeIds.includes(props.currentUserId)? 
     props.post.likeIds: 
     [...props.post.likeIds, props.currentUserId];
   
@@ -41,7 +42,8 @@ function addLike(state: PostState, props: any) {
 }
 
 function removeLike(state: PostState, props: any) {
-  const likeIds = props.post.likeIds.includes(props.currentUserId)? 
+  let likeIds = props.post.likeIds || [];
+  likeIds = likeIds.includes(props.currentUserId)? 
     props.post.likeIds.filter((e: string) => e !== props.currentUserId): 
     props.post.likeIds;
   

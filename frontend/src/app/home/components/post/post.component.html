@@ -16,13 +16,14 @@
         <p>{{ post.content }}</p>
     </mat-card-content>
 
-    <mat-card-actions class="PostCard-Actions">
-        <button [ngClass]="post.likeIds?.includes(currentUser.id)? 'PostCard-LikeButton--Liked--' + postDesign.palette : 'PostCard-LikeButton'" (click)="toggleLikePost()" mat-button>
-            <mat-icon>thumb_up</mat-icon>
+    <mat-card-actions [ngClass]="'PostCard-Actions--' + postDesign.palette">
+        <button (click)="toggleLikePost()" mat-button>
+            <mat-icon *ngIf="!post.likeIds?.includes(currentUser.id)" fontSet="material-icons-outlined">thumb_up</mat-icon>
+            <mat-icon *ngIf="post.likeIds?.includes(currentUser.id)">thumb_up</mat-icon>
             <span *ngIf="post.likeIds && post.likeIds.length > 0">{{ post.likeIds.length }}</span>
         </button>
         <button mat-button (click)="toggleComments()">
-            <mat-icon>chat_bubble</mat-icon>
+            <mat-icon fontSet="material-icons-outlined">chat_bubble_outline</mat-icon>
             <ng-container *ngIf="commentsCount$ | async as commentsCount; else postCommentsCount">
                 <span *ngIf="commentsCount > 0">{{ commentsCount }}</span>
             </ng-container>
@@ -48,11 +49,12 @@
 
     <mat-card-actions [ngClass]="'PostCardLight-Actions--' + postDesign.palette">
         <button (click)="toggleLikePost()" mat-button>
-            <mat-icon>thumb_up</mat-icon>
-            <span *ngIf="post.likesCount > 0">{{ post.likesCount }}</span>
+            <mat-icon *ngIf="!post.likeIds?.includes(currentUser.id)" fontSet="material-icons-outlined">thumb_up</mat-icon>
+            <mat-icon *ngIf="post.likeIds?.includes(currentUser.id)">thumb_up</mat-icon>
+            <span *ngIf="post.likeIds && post.likeIds.length > 0">{{ post.likeIds.length }}</span>
         </button>
         <button mat-button (click)="toggleComments()">
-            <mat-icon>chat_bubble</mat-icon>
+            <mat-icon fontSet="material-icons-outlined">chat_bubble_outline</mat-icon>
             <ng-container *ngIf="commentsCount$ | async as commentsCount">
                 <span *ngIf="commentsCount > 0; else postCommentsCount">{{ commentsCount }}</span>
                 <ng-template #postCommentsCount><span *ngIf="post.commentsCount > 0">{{ post.commentsCount }}</span></ng-template>

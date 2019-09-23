@@ -30,7 +30,6 @@ $ribbon-icon-size: 30px;
   justify-content: flex-end;
   margin: 0;
   padding: 0;
-  color: get-theme-color($ink-theme, foreground, disabled-button, null);
 }
 
 .PostCard-Ribbon-Icon {
@@ -57,7 +56,8 @@ $ribbon-icon-size: 30px;
     fill: get-theme-color($ink-theme, $name, default, null);
   }
 
-  .PostCard-LikeButton--Liked--#{$name} {
+  .PostCard-Actions--#{$name} {
+    @extend .PostCard-Actions;
     color: get-theme-color($ink-theme, $name, default, null);
   }
 
