@@ -30,14 +30,6 @@ export function timestampsToISO(timestamp: Timestamp): string {
   return moment(timestamp.toMillis());
 }
 
-export function findField(docData: DocumentData, fieldName: string): any {
-  if (!isNaN(docData[fieldName])) {
-    return docData[fieldName];
-  } else {
-    throw new DbServiceError(null, `${fieldName} does not exist on this document`);
-  }
-}
-
 export function handleError(err?: any): DbServiceError {
   if (!err) {
     return new DbServiceError();

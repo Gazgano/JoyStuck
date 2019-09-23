@@ -31,11 +31,11 @@ export class App {
 
   private defineRoutes() {
     this.app.put('/posts/:id/like', callDbService((req, res) => 
-      this.dbService.likePost('posts', req.params.id, req.user.user_id)
+      this.dbService.toggleLikePost('posts', req.params.id, req.user.user_id)
     ));
 
     this.app.put('/comments/:id/like', callDbService((req, res) => 
-      this.dbService.likeComment('comments', req.params.id, req.user.user_id)
+      this.dbService.toggleLikeComment('comments', req.params.id, req.user.user_id)
     ));
 
     this.app.get('/:collection/:id', callDbService((req, res) => 

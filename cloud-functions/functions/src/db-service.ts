@@ -1,13 +1,13 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-import { DocumentData, QuerySnapshot, DocumentSnapshot, Firestore, Query, DocumentReference } from '@google-cloud/firestore';
+import { DocumentData, QuerySnapshot, DocumentSnapshot, Firestore, Query, QueryDocumentSnapshot } from '@google-cloud/firestore';
 
 
 import { DbServiceError } from './models/db-service-error.model';
 import { DbServiceData } from './models/db-service-data.model';
 import { createDocument } from './document-service';
 import { JoinService } from './join-service';
-import { convertDocDataTimestamp, findField, handleError } from './helper';
+import { convertDocDataTimestamp, handleError } from './helper';
 
 export class DbService {
 
@@ -42,24 +42,19 @@ export class DbService {
     const doc = createDocument(collectionPath, obj);
     
     return this.db.collection(collectionPath).add(doc)
-    .then(async docRef => {
-      await this.updateDependencies(collectionPath, doc);
-      return docRef;
-    })
     .then(docRef => docRef.get())
     .then(docSnapshot => this.formatDocumentSnapshot(docSnapshot, collectionPath))
     .catch(err => { throw handleError(err) })
   }
 
-  async likePost(collectionPath: string, documentId: string, userId: string): Promise<DbServiceData<DocumentData>> {
-    const docRef = this.db.doc(`${collectionPath}/${documentId}`);
-    return this.appendId(docRef, 'like_ids', userId)
+  async toggleLikePost(collectionPath: string, documentId: string, userId: string): Promise<DbServiceData<DocumentData>> {
+    return this.toggleId(collectionPath, documentId, 'like_ids', userId)
     .then(docData => new DbServiceData<DocumentData>(docData))
     .catch(err => { throw handleError(err) });
   }
 
-  async likeComment(collectionPath: string, documentId: string, userId: string): Promise<DbServiceData<DocumentData>> {
-    return await this.likePost(collectionPath, documentId, userId); // has a likesCount as well
+  async toggleLikeComment(collectionPath: string, documentId: string, userId: string): Promise<DbServiceData<DocumentData>> {
+    return await this.toggleLikePost(collectionPath, documentId, userId); // has like_ids as well
   }
 
   async validateFirebaseIdToken(req, res, next) {
@@ -113,61 +108,52 @@ export class DbService {
   private async formatQuerySnapshot(querySnapshot: QuerySnapshot, collectionPath: string): Promise<DbServiceData<DocumentData[]>> {
     if(!querySnapshot.empty) {
       return Promise.all(
-        querySnapshot.docs.map(doc => { 
-          let docData = convertDocDataTimestamp(doc.data());
-          docData.id = doc.id;
-          return this.joinService.applyJoins(docData, collectionPath);
-      }))
-      .then(docDatas => new DbServiceData<DocumentData[]>(docDatas));
+        querySnapshot.docs.map(doc => this.formatDocumentData(doc, collectionPath))
+      ).then(docDatas => 
+        new DbServiceData<DocumentData[]>(docDatas)
+      );
     } else {
-      return new Promise(resolve => resolve(
-        new DbServiceData<DocumentData[]>([])
-      ));
+      return Promise.resolve(new DbServiceData<DocumentData[]>([]));
     }
   }
 
-  private formatDocumentSnapshot(docSnapshot: DocumentSnapshot, collectionPath: string): Promise<DbServiceData<DocumentData>> {
+  private async formatDocumentSnapshot(docSnapshot: DocumentSnapshot, collectionPath: string): Promise<DbServiceData<DocumentData>> {
     if(docSnapshot.exists) {
-      const docData = convertDocDataTimestamp(docSnapshot.data());
-      docData.id = docSnapshot.id;
-      return this.joinService.applyJoins(docData, collectionPath)
+      return this.formatDocumentData(docSnapshot, collectionPath)
       .then(docData => new DbServiceData<DocumentData>(docData));
     } else {
-      return new Promise(resolve => resolve(
-        new DbServiceData<DocumentData>({})
-      ));
+      return Promise.resolve(new DbServiceData<DocumentData>({}));
     }
   };
 
-  private async updateDependencies(collectionPath: string, doc: DocumentData) {
-    switch (collectionPath) {
-      case 'comments':
-        return this.incrementData('posts', doc.post_id, 'commentsCount');
-    }
+  private async formatDocumentData(doc: DocumentSnapshot | QueryDocumentSnapshot, collectionPath: string): Promise<DocumentData> {
+    let docData = convertDocDataTimestamp(doc.data());
+    docData.id = doc.id;
+    return this.joinService.applyJoins(docData, collectionPath);
   }
 
-  private async incrementData(collectionPath: string, id: string, field: string) {
-    return this.getDocument(collectionPath, id)
-    .then(dataContainer => findField(dataContainer.data, field))
-    .then(fieldValue => {
-      let update = {};
-      update[field] = ++fieldValue;
-      return this.db.doc(`${collectionPath}/${id}`).set(update, { merge: true });
-    })
-    .catch(err => { throw new DbServiceError(err, 'Error during incrementation'); })
-  }
 
-  private appendId(docRef: DocumentReference, fieldName: string, id: string): Promise<DocumentData> {
+  private toggleId(collectionPath: string, documentId: string, fieldName: string, id: string): Promise<DocumentData> {
+    const docRef = this.db.doc(`${collectionPath}/${documentId}`);
     return this.db.runTransaction(t => {
       return t.get(docRef).then(doc => {
         let data = doc.data();
         if (!data) { throw new DbServiceError(null, 'This document has no data'); }
-        let field: string[] = data[fieldName] || [];
-        if (!field.includes(id)) { 
-          field.push(id);
-          t.update(docRef, { field });
+        
+        let fieldValue: string[] = data[fieldName] || [];
+        if (fieldValue.includes(id)) { 
+          fieldValue = fieldValue.filter(e => e !== id);
+        } else {
+          fieldValue.push(id);
         }
-        return Promise.resolve({...data, field});
+        
+        let update = {};
+        update[fieldName] = fieldValue;
+        t.update(docRef, update);
+        
+        let result = {...data};
+        result[fieldName] = fieldValue;
+        return this.formatDocumentData(doc, collectionPath)
       })
     });
   }
