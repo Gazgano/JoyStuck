@@ -25,6 +25,12 @@ export class CommentsService {
     );
   }
 
+  unlikeComment(id: string): Observable<UserComment | null> {
+    return from(this.apiService.getReqOptions()).pipe(
+      mergeMap(options => this.http.put<UserComment>(`${baseUrl}comments/${id}/unlike`, {}, options))
+    );
+  }
+
   postComment(commentPayload: any): Observable<UserComment | null> {
     return from(this.apiService.getReqOptions()).pipe(
       mergeMap(options => this.http.post<UserComment>(`${baseUrl}comments/`, commentPayload, options))

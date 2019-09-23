@@ -30,6 +30,20 @@ export const likeCommentFailure = createAction(
   props<{ comment: UserComment, currentUserId: string }>()
 );
 
+export const unlikeComment = createAction(
+  '[Home] Unlike Comment',
+  props<{ comment: UserComment, currentUserId: string }>()
+);
+
+export const unlikeCommentSuccess = createAction(
+  '[Home] Comment unliked successfully'
+);
+
+export const unlikeCommentFailure = createAction(
+  '[Home] Unlike Comment failed',
+  props<{ comment: UserComment, currentUserId: string }>()
+);
+
 export const sendComment = createAction(
   '[Home] Send Comment',
   props<{ text: string, postId: string }>()

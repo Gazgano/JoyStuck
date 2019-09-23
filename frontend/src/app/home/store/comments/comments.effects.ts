@@ -43,6 +43,18 @@ export class CommentsEffects {
     ))
   ));
 
+  unlikeComment$ = createEffect(() => this.actions$.pipe(
+    ofType(commentsActions.unlikeComment),
+    switchMap(action => this.commentsService.unlikeComment(action.comment.id).pipe(
+      map(comment => commentsActions.unlikeCommentSuccess()),
+      catchError(err => {
+        this.matSnackBar.open('An error happened while unliking the comment', 'Dismiss', { duration: 3000 });
+        log.handleError(err);
+        return of(commentsActions.unlikeCommentFailure({ comment: action.comment, currentUserId: action.currentUserId }));
+      })
+    ))
+  ));
+
   sendComment$ = createEffect(() => this.actions$.pipe(
     ofType(commentsActions.sendComment),
     mergeMap(action => {

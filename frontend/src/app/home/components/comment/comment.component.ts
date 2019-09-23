@@ -42,7 +42,9 @@ export class CommentComponent implements OnInit {
   }
 
   toggleLikeComment(id: string) {
-    if (!this.comment.likeIds || !this.comment.likeIds.includes(this.currentUser.id)) {
+    if (this.comment.likeIds && this.comment.likeIds.includes(this.currentUser.id)) {
+      this.store.dispatch(commentsActions.unlikeComment({ comment: this.comment, currentUserId: this.currentUser.id }));
+    } else {
       this.store.dispatch(commentsActions.likeComment({ comment: this.comment, currentUserId: this.currentUser.id }));
     }
   }
