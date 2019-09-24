@@ -70,7 +70,7 @@ export class CommentsEffects {
       return this.commentsService.postComment(action.failedComment).pipe(
         map(comment => commentsActions.retrySendCommentSuccess({ failedComment: action.failedComment, comment })),
         catchError(err => of(commentsActions.retrySendCommentFailure({
-          failedComment: action.failedComment
+          failedCommentId: action.failedComment.id
         })))
       );
     })

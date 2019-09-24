@@ -14,7 +14,6 @@ const log = new Logger('CommentsReducer');
 
 export interface CommentsState extends EntityState<UserComment> {
   loadingCommentsPostsIds: string[];
-  resendingCommentsIds: string[];
 }
 
 export const commentsAdapter = createEntityAdapter({
@@ -89,19 +88,24 @@ function onSendCommentFailure(state: CommentsState, props: any) {
 }
 
 function onRetrySendComment(state: CommentsState, props: any) {
-  return {...state, resendingCommentsIds: [...state.resendingCommentsIds, props.failedComment.id]};
+  const update: Update<UserComment> = {
+    id: props.failedComment.id,
+    changes: { status: 'PENDING' }
+  };
+  return commentsAdapter.updateOne(update, state);
 }
 
 function onRetrySendCommentSuccess(state: CommentsState, props: any) {
-  let newState = commentsAdapter.removeOne(props.failedComment.id, state);
-  newState = commentsAdapter.addOne(props.comment, newState);
-  newState.resendingCommentsIds = state.resendingCommentsIds.filter(id => id !== props.failedComment.id);
-  return newState;
+  const newState = commentsAdapter.removeOne(props.failedComment.id, state);
+  return commentsAdapter.addOne(props.comment, newState);
 }
 
 function onRetrySendCommentFailure(state: CommentsState, props: any) {
-  const resendingCommentsIds = state.resendingCommentsIds.filter(id => id !== props.failedComment.id);
-  return {...state, resendingCommentsIds};
+  const update: Update<UserComment> = {
+    id: props.failedCommentId,
+    changes: { status: 'FAILED' }
+  };
+  return commentsAdapter.updateOne(update, state);
 }
 
 ////////////////////////////////////////////////

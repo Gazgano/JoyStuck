@@ -10,13 +10,10 @@
 </button>
 
 <ng-container *ngIf="comment.status === 'FAILED'">
-    <mat-spinner *ngIf="(isResending$ | async); else resendButton" color="warn" [diameter]="20"></mat-spinner>
-    <ng-template #resendButton>
-        <button (click)="retrySend()" mat-button color="warn" class="PostComment-RetryButton">
-            <mat-icon [inline]="true">error</mat-icon>
-            <span>Error while sending. Click to retry.</span>
-        </button>
-    </ng-template>
+    <button (click)="retrySend()" mat-button color="warn" class="PostComment-RetryButton">
+        <mat-icon [inline]="true">error</mat-icon>
+        <span>Error while sending. Click to retry.</span>
+    </button>
 </ng-container>
 
 

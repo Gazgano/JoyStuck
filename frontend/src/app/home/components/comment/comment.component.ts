@@ -23,7 +23,6 @@ export class CommentComponent implements OnInit {
   @Input() palette: string;
   @Input() postId: string;
 
-  public isResending$: Observable<boolean>;
   public author: User;
   public timestamp: string;
   public currentUser: User;
@@ -31,7 +30,6 @@ export class CommentComponent implements OnInit {
   constructor(private store: Store<UserComment[]>, private authService: AuthService) { }
 
   ngOnInit() {
-    this.isResending$ = this.store.pipe(select(commentsSelectors.isResending(this.comment.id)));
     this.author = {
       id: this.comment.author.uid,
       username: this.comment.author.displayName,
