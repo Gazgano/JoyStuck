@@ -50,8 +50,8 @@ export class App {
       this.dbService.getDocument(req.params.collection, req.params.id)
     ));
     
-    this.app.post('/:collection', callDbService((req, res) => 
-      this.dbService.addDocument(req.body, req.params.collection, req.user.user_id)
+    this.app.post('/comments', callDbService((req, res) => 
+      this.dbService.addComment(req.body, req.user.user_id)
     ));
 
     this.app.get('/:collection', callDbService((req, res) => 

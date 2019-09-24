@@ -5,7 +5,7 @@ import { DocumentData, QuerySnapshot, DocumentSnapshot, Firestore, Query, QueryD
 
 import { DbServiceError } from './models/db-service-error.model';
 import { DbServiceData } from './models/db-service-data.model';
-import { createDocument } from './document-service';
+import { createComment } from './document-service';
 import { JoinService } from './join-service';
 import { convertDocDataTimestamp, handleError } from './helper';
 
@@ -38,13 +38,21 @@ export class DbService {
     .catch(err => { throw handleError(err) })
   }
 
-  async addDocument(obj: any, collectionPath: string, userId: string): Promise<DbServiceData<DocumentData>> {
-    const doc = createDocument(collectionPath, obj, userId);
+  async addComment(obj: any, userId: string): Promise<DbServiceData<DocumentData>> {
+    const commentData = createComment(obj, userId);
+    const commentRef = this.db.collection('comments').doc();
+    const postRef = this.db.collection('posts').doc(commentData.post_id);
     
-    return this.db.collection(collectionPath).add(doc)
-    .then(docRef => docRef.get())
-    .then(docSnapshot => this.formatDocumentSnapshot(docSnapshot, collectionPath))
-    .catch(err => { throw handleError(err) })
+    return this.db.runTransaction(t => {
+      t.set(commentRef, commentData);
+      t.update(postRef, { commentsCount: admin.firestore.FieldValue.increment(1) });
+
+      let result = convertDocDataTimestamp(commentData);
+      result.id = commentRef.id;
+      return this.joinService.applyJoins(result, 'comments')
+    })
+    .then(docData => new DbServiceData<DocumentData>(docData))
+    .catch(err => { throw handleError(err) });
   }
 
   async likePost(collectionPath: string, documentId: string, userId: string): Promise<DbServiceData<DocumentData>> {
