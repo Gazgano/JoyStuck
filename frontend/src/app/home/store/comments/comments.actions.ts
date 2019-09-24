@@ -17,7 +17,7 @@ export const loadCommentsSuccess = createAction(
 
 export const loadCommentsFailure = createAction(
   '[Home] Load Comments failed',
-  props<{ postId: string }>()
+  props<{ postId: string, error: any }>()
 );
 
 ////////////////////////////////////////

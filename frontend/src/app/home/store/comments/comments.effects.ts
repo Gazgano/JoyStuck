@@ -26,7 +26,7 @@ export class CommentsEffects {
     ofType(commentsActions.loadComments),
     mergeMap(action => this.commentsService.getCommentsByPostId(action.postId).pipe(
       map(comments => commentsActions.loadCommentsSuccess({ postId: action.postId, comments })),
-      catchError(() => of(commentsActions.loadCommentsFailure({ postId: action.postId })))
+      catchError(error => of(commentsActions.loadCommentsFailure({ postId: action.postId, error })))
     ))
   ));
 

@@ -23,7 +23,7 @@ export const selectCommentsCountByPostId = (postId: string) => createSelector(
   comments => comments.filter(c => c.post_id === postId).length
 );
 
-export const selectLoadingCommentsByPostId = (postId: string) => createSelector(
+export const selectCallState = (postId: string) => createSelector(
   selectComments,
-  (state: CommentsState) => state.loadingCommentsPostsIds.includes(postId)
+  (state: CommentsState) => state.statesByPostId[postId]
 );

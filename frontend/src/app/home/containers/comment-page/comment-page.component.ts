@@ -9,6 +9,7 @@ import * as commentsSelectors from '@app/home/store/comments/comments.selectors'
 import * as commentsActions from '@app/home/store/comments/comments.actions';
 import { AuthService } from '@app/core/services/auth.service';
 import { User } from '@app/core/models/user.model';
+import { CallState, getErrorMessage } from '@app/core/models/call-state.model';
 
 @Component({
   selector: 'app-comment-page',
@@ -21,14 +22,14 @@ export class CommentPageComponent implements OnInit {
   @Input() palette: string;
   @ViewChild('userComment', { static: true }) userCommentInput: ElementRef;
 
-  public areCommentsLoading$: Observable<boolean>;
+  public callState$: Observable<CallState>;
   public comments$: Observable<UserComment[]>;
   public currentUser: User;
 
   constructor(private store: Store<UserComment[]>, private authService: AuthService) { }
 
   ngOnInit() {
-    this.areCommentsLoading$ = this.store.pipe(select(commentsSelectors.selectLoadingCommentsByPostId(this.postId)));
+    this.callState$ = this.store.pipe(select(commentsSelectors.selectCallState(this.postId)));
     this.comments$ = this.store.pipe(select(commentsSelectors.selectCommentsByPostId(this.postId)));
     this.currentUser = this.authService.getCurrentUser();
   }
@@ -56,5 +57,9 @@ export class CommentPageComponent implements OnInit {
       likeIds: [],
       status: 'PENDING'
     };
+  }
+
+  getErrorMessage(callState: CallState): string {
+    return getErrorMessage(callState);
   }
 }

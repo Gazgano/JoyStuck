@@ -1,14 +1,22 @@
-<div *ngIf="(areCommentsLoading$ | async); else commentList" class="PostComment-CenterContainer">
-    <mat-spinner [color]="palette" [diameter]="30"></mat-spinner>
-</div>
+<ng-container *ngIf="callState$ | async as callState">
+  <div *ngIf="getErrorMessage(callState)" class="PostComment-CenterContainer">
+      {{ getErrorMessage(callState) }}
+  </div>
 
-<ng-template #commentList><ng-container *ngIf="comments$ | async as comments">
-    <app-comment-list *ngIf="comments.length > 0; else noCommentMessage" [comments]="comments" [palette]="palette" [postId]="postId"></app-comment-list>
-</ng-container></ng-template>
+  <div *ngIf="callState === 'LOADING'" class="PostComment-CenterContainer">
+      <mat-spinner [color]="palette" [diameter]="30"></mat-spinner>
+  </div>
 
-<ng-template #noCommentMessage><div class="PostComment-CenterContainer">
-    There is not comment here. Be the first to add one!
-</div></ng-template>
+  <ng-container *ngIf="callState === 'LOADED'">
+    <ng-container *ngIf="comments$ | async as comments; else noCommentMessage">
+      <app-comment-list *ngIf="comments.length > 0; else noCommentMessage" [comments]="comments" [palette]="palette" [postId]="postId"></app-comment-list>
+    </ng-container>
+
+    <ng-template #noCommentMessage><div class="PostComment-CenterContainer">
+      There is not comment here. Be the first to add one!
+    </div></ng-template>
+  </ng-container>
+</ng-container>
 
 <mat-divider></mat-divider>
 

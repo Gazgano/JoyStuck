@@ -5,6 +5,7 @@ import * as moment from 'moment';
 import { UserComment, CommentStatus } from '../../models/user-comment.model';
 import * as commentsActions from './comments.actions';
 import { Logger } from '@app/core/services/logger.service';
+import { CallState, LoadingState, ErrorState } from '@app/core/models/call-state.model';
 
 const log = new Logger('CommentsReducer');
 
@@ -13,7 +14,7 @@ const log = new Logger('CommentsReducer');
 ////////////////////////////////////////////////
 
 export interface CommentsState extends EntityState<UserComment> {
-  loadingCommentsPostsIds: string[];
+  statesByPostId: { [postId: string]: CallState };
 }
 
 export const commentsAdapter = createEntityAdapter({
@@ -22,7 +23,7 @@ export const commentsAdapter = createEntityAdapter({
 });
 
 const initialState: CommentsState = commentsAdapter.getInitialState({
-  loadingCommentsPostsIds: []
+  statesByPostId: {}
 });
 
 ////////////////////////////////////////////////
@@ -30,20 +31,26 @@ const initialState: CommentsState = commentsAdapter.getInitialState({
 ////////////////////////////////////////////////
 
 function onLoadComments(state: CommentsState, props: any) {
-  return {...state, loadingCommentsPostsIds: [...state.loadingCommentsPostsIds, props.postId]};
+  const newState = {...state};
+  newState.statesByPostId[props.postId] = LoadingState.LOADING;
+  return newState;
 }
 
 function onLoadCommentsSuccess(state: CommentsState, props: any) {
-  const loadingCommentsPostsIds = state.loadingCommentsPostsIds.filter(e => e !== props.postId);
-  return commentsAdapter.addMany(props.comments, {...state, loadingCommentsPostsIds});
+  const newState = commentsAdapter.addMany(props.comments, state);
+  newState.statesByPostId[props.postId] = LoadingState.LOADED;
+  return newState;
 }
 
 function onLoadCommentsFailure(state: CommentsState, props: any) {
-  const loadingCommentsPostsIds = state.loadingCommentsPostsIds.filter(e => e !== props.postId);
-  return {...state, loadingCommentsPostsIds};
+  const newState = {...state};
+  newState.statesByPostId[props.postId] = {
+    errorMessage: props.error && props.error.message  || 'An error occured while loading comments'
+  };
+  return newState;
 }
 
-function onSendComment(state: CommentsState, props: any) {
+function addComment(state: CommentsState, props: any) {
   return commentsAdapter.addOne(props.pendingComment, state);
 }
 
@@ -99,7 +106,7 @@ const reducer = createReducer(
   on(commentsActions.likeCommentFailure, (state, props) => removeLike(state, props)),
   on(commentsActions.unlikeComment, (state, props) => removeLike(state, props)),
   on(commentsActions.unlikeCommentFailure, (state, props) => addLike(state, props)),
-  on(commentsActions.sendComment, (state, props) => onSendComment(state, props)),
+  on(commentsActions.sendComment, (state, props) => addComment(state, props)),
   on(commentsActions.sendCommentSuccess, (state, props) => replaceComment(state, props.pendingComment.id, props.comment)),
   on(commentsActions.sendCommentFailure, (state, props) => updateStatus(state, props.failedCommentId, 'FAILED')),
   on(commentsActions.retrySendComment, (state, props) => updateStatus(state, props.failedComment.id, 'PENDING')),
