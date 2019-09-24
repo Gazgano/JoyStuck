@@ -1,3 +1,5 @@
+export type CommentStatus = 'FAILED' | 'SENT' | 'PENDING';
+
 export interface UserComment {
     id: string;
     post_id: string;
@@ -9,5 +11,5 @@ export interface UserComment {
     timestamp: string;
     content: string;
     likeIds: string[];
-    status: 'FAILED' | 'SENT' | 'PENDING';
+    status: CommentStatus;
 }

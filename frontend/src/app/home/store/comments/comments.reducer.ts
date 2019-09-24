@@ -2,7 +2,7 @@ import { EntityState, createEntityAdapter, Update } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
 import * as moment from 'moment';
 
-import { UserComment } from '../../models/user-comment.model';
+import { UserComment, CommentStatus } from '../../models/user-comment.model';
 import * as commentsActions from './comments.actions';
 import { Logger } from '@app/core/services/logger.service';
 
@@ -22,8 +22,7 @@ export const commentsAdapter = createEntityAdapter({
 });
 
 const initialState: CommentsState = commentsAdapter.getInitialState({
-  loadingCommentsPostsIds: [],
-  resendingCommentsIds: []
+  loadingCommentsPostsIds: []
 });
 
 ////////////////////////////////////////////////
@@ -42,6 +41,10 @@ function onLoadCommentsSuccess(state: CommentsState, props: any) {
 function onLoadCommentsFailure(state: CommentsState, props: any) {
   const loadingCommentsPostsIds = state.loadingCommentsPostsIds.filter(e => e !== props.postId);
   return {...state, loadingCommentsPostsIds};
+}
+
+function onSendComment(state: CommentsState, props: any) {
+  return commentsAdapter.addOne(props.pendingComment, state);
 }
 
 function addLike(state: CommentsState, props: any) {
@@ -70,42 +73,17 @@ function removeLike(state: CommentsState, props: any) {
   return commentsAdapter.updateOne(update, state);
 }
 
-function onSendComment(state: CommentsState, props: any) {
-  return commentsAdapter.addOne(props.pendingComment, state);
-}
-
-function onSendCommentSuccess(state: CommentsState, props: any) {
-  const newState = commentsAdapter.removeOne(props.pendingComment.id, state);
-  return commentsAdapter.addOne(props.comment, newState);
-}
-
-function onSendCommentFailure(state: CommentsState, props: any) {
+function updateStatus(state: CommentsState, id: string, newStatus: CommentStatus) {
   const update: Update<UserComment> = {
-    id: props.failedCommentId,
-    changes: { status: 'FAILED' }
+    id,
+    changes: { status: newStatus }
   };
   return commentsAdapter.updateOne(update, state);
 }
 
-function onRetrySendComment(state: CommentsState, props: any) {
-  const update: Update<UserComment> = {
-    id: props.failedComment.id,
-    changes: { status: 'PENDING' }
-  };
-  return commentsAdapter.updateOne(update, state);
-}
-
-function onRetrySendCommentSuccess(state: CommentsState, props: any) {
-  const newState = commentsAdapter.removeOne(props.failedComment.id, state);
-  return commentsAdapter.addOne(props.comment, newState);
-}
-
-function onRetrySendCommentFailure(state: CommentsState, props: any) {
-  const update: Update<UserComment> = {
-    id: props.failedCommentId,
-    changes: { status: 'FAILED' }
-  };
-  return commentsAdapter.updateOne(update, state);
+function replaceComment(state: CommentsState, oldCommentId: string, newComment: UserComment) {
+  const newState = commentsAdapter.removeOne(oldCommentId, state);
+  return commentsAdapter.addOne(newComment, newState);
 }
 
 ////////////////////////////////////////////////
@@ -122,11 +100,11 @@ const reducer = createReducer(
   on(commentsActions.unlikeComment, (state, props) => removeLike(state, props)),
   on(commentsActions.unlikeCommentFailure, (state, props) => addLike(state, props)),
   on(commentsActions.sendComment, (state, props) => onSendComment(state, props)),
-  on(commentsActions.sendCommentSuccess, (state, props) => onSendCommentSuccess(state, props)),
-  on(commentsActions.sendCommentFailure, (state, props) => onSendCommentFailure(state, props)),
-  on(commentsActions.retrySendComment, (state, props) => onRetrySendComment(state, props)),
-  on(commentsActions.retrySendCommentSuccess, (state, props) => onRetrySendCommentSuccess(state, props)),
-  on(commentsActions.retrySendCommentFailure, (state, props) => onRetrySendCommentFailure(state, props))
+  on(commentsActions.sendCommentSuccess, (state, props) => replaceComment(state, props.pendingComment.id, props.comment)),
+  on(commentsActions.sendCommentFailure, (state, props) => updateStatus(state, props.failedCommentId, 'FAILED')),
+  on(commentsActions.retrySendComment, (state, props) => updateStatus(state, props.failedComment.id, 'PENDING')),
+  on(commentsActions.retrySendCommentSuccess, (state, props) => replaceComment(state, props.failedComment.id, props.comment)),
+  on(commentsActions.retrySendCommentFailure, (state, props) => updateStatus(state, props.failedCommentId, 'FAILED'))
 );
 
 export function commentsReducer(state: CommentsState, action: Action) {
