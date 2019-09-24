@@ -81,7 +81,11 @@ function onSendCommentSuccess(state: CommentsState, props: any) {
 }
 
 function onSendCommentFailure(state: CommentsState, props: any) {
-  return commentsAdapter.addOne(props.failedComment, state);
+  const update: Update<UserComment> = {
+    id: props.failedCommentId,
+    changes: { status: 'FAILED' }
+  };
+  return commentsAdapter.updateOne(update, state);
 }
 
 function onRetrySendComment(state: CommentsState, props: any) {

@@ -68,7 +68,7 @@ export const sendCommentSuccess = createAction(
 
 export const sendCommentFailure = createAction(
   '[Home] Send Comment failed',
-  props<{ failedComment: UserComment }>()
+  props<{ failedCommentId: string }>()
 );
 
 export const retrySendComment = createAction(

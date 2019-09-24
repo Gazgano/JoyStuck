@@ -15,9 +15,7 @@
 <div class="PostComment-WriteBox">
     <app-profile-image class="PostComment-WriteBox-Avatar" [user]="currentUser" [sizeInPixel]="'32'"></app-profile-image>
     <input #userComment (keyup.enter)="sendComment(userComment.value)" class="PostComment-WriteBox-Input" type="text" placeholder="Write a comment...">
-    <ng-template #sendButton>
-        <button (click)="sendComment(userComment.value)" [ngClass]="'PostComment-WriteBox-SendButton--' + palette" mat-icon-button>
-            <mat-icon [inline]="true">send</mat-icon>
-        </button>
-    </ng-template>
+    <button (click)="sendComment(userComment.value)" [ngClass]="'PostComment-WriteBox-SendButton--' + palette" mat-icon-button>
+        <mat-icon [inline]="true">send</mat-icon>
+    </button>
 </div>

@@ -59,7 +59,7 @@ export class CommentsEffects {
     mergeMap(action => {
       return this.commentsService.postComment(action.pendingComment).pipe(
         map(comment => commentsActions.sendCommentSuccess({ pendingComment: action.pendingComment, comment })),
-        catchError(err => of(commentsActions.sendCommentFailure({ failedComment: {...action.pendingComment, status: 'FAILED'} })))
+        catchError(err => of(commentsActions.sendCommentFailure({ failedCommentId: action.pendingComment.id })))
       );
     })
   ));
