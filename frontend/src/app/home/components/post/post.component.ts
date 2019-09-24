@@ -59,11 +59,11 @@ export class PostComponent implements OnInit {
   }
 
   toggleComments() {
-    const postId = this.post.id;
-
-    if (!this.commentsOpen) {
-      this.store.dispatch(commentsActions.loadComments({ postId }));
-    }
+    if (!this.commentsOpen) { this.loadComments(); }
     this.commentsOpen = !this.commentsOpen;
+  }
+
+  loadComments() {
+    this.store.dispatch(commentsActions.loadComments({ postId: this.post.id }));
   }
 }

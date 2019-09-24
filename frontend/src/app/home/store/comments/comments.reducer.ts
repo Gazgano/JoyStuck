@@ -31,23 +31,23 @@ const initialState: CommentsState = commentsAdapter.getInitialState({
 ////////////////////////////////////////////////
 
 function onLoadComments(state: CommentsState, props: any) {
-  const newState = {...state};
-  newState.statesByPostId[props.postId] = LoadingState.LOADING;
-  return newState;
+  const statesByPostId = {...state.statesByPostId};
+  statesByPostId[props.postId] = LoadingState.LOADING;
+  return { ...state, statesByPostId };
 }
 
 function onLoadCommentsSuccess(state: CommentsState, props: any) {
-  const newState = commentsAdapter.addMany(props.comments, state);
-  newState.statesByPostId[props.postId] = LoadingState.LOADED;
-  return newState;
+  const statesByPostId = {...state.statesByPostId};
+  statesByPostId[props.postId] = LoadingState.LOADED;
+  return { ...commentsAdapter.addMany(props.comments, state), statesByPostId };
 }
 
 function onLoadCommentsFailure(state: CommentsState, props: any) {
-  const newState = {...state};
-  newState.statesByPostId[props.postId] = {
+  const statesByPostId = {...state.statesByPostId};
+  statesByPostId[props.postId] = {
     errorMessage: props.error && props.error.message  || 'An error occured while loading comments'
   };
-  return newState;
+  return { ...state, statesByPostId };
 }
 
 function addComment(state: CommentsState, props: any) {

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import * as uid from 'uid';
@@ -20,6 +20,7 @@ export class CommentPageComponent implements OnInit {
 
   @Input() postId: string;
   @Input() palette: string;
+  @Output() retryLoading = new EventEmitter<boolean>();
   @ViewChild('userComment', { static: true }) userCommentInput: ElementRef;
 
   public callState$: Observable<CallState>;
@@ -40,6 +41,10 @@ export class CommentPageComponent implements OnInit {
       this.store.dispatch(commentsActions.sendComment({ pendingComment }));
       this.userCommentInput.nativeElement.value = '';
     }
+  }
+
+  retryToLoad() {
+    this.retryLoading.emit(true);
   }
 
   private createPendingComment(text: string, postId: string): UserComment {

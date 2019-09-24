@@ -1,6 +1,7 @@
 <ng-container *ngIf="callState$ | async as callState">
   <div *ngIf="getErrorMessage(callState)" class="PostComment-CenterContainer">
-      {{ getErrorMessage(callState) }}
+      <div class="PostComment-Message">{{ getErrorMessage(callState) }}</div>
+      <button mat-button color="primary" (click)="retryToLoad()">Retry</button>
   </div>
 
   <div *ngIf="callState === 'LOADING'" class="PostComment-CenterContainer">
@@ -13,7 +14,9 @@
     </ng-container>
 
     <ng-template #noCommentMessage><div class="PostComment-CenterContainer">
-      There is not comment here. Be the first to add one!
+        <div class="PostComment-Message">
+          There is no comment here. Be the first to add one!
+        </div>
     </div></ng-template>
   </ng-container>
 </ng-container>

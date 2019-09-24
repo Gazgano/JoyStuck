@@ -35,7 +35,7 @@
 <!-- Usual card comments -->
 <div *ngIf="postDesign.componentStyle === 0" [@openClose]="commentsOpen ? 'open' : 'closed'" class="PostCard-Comments">
     <mat-divider></mat-divider>
-    <app-comment-page [palette]="postDesign.palette" [postId]="post.id"></app-comment-page>
+    <app-comment-page [palette]="postDesign.palette" [postId]="post.id" (retryLoading)="loadComments()"></app-comment-page>
 </div>
 
 <!-- Light card (no content, just title) -->
@@ -66,5 +66,5 @@
 <!-- Light card comments -->
 <div *ngIf="postDesign.componentStyle === 1" [@openClose]="commentsOpen ? 'open' : 'closed'" class="PostCardLight-Comments">
   <mat-divider></mat-divider>
-  <app-comment-page [palette]="postDesign.palette" [postId]="post.id"></app-comment-page>
+  <app-comment-page [palette]="postDesign.palette" [postId]="post.id" (retryLoading)="loadComments()"></app-comment-page>
 </div>
