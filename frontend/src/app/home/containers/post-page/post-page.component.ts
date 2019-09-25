@@ -6,6 +6,7 @@ import { Logger } from '@app/core/services/logger.service';
 import { Post } from '../../models/post.model';
 import * as postSelectors from '../../store/post/post.selectors';
 import * as postActions from '../../store/post/post.actions';
+import { CallState, getErrorMessage } from '@app/core/models/call-state.model';
 
 const log = new Logger('PostPageComponent');
 
@@ -18,19 +19,21 @@ const log = new Logger('PostPageComponent');
 export class PostPageComponent implements OnInit {
 
   public posts$: Observable<Post[]>;
-  public isLoading$: Observable<boolean>;
-  public inError$: Observable<boolean>;
+  public callState$: Observable<CallState>;
 
   constructor(private store: Store<Post[]>) { }
 
   ngOnInit() {
     this.posts$ = this.store.pipe(select(postSelectors.selectPostsArray));
-    this.isLoading$ = this.store.pipe(select(postSelectors.selectIsLoading));
-    this.inError$ = this.store.pipe(select(postSelectors.selectInError));
+    this.callState$ = this.store.pipe(select(postSelectors.selectCallState));
     this.refresh();
   }
 
   refresh() {
     this.store.dispatch(postActions.loadPosts());
+  }
+
+  getErrorMessage(callState: CallState): string {
+    return getErrorMessage(callState);
   }
 }

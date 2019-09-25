@@ -1,24 +1,24 @@
-<app-shell>
-  <app-loader *ngIf="isLoading$ | async; else errorPage" class="PostPage-Loader" palette="primary"></app-loader>
+<app-shell *ngIf="callState$ | async as callState">
+  <app-loader *ngIf="callState === 'LOADING'" class="PostPage-Loader" palette="primary"></app-loader>
 
-  <ng-template #errorPage>
-    <div *ngIf="inError$ | async; else postPage" class="PostPage-ErrorPage">
-      <div class="PostPage-ErrorPage-Icon">
-        <mat-icon color="primary" [inline]="true">error_outline</mat-icon>
+  <div *ngIf="getErrorMessage(callState)" class="PostPage-ErrorPage">
+    <div class="PostPage-ErrorPage-Icon">
+      <mat-icon color="primary" [inline]="true">error_outline</mat-icon>
+    </div>
+    <h3>Oups! {{ getErrorMessage(callState) }}</h3>
+    <button (click)="refresh()" color="primary" mat-raised-button>Retry</button>
+  </div>
+
+  <ng-container *ngIf="callState === 'LOADED'">
+    <ng-container *ngIf="posts$ | async as posts">
+      <div *ngIf="posts && posts.length === 0; else postsList" class="PostPage-ErrorPage">
+        <h3>No post to display for now</h3>
+        <button (click)="refresh()" color="primary" mat-raised-button>Refresh</button>
       </div>
-      <h3>Oups! An error occured while fetching posts.</h3>
-      <button (click)="refresh()" color="primary" mat-raised-button>Retry</button>
-    </div>
-  </ng-template>
-
-  <ng-template #postPage><ng-container *ngIf="posts$ | async as posts">
-    <div *ngIf="posts && posts.length === 0; else postsList" class="PostPage-ErrorPage">
-      <h3>No post to display for now</h3>
-      <button (click)="refresh()" color="primary" mat-raised-button>Refresh</button>
-    </div>
-    
-    <ng-template #postsList>
-      <app-post-list [posts]="posts" class="PostPageContainer"></app-post-list>
-    </ng-template>
-  </ng-container></ng-template>
+      
+      <ng-template #postsList>
+        <app-post-list [posts]="posts" class="PostPageContainer"></app-post-list>
+      </ng-template>
+    </ng-container>
+  </ng-container>
 </app-shell>

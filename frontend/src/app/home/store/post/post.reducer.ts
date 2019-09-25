@@ -4,14 +4,14 @@ import * as moment from 'moment';
 
 import { Post } from '../../models/post.model';
 import * as postActions from './post.actions';
+import { CallState, LoadingState, ErrorState } from '@app/core/models/call-state.model';
 
 ////////////////////////////////////////////////
 // State
 ////////////////////////////////////////////////
 
 export interface PostState extends EntityState<Post> {
-  isLoading: boolean;
-  inError: boolean;
+  callState: CallState;
 }
 
 export const postAdapter = createEntityAdapter({
@@ -20,8 +20,7 @@ export const postAdapter = createEntityAdapter({
 });
 
 const initialState = postAdapter.getInitialState({
-  isLoading: false,
-  inError: false
+  callState: null
 });
 
 ////////////////////////////////////////////////
@@ -61,12 +60,15 @@ function removeLike(state: PostState, props: any) {
 const reducer = createReducer(
   initialState,
 
-  on(postActions.loadPosts, state => ({ ...state, isLoading: true, inError: false })),
+  on(postActions.loadPosts, state => ({ ...state, callState: LoadingState.LOADING })),
   on(postActions.loadPostsSuccess, (state, { posts }) => {
-    return postAdapter.addAll(posts, {...state, isLoading: false, inError: false });
+    return postAdapter.addAll(posts, {...state, callState: LoadingState.LOADED });
   }),
-  on(postActions.loadPostsFailure, state => {
-    return {...state, isLoading: false, inError: true };
+  on(postActions.loadPostsFailure, (state, props) => {
+    const errorState: ErrorState = {
+      errorMessage: props.error && props.error.message  || 'An error occured while loading comments'
+    };
+    return { ...state, callState: errorState };
   }),
 
   on(postActions.likePost, (state, props) => addLike(state, props)),

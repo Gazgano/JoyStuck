@@ -17,14 +17,9 @@ export const selectPostsArray = createSelector(
   postAdapter.getSelectors().selectAll
 );
 
-export const selectIsLoading = createSelector(
+export const selectCallState = createSelector(
   selectPost,
-  (state: PostState) => state.isLoading
-);
-
-export const selectInError = createSelector(
-  selectPost,
-  (state: PostState) => state.inError
+  (state: PostState) => state.callState
 );
 
 export const selectLikeIds = (postId: string) => createSelector(

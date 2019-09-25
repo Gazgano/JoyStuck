@@ -4,7 +4,7 @@ import { Post } from '../../models/post.model';
 
 export const loadPosts = createAction('[Home] Load Posts');
 export const loadPostsSuccess = createAction('[Home] Posts loaded successfully', props<{ posts: Post[] }>());
-export const loadPostsFailure = createAction('[Home] Load Posts failed');
+export const loadPostsFailure = createAction('[Home] Load Posts failed', props<{ error: any }>());
 
 export const likePost = createAction('[Home] Like Post', props<{ post: Post, currentUserId: string }>());
 export const likePostSuccess = createAction('[Home] Post liked successfully');

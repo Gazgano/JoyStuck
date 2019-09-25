@@ -5,7 +5,7 @@ import * as moment from 'moment';
 import { UserComment, CommentStatus } from '../../models/user-comment.model';
 import * as commentsActions from './comments.actions';
 import { Logger } from '@app/core/services/logger.service';
-import { CallState, LoadingState, ErrorState } from '@app/core/models/call-state.model';
+import { CallState, LoadingState } from '@app/core/models/call-state.model';
 
 const log = new Logger('CommentsReducer');
 

@@ -19,7 +19,7 @@ export class PostEffects {
     ofType(postActions.loadPosts),
     mergeMap(() => this.postsService.getPosts().pipe(
       map(posts => postActions.loadPostsSuccess({ posts })),
-      catchError(() => of(postActions.loadPostsFailure()))
+      catchError(error => of(postActions.loadPostsFailure({ error })))
     ))
   ));
 
