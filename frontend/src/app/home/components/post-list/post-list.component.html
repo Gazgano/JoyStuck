@@ -2,4 +2,5 @@
   <ng-container *ngFor="let post of posts; trackBy: trackByPost">
       <app-post [post]="post"></app-post>
   </ng-container>
+  <button class="PostList-RefreshButton" mat-button color="primary" (click)="emitRefreshEvent()">Refresh</button>
 </div>

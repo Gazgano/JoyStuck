@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { Post } from '@app/home/models/post.model';
 
 @Component({
@@ -9,10 +9,15 @@ import { Post } from '@app/home/models/post.model';
 export class PostListComponent {
 
   @Input() posts: Post[];
+  @Output() refresh = new EventEmitter<boolean>();
 
   constructor() { }
 
   trackByPost(index: number, post: Post) {
     return post.id;
+  }
+
+  emitRefreshEvent() {
+    this.refresh.emit(true);
   }
 }

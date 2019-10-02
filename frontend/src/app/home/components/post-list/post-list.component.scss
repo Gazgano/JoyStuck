@@ -4,10 +4,11 @@
   height: 100%;
   margin-top: -10px; // to compensate the margin-top of the first post
   width: $md;
+  display: flex;
+  flex-direction: column;
 }
 
-.PostList-EmptyScreen {
-  margin: auto;
-  padding: 20px;
-  width: fit-content;
+.PostList-RefreshButton {
+  align-self: center;
+  margin-top: 20px;
 }

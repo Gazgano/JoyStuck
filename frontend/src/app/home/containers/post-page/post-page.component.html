@@ -17,7 +17,7 @@
       </div>
       
       <ng-template #postsList>
-        <app-post-list [posts]="posts" class="PostPageContainer"></app-post-list>
+        <app-post-list [posts]="posts" class="PostPageContainer" (refresh)="refresh($event)"></app-post-list>
       </ng-template>
     </ng-container>
   </ng-container>
