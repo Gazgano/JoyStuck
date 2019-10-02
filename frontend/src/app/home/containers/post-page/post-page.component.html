@@ -9,7 +9,11 @@
     <button (click)="refresh()" color="primary" mat-raised-button>Retry</button>
   </div>
 
-  <ng-container *ngIf="callState === 'LOADED'">
+  <div class="PostPage-Container" *ngIf="callState === 'LOADED'">
+    <div class="PostPage-AddPostActions">
+      <button mat-fab color="primary" title="Post a message"><mat-icon>edit</mat-icon></button>
+      <button mat-fab color="warn" title="Share an image"><mat-icon>image</mat-icon></button>
+    </div>
     <ng-container *ngIf="posts$ | async as posts">
       <div *ngIf="posts && posts.length === 0; else postsList" class="PostPage-ErrorPage">
         <h3>No post to display for now</h3>
@@ -17,8 +21,8 @@
       </div>
       
       <ng-template #postsList>
-        <app-post-list [posts]="posts" class="PostPageContainer" (refresh)="refresh($event)"></app-post-list>
+        <app-post-list [posts]="posts" (refresh)="refresh($event)"></app-post-list>
       </ng-template>
     </ng-container>
-  </ng-container>
+  </div>
 </app-shell>

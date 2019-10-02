@@ -1,14 +1,8 @@
 @import 'mixins';
+@import 'breakpoints';
 
 :host {
   @include full-size;
-}
-
-.PostPageContainer {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  padding: 20px;
 }
 
 .PostPage-Loader {
@@ -26,4 +20,17 @@
 .PostPage-ErrorPage-Icon {
   font-size: 150px;
   margin-bottom: -30px; // to compensate icon line spacing
+}
+
+.PostPage-Container {
+  width: $md;
+  align-self: center;
+}
+
+.PostPage-AddPostActions {
+  padding: 20px 0;
+  display: flex;
+  & > *:not(:last-child) {
+    margin-right: 10px;
+  }
 }
