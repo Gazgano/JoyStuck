@@ -1,14 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Store, select } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
 
 import { Logger } from '@app/core/services/logger.service';
 import { UserComment } from '../../models/user-comment.model';
 import { User } from '@app/core/models/user.model';
 import * as commentsActions from '../../store/comments/comments.actions';
-import * as commentsSelectors from '../../store/comments/comments.selectors';
 import * as moment from 'moment';
 import { AuthService } from '@app/core/services/auth.service';
+import { Palette } from '@app/core/models/palette.model';
 
 const log = new Logger('CommentComponent');
 
@@ -20,7 +19,7 @@ const log = new Logger('CommentComponent');
 export class CommentComponent implements OnInit {
 
   @Input() comment: UserComment;
-  @Input() palette: string;
+  @Input() palette: Palette;
   @Input() postId: string;
 
   public author: User;

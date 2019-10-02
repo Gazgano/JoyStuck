@@ -1,0 +1,19 @@
+<mat-card *ngIf="postEditorType === 'message'" class="PostEditor-Card" [formGroup]="form">
+  <mat-card-header class="PostEditor-Card-Header">
+    <app-profile-image mat-card-avatar [user]="currentUser" [sizeInPixel]="'40'"></app-profile-image>
+    <mat-card-title class="PostEditor-Card-Title">
+      <input formControlName="title" type="text" [ngClass]="'PostEditor-Card-Title-Input--' + design.palette">
+      <mat-error class="PostEditor-Card-Title-Error">{{ getErrorMessage('title', 'title') | uppercaseFirstLetter }}</mat-error>
+    </mat-card-title>
+  </mat-card-header>
+  
+  <mat-card-content>
+    <textarea formControlName="message" [ngClass]="'PostEditor-Card-Content--' + design.palette" placeholder="Type your message..."></textarea>
+    <mat-error>{{ getErrorMessage('message', 'message') | uppercaseFirstLetter }}</mat-error>
+  </mat-card-content>
+
+  <mat-card-actions class="PostEditor-Card-Actions">
+    <button mat-button color="primary" (click)="closeEditor()">Cancel</button>
+    <button mat-flat-button color="primary" (click)="publish()">Publish</button>
+  </mat-card-actions>
+</mat-card>

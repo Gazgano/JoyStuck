@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Palette } from '@app/core/models/palette.model';
 
 @Component({
   selector: 'app-loader',
@@ -7,7 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class LoaderComponent implements OnInit {
 
-  @Input() palette: string;
+  @Input() palette: Palette;
   
   constructor() { }
 

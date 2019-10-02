@@ -1,6 +1,7 @@
 import { Component,Input } from '@angular/core';
 
 import { UserComment } from '@app/home/models/user-comment.model';
+import { Palette } from '@app/core/models/palette.model';
 
 @Component({
   selector: 'app-comment-list',
@@ -10,7 +11,7 @@ import { UserComment } from '@app/home/models/user-comment.model';
 export class CommentListComponent {
 
   @Input() comments: UserComment[];
-  @Input() palette: string;
+  @Input() palette: Palette;
   @Input() postId: string;
 
   constructor() { }

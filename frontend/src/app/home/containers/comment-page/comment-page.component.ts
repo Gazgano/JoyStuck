@@ -10,6 +10,7 @@ import * as commentsActions from '@app/home/store/comments/comments.actions';
 import { AuthService } from '@app/core/services/auth.service';
 import { User } from '@app/core/models/user.model';
 import { CallState, getErrorMessage } from '@app/core/models/call-state.model';
+import { Palette } from '@app/core/models/palette.model';
 
 @Component({
   selector: 'app-comment-page',
@@ -19,7 +20,7 @@ import { CallState, getErrorMessage } from '@app/core/models/call-state.model';
 export class CommentPageComponent implements OnInit {
 
   @Input() postId: string;
-  @Input() palette: string;
+  @Input() palette: Palette;
   @Output() retryLoading = new EventEmitter<boolean>();
   @ViewChild('userComment', { static: true }) userCommentInput: ElementRef;
 

@@ -11,9 +11,10 @@
 
   <div class="PostPage-Container" *ngIf="callState === 'LOADED'">
     <div class="PostPage-AddPostActions">
-      <button mat-fab color="primary" title="Post a message"><mat-icon>edit</mat-icon></button>
-      <button mat-fab color="warn" title="Share an image"><mat-icon>image</mat-icon></button>
+      <button mat-fab color="primary" title="Post a message" (click)="displayEditor('message')"><mat-icon>edit</mat-icon></button>
+      <button mat-fab color="warn" title="Share an image" (click)="displayEditor('screenshotShare')"><mat-icon>image</mat-icon></button>
     </div>
+    <app-post-editor [postEditorType]="displayedEditor"></app-post-editor>
     <ng-container *ngIf="posts$ | async as posts">
       <div *ngIf="posts && posts.length === 0; else postsList" class="PostPage-ErrorPage">
         <h3>No post to display for now</h3>

@@ -7,6 +7,7 @@ import { Post } from '../../models/post.model';
 import * as postSelectors from '../../store/post/post.selectors';
 import * as postActions from '../../store/post/post.actions';
 import { CallState, getErrorMessage } from '@app/core/models/call-state.model';
+import { PostEditorType } from '@app/home/components/post-editor/post-editor.config';
 
 const log = new Logger('PostPageComponent');
 
@@ -20,6 +21,7 @@ export class PostPageComponent implements OnInit {
 
   public posts$: Observable<Post[]>;
   public callState$: Observable<CallState>;
+  public displayedEditor: PostEditorType;
 
   constructor(private store: Store<Post[]>) { }
 
@@ -35,5 +37,13 @@ export class PostPageComponent implements OnInit {
 
   getErrorMessage(callState: CallState): string {
     return getErrorMessage(callState);
+  }
+
+  displayEditor(editorType: PostEditorType) {
+    if (this.displayedEditor === editorType) {
+      this.displayedEditor = null;
+    } else {
+      this.displayedEditor = editorType || null;
+    }
   }
 }

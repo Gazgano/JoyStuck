@@ -35,7 +35,7 @@ export class FormService {
     const field = form.get(path);
     const key = Array.isArray(path)? path.join('/') : path;
     
-    if (field.errors && !isEmpty(field.errors)) {
+    if (field.touched && field.errors && !isEmpty(field.errors)) {
       const errorCode = Object.keys(field.errors)[0]; // get first error
       if (errorsMessages[key] && errorsMessages[key][errorCode]) {
         return errorsMessages[key][errorCode](fieldName, field.errors);

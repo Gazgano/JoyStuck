@@ -1,3 +1,5 @@
+import { Palette } from '@app/core/models/palette.model';
+
 export enum PostType {
   Normal = 0,
   Light
@@ -5,7 +7,7 @@ export enum PostType {
 
 export interface PostDesign {
   readonly componentStyle: PostType;
-  readonly palette: string;
+  readonly palette: Palette;
   readonly icon: string;
 }
 

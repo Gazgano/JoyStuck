@@ -1,0 +1,59 @@
+@import 'ink-theme';
+@import 'mixins';
+
+.PostEditor-Card {
+  margin-bottom: 20px;
+  border-radius: 0;
+}
+
+.PostEditor-Card-Header {
+  margin-bottom: 20px;
+}
+
+%PostEditor-Card-Title-Input {
+  width: 100%;
+  border: solid 1px get-theme-color($ink-theme, foreground, divider, null);
+  padding: 2px;
+  font-size: 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.PostEditor-Card-Title-Error {
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+%PostEditor-Card-Content {
+  width: 100%;
+  height: 70px;
+  resize: none;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  border-radius: 2px;
+  padding: 7px;
+  border-color: get-theme-color($ink-theme, foreground, divider, null);
+}
+
+.PostEditor-Card-Actions {
+  margin: 0 !important;
+  text-align: end;
+}
+
+@each $name in $palettes {
+  .PostEditor-Card-Content--#{$name} {
+    @extend %PostEditor-Card-Content;
+    &:focus {
+      border-color: get-theme-color($ink-theme, $name, 200, null);
+    }
+  }
+  
+  .PostEditor-Card-Title-Input--#{$name} {
+    @extend %PostEditor-Card-Title-Input;
+    color: get-theme-color($ink-theme, $name, default-contrast, null);
+    background-color: get-theme-color($ink-theme, $name, default, null);
+    // &:focus {
+    //   border-color: get-theme-color($ink-theme, $name, 200, null);
+    // }
+  }
+}
+
