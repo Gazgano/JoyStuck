@@ -18,22 +18,22 @@ export function createComment(obj: any, userId: string): DocumentData {
   }
 }
 
-// function createPost(obj: any, userId: string): DocumentData {
-//   if (!obj.type || !isString(obj.type)) {
-//     throw new DbServiceError({}, 'type is not valid', 400);
-//   } else if (!obj.title || !isString(obj.title)) {
-//     throw new DbServiceError({}, 'title is not valid', 400);
-//   } else if (obj.content && !isString(obj.content)) {
-//     throw new DbServiceError({}, 'content is not valid', 400);
-//   } else {
-//     return {
-//       timestamp: Timestamp.now(),
-//       type: obj.type,
-//       author_id: userId,
-//       title: obj.title,
-//       likesCount: 0,
-//       commentsCount: 0,
-//       content: obj.content || null
-//     };
-//   }
-// }
+export function createPost(obj: any, userId: string): DocumentData {
+  if (!obj.type || !isString(obj.type)) {
+    throw new DbServiceError({}, 'type is not valid', 400);
+  } else if (!obj.title || !isString(obj.title)) {
+    throw new DbServiceError({}, 'title is not valid', 400);
+  } else if (obj.content && !isString(obj.content)) {
+    throw new DbServiceError({}, 'content is not valid', 400);
+  } else {
+    return {
+      timestamp: Timestamp.now(),
+      type: obj.type,
+      author_id: userId,
+      title: obj.title,
+      likesCount: 0,
+      commentsCount: 0,
+      content: obj.content || null
+    };
+  }
+}

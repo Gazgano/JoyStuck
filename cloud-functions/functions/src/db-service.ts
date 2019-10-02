@@ -5,7 +5,7 @@ import { DocumentData, QuerySnapshot, DocumentSnapshot, Firestore, Query, QueryD
 
 import { DbServiceError } from './models/db-service-error.model';
 import { DbServiceData } from './models/db-service-data.model';
-import { createComment } from './document-service';
+import { createPost, createComment } from './document-service';
 import { JoinService } from './join-service';
 import { convertDocDataTimestamp, handleError } from './helper';
 
@@ -36,6 +36,21 @@ export class DbService {
     return this.db.doc(`${collectionPath}/${id}`).get()
     .then((ds: DocumentSnapshot) => this.formatDocumentSnapshot(ds, collectionPath))
     .catch(err => { throw handleError(err) })
+  }
+
+  async addPost(obj: any, userId: string): Promise<DbServiceData<DocumentData>> {
+    const postData = createPost(obj, userId);
+    const postRef = this.db.collection('posts').doc();
+    
+    return this.db.runTransaction(t => {
+      t.set(postRef, postData);
+
+      let result = convertDocDataTimestamp(postData);
+      result.id = postRef.id;
+      return this.joinService.applyJoins(result, 'posts')
+    })
+    .then(docData => new DbServiceData<DocumentData>(docData))
+    .catch(err => { throw handleError(err) });
   }
 
   async addComment(obj: any, userId: string): Promise<DbServiceData<DocumentData>> {
