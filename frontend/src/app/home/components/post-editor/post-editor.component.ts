@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Validators, FormControl, FormGroup } from '@angular/forms';
 
 import { User } from '@app/core/models/user.model';
@@ -6,19 +6,29 @@ import { AuthService } from '@app/core/services/auth.service';
 import { PostEditorType, PostEditorDesign, POST_EDITOR_TYPES_DESIGNS } from './post-editor.config';
 import { Logger } from '@app/core/services/logger.service';
 import { FormService } from '@app/shared/services/form.service';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 const log = new Logger('PostEditorComponent');
 
 @Component({
   selector: 'app-post-editor',
   templateUrl: './post-editor.component.html',
-  styleUrls: ['./post-editor.component.scss']
+  styleUrls: ['./post-editor.component.scss'],
+  animations: [trigger('open', [
+    transition(':enter', [
+      style({height: '0', opacity: '0'}),
+      animate('200ms ease-out')
+    ])
+  ])]
 })
 export class PostEditorComponent implements OnInit {
 
   @Input() postEditorType: PostEditorType;
+  @Output() close = new EventEmitter<boolean>();
+
   public currentUser: User;
   public form: FormGroup;
+  public formSubmitted = false;
   private errorsMessages = {
     title: { required: (fieldName: string) => `${fieldName} is required` },
     message: { required: (fieldName: string) => `${fieldName} is required` }
@@ -46,12 +56,14 @@ export class PostEditorComponent implements OnInit {
   }
 
   closeEditor() {
-    this.postEditorType = null;
+    this.close.emit(true);
     this.form.reset();
+    this.formSubmitted = false;
   }
 
   publish() {
     this.form.markAllAsTouched();
+    this.formSubmitted = true;
     
     if (this.form.valid) {
       log.debug({
@@ -59,5 +71,6 @@ export class PostEditorComponent implements OnInit {
         message: this.form.get('message').value
       });
     }
+
   }
 }

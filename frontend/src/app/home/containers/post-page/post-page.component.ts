@@ -39,11 +39,15 @@ export class PostPageComponent implements OnInit {
     return getErrorMessage(callState);
   }
 
-  displayEditor(editorType: PostEditorType) {
+  toggleEditor(editorType: PostEditorType) {
     if (this.displayedEditor === editorType) {
       this.displayedEditor = null;
     } else {
       this.displayedEditor = editorType || null;
     }
+  }
+
+  closeEditor() {
+    this.displayedEditor = null;
   }
 }

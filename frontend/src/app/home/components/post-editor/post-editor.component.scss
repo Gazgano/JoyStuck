@@ -51,9 +51,9 @@
     @extend %PostEditor-Card-Title-Input;
     color: get-theme-color($ink-theme, $name, default-contrast, null);
     background-color: get-theme-color($ink-theme, $name, default, null);
-    // &:focus {
-    //   border-color: get-theme-color($ink-theme, $name, 200, null);
-    // }
+    &::placeholder {
+      color: get-theme-color($ink-theme, $name, default-contrast, null);
+    }
   }
 }
 
