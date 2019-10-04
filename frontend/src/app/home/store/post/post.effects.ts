@@ -46,4 +46,14 @@ export class PostEffects {
       })
     ))
   ));
+
+  sendPost$ = createEffect(() => this.actions$.pipe(
+    ofType(postActions.sendPost),
+    mergeMap(action => {
+      return this.postsService.postPost(action.pendingPost).pipe(
+        map(post => postActions.sendPostSuccess({ post })),
+        catchError(error => of(postActions.sendPostFailure({ error })))
+      );
+    })
+  ));
 }

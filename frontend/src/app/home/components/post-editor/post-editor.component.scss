@@ -36,7 +36,9 @@
 
 .PostEditor-Card-Actions {
   margin: 0 !important;
-  text-align: end;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 @each $name in $palettes {

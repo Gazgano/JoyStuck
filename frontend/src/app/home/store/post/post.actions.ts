@@ -13,3 +13,7 @@ export const likePostFailure = createAction('[Home] Like Post failed', props<{ p
 export const unlikePost = createAction('[Home] Unlike Post', props<{ post: Post, currentUserId: string }>());
 export const unlikePostSuccess = createAction('[Home] Post unliked successfully');
 export const unlikePostFailure = createAction('[Home] Unlike Post failed', props<{ post: Post, currentUserId: string }>());
+
+export const sendPost = createAction('[Home] Send Post', props<{ pendingPost: Post }>());
+export const sendPostSuccess = createAction('[Home] Post sent successfully', props<{ post: Post }>());
+export const sendPostFailure = createAction('[Home] Send Post failed', props<{ error: any }>());

@@ -26,5 +26,10 @@ export const POST_TYPES_DESIGNS: { [key: string]: PostDesign } = {
     palette: 'accent',
     icon: 'image',
     componentStyle: PostType.Normal
+  },
+  message: {
+    palette: 'primary',
+    icon: 'forum',
+    componentStyle: PostType.Normal
   }
 };

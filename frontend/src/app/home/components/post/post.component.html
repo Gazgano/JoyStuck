@@ -23,11 +23,16 @@
             <span *ngIf="post.likeIds && post.likeIds.length > 0">{{ post.likeIds.length }}</span>
         </button>
         <button mat-button (click)="toggleComments()">
-            <mat-icon fontSet="material-icons-outlined">chat_bubble_outline</mat-icon>
             <ng-container *ngIf="commentsCount$ | async as commentsCount; else postCommentsCount">
+                <mat-icon *ngIf="commentsCount === 0" fontSet="material-icons-outlined">chat_bubble_outline</mat-icon>
+                <mat-icon *ngIf="commentsCount > 0">chat_bubble</mat-icon>
                 <span *ngIf="commentsCount > 0">{{ commentsCount }}</span>
             </ng-container>
-            <ng-template #postCommentsCount><span *ngIf="post.commentsCount > 0">{{ post.commentsCount }}</span></ng-template>
+            <ng-template #postCommentsCount>
+                <mat-icon *ngIf="post.commentsCount === 0" fontSet="material-icons-outlined">chat_bubble_outline</mat-icon>
+                <mat-icon *ngIf="post.commentsCount > 0">chat_bubble</mat-icon>
+                <span *ngIf="post.commentsCount > 0">{{ post.commentsCount }}</span>
+            </ng-template>
         </button>
     </mat-card-actions>
 </mat-card>

@@ -13,6 +13,7 @@
   </mat-card-content>
 
   <mat-card-actions class="PostEditor-Card-Actions">
+    <mat-spinner *ngIf="(sendPostState$ | async) === 'LOADING'" [diameter]="20" [color]="design.palette"></mat-spinner>
     <button mat-button color="primary" (click)="closeEditor()">Cancel</button>
     <button mat-flat-button color="primary" (click)="publish()">Publish</button>
   </mat-card-actions>

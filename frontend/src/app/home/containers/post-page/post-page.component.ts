@@ -27,7 +27,7 @@ export class PostPageComponent implements OnInit {
 
   ngOnInit() {
     this.posts$ = this.store.pipe(select(postSelectors.selectPostsArray));
-    this.callState$ = this.store.pipe(select(postSelectors.selectCallState));
+    this.callState$ = this.store.pipe(select(postSelectors.selectLoadPostsState));
     this.refresh();
   }
 

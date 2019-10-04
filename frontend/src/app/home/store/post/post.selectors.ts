@@ -17,12 +17,17 @@ export const selectPostsArray = createSelector(
   postAdapter.getSelectors().selectAll
 );
 
-export const selectCallState = createSelector(
+export const selectLoadPostsState = createSelector(
   selectPost,
-  (state: PostState) => state.callState
+  (state: PostState) => state.loadPostsState
 );
 
 export const selectLikeIds = (postId: string) => createSelector(
   selectPostsEntities,
   posts => posts[postId].likeIds || []
+);
+
+export const selectSendPostState = createSelector(
+  selectPost,
+  (state: PostState) => state.sendPostState
 );

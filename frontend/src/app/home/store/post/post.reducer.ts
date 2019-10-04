@@ -11,7 +11,8 @@ import { CallState, LoadingState, ErrorState } from '@app/core/models/call-state
 ////////////////////////////////////////////////
 
 export interface PostState extends EntityState<Post> {
-  callState: CallState;
+  loadPostsState: CallState;
+  sendPostState: CallState;
 }
 
 export const postAdapter = createEntityAdapter({
@@ -20,7 +21,8 @@ export const postAdapter = createEntityAdapter({
 });
 
 const initialState = postAdapter.getInitialState({
-  callState: null
+  loadPostsState: null,
+  sendPostState: null
 });
 
 ////////////////////////////////////////////////
@@ -60,22 +62,37 @@ function removeLike(state: PostState, props: any) {
 const reducer = createReducer(
   initialState,
 
-  on(postActions.loadPosts, state => ({ ...state, callState: LoadingState.LOADING })),
-  on(postActions.loadPostsSuccess, (state, { posts }) => {
-    return postAdapter.addAll(posts, {...state, callState: LoadingState.LOADED });
+  // load posts
+  on(postActions.loadPosts, state => ({ ...state, loadPostsState: LoadingState.LOADING })),
+  on(postActions.loadPostsSuccess, (state, props) => {
+    return postAdapter.addAll(props.posts, {...state, loadPostsState: LoadingState.LOADED });
   }),
   on(postActions.loadPostsFailure, (state, props) => {
     const errorState: ErrorState = {
       errorMessage: props.error && props.error.message  || 'An error occured while loading comments'
     };
-    return { ...state, callState: errorState };
+    return { ...state, loadPostsState: errorState };
   }),
 
+  // like post
   on(postActions.likePost, (state, props) => addLike(state, props)),
   on(postActions.likePostFailure, (state, props) => removeLike(state, props)),
 
+  // unlike post
   on(postActions.unlikePost, (state, props) => removeLike(state, props)),
-  on(postActions.unlikePostFailure, (state, props) => addLike(state, props))
+  on(postActions.unlikePostFailure, (state, props) => addLike(state, props)),
+
+  // publish post
+  on(postActions.sendPost, state => ({ ...state, sendPostState: LoadingState.LOADING })),
+  on(postActions.sendPostSuccess, (state, props) => {
+    return postAdapter.addOne(props.post, {...state, sendPostState: LoadingState.LOADED });
+  }),
+  on(postActions.sendPostFailure, (state, props) => {
+    const errorState: ErrorState = {
+      errorMessage: props.error && props.error.message  || 'An error occured while publishing your post'
+    };
+    return { ...state, sendPostState: errorState };
+  }),
 );
 
 export function postReducer(state: PostState | undefined, action: Action) {

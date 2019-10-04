@@ -31,7 +31,7 @@ export function createPost(obj: any, userId: string): DocumentData {
       type: obj.type,
       author_id: userId,
       title: obj.title,
-      likesCount: 0,
+      likeIds: [],
       commentsCount: 0,
       content: obj.content || null
     };
