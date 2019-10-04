@@ -12,7 +12,7 @@
   <div class="PostPage-Container" *ngIf="callState === 'LOADED'">
     <div class="PostPage-AddPostActions">
       <button mat-fab color="primary" title="Post a message" (click)="toggleEditor('message')"><mat-icon>edit</mat-icon></button>
-      <button mat-fab color="warn" title="Share an image" (click)="toggleEditor('screenshotShare')"><mat-icon>image</mat-icon></button>
+      <button mat-fab color="accent" title="Share an image" (click)="toggleEditor('screenshotShare')"><mat-icon>image</mat-icon></button>
     </div>
     <app-post-editor [postEditorType]="displayedEditor" (close)="closeEditor($event)"></app-post-editor>
     <ng-container *ngIf="posts$ | async as posts">

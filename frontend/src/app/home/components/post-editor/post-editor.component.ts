@@ -1,6 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { Validators, FormControl, FormGroup } from '@angular/forms';
-import { trigger, transition, style, animate } from '@angular/animations';
 import { Store, select } from '@ngrx/store';
 import * as uid from 'uid';
 import * as moment from 'moment';
@@ -16,24 +15,20 @@ import * as postSelectors from '@app/home/store/post/post.selectors';
 import { Observable, Subscription } from 'rxjs';
 import { CallState } from '@app/core/models/call-state.model';
 import { Actions, ofType } from '@ngrx/effects';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 const log = new Logger('PostEditorComponent');
 
 @Component({
   selector: 'app-post-editor',
   templateUrl: './post-editor.component.html',
-  styleUrls: ['./post-editor.component.scss'],
-  animations: [trigger('open', [
-    transition(':enter', [
-      style({height: '0', opacity: '0'}),
-      animate('200ms ease-out')
-    ])
-  ])]
+  styleUrls: ['./post-editor.component.scss']
 })
 export class PostEditorComponent implements OnInit, OnDestroy {
 
   @Input() postEditorType: PostEditorType;
   @Output() close = new EventEmitter<boolean>();
+  @ViewChild('imageUploader', { static: true }) filesInput: ElementRef;
 
   public sendPostState$: Observable<CallState>;
   public sendPostSuccessAction$: Observable<any>;
@@ -58,7 +53,9 @@ export class PostEditorComponent implements OnInit, OnDestroy {
     private authService: AuthService, 
     private formService: FormService,
     private store: Store<Post[]>,
-    private actions$: Actions
+    private actions$: Actions,
+    private cd: ChangeDetectorRef,
+    private matSnackBar: MatSnackBar 
   ) { }
 
   ngOnInit() {
@@ -69,7 +66,33 @@ export class PostEditorComponent implements OnInit, OnDestroy {
   }
 
   get design(): PostEditorDesign {
-    return POST_EDITOR_TYPES_DESIGNS[this.postEditorType];
+    return this.postEditorType? 
+      POST_EDITOR_TYPES_DESIGNS[this.postEditorType]:
+      POST_EDITOR_TYPES_DESIGNS.message;
+  }
+
+  get filesURLs() {
+    const files: FileList = this.filesInput.nativeElement.files;
+    if (files.length === 0) { return []; }
+
+    const fileNames: string[] = [];
+    // tslint:disable-next-line: prefer-for-of
+    for (let i = 0; i < files.length; i++) {
+      if (files[i].type.match(/image\/*/) == null) {
+        this.matSnackBar.open(`Only images are supported`, 'Dismiss', { duration: 3000 });
+        return;
+      }
+      
+      // const reader = new FileReader();
+      // reader.readAsDataURL(files[0]); 
+      // reader.onload = (_event) => { 
+      //   this.imgURL = reader.result; 
+      // }
+
+      fileNames.push(files[i].name);
+    }
+
+    return fileNames;
   }
 
   getErrorMessage(path: string | string[], fieldName: string) {
@@ -92,6 +115,10 @@ export class PostEditorComponent implements OnInit, OnDestroy {
       const pendingPost = this.createPendingPost(title, message);
       this.store.dispatch(postActions.sendPost({ pendingPost }));
     }
+  }
+
+  refreshView() {
+    this.cd.detectChanges();
   }
 
   private initializeForm(): FormGroup {

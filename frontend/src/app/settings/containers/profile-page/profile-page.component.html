@@ -8,8 +8,8 @@
   <app-profile-image class="ProfilePage-UploadImage-Image" [user]="currentUser" [sizeInPixel]="'64'"></app-profile-image>
 
   <div class="ProfilePage-UploadImage-Actions">
-    <div>Accepted formats: <i>.jpg</i>, <i>.png</i></div>
-    <input #file mat-button type="file">
+    <div>Accepted formats: <i>.jpg</i>, <i>.jpeg</i>, <i>.png</i></div>
+    <input #file type="file" accept=".jpg, .jpeg, .png">
   </div>
 </div>
 

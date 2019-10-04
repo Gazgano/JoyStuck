@@ -13,7 +13,7 @@ export const POST_EDITOR_TYPES_DESIGNS: { [key in PostEditorType]: PostEditorDes
     icon: 'edit'
   },
   screenshotShare: {
-    palette: 'warn',
+    palette: 'accent',
     icon: 'image'
   }
 };

@@ -34,6 +34,12 @@
   border-color: get-theme-color($ink-theme, foreground, divider, null);
 }
 
+.PostEditor-Card-ImagesUploader {
+  margin-bottom: 20px;
+  button { margin-top: 5px; }
+  input[type=file] { display: none; }
+}
+
 .PostEditor-Card-Actions {
   margin: 0 !important;
   display: flex;
