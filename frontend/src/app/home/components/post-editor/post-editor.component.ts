@@ -51,6 +51,7 @@ export class PostEditorComponent implements OnInit, OnDestroy {
 
   private maxImageSizeInBytes = Math.pow(2, 21); // 2 MB
   public maxImageSizeString = Math.round(Math.pow(this.maxImageSizeInBytes, 1/21)) + ' MB';
+  public filesURLs: (ArrayBuffer | string)[] = [];
   
   constructor(
     private authService: AuthService, 
@@ -74,11 +75,10 @@ export class PostEditorComponent implements OnInit, OnDestroy {
       POST_EDITOR_TYPES_DESIGNS.message;
   }
 
-  get filesURLs() {
+  readFiles() {
     const files: FileList = this.filesInput.nativeElement.files;
-    if (files.length === 0) { return []; }
+    if (files.length === 0) { return; }
 
-    const fileNames: string[] = [];
     // tslint:disable-next-line: prefer-for-of
     for (let i = 0; i < files.length; i++) {
       // format control
@@ -94,19 +94,18 @@ export class PostEditorComponent implements OnInit, OnDestroy {
           'Dismiss', 
           { duration: 3000 }
         );
-        return false;
+        return;
       }
       
-      // const reader = new FileReader();
-      // reader.readAsDataURL(files[0]); 
-      // reader.onload = (_event) => { 
-      //   this.imgURL = reader.result; 
-      // }
-
-      fileNames.push(files[i].name);
+      const reader = new FileReader();
+      reader.readAsDataURL(files[i]); 
+      reader.onloadend = event => { 
+        this.filesURLs.push(reader.result);
+        this.refreshView();
+      };
     }
-
-    return fileNames;
+    
+    return;
   }
 
   getErrorMessage(path: string | string[], fieldName: string) {
