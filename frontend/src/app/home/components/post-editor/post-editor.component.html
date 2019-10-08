@@ -9,11 +9,11 @@
   
   <mat-card-content>
     <div class="PostEditor-Card-ImagesUploader" [ngStyle]="{display: postEditorType === 'screenshotShare'? 'block' : 'none'}">
-      <div>Attach pictures (<i>.jpg</i>, <i>.jpeg</i>, <i>.png</i>)</div>
+      <div>Attach pictures (<i>.jpg</i>, <i>.jpeg</i>, <i>.png</i>). Max size per file: {{ maxImageSizeString }}.</div>
       <button (click)="imageUploader.click()" mat-button [color]="design.palette">Choose pictures</button>
       <input #imageUploader type="file" accept=".jpg, .jpeg, .png" multiple (change)="refreshView()">
       <ul>
-        <li *ngFor="let name of filesNames">{{ name }}</li>
+        <li *ngFor="let url of filesURLs">{{ url }}</li>
       </ul>
     </div>
     <textarea formControlName="message" [ngClass]="'PostEditor-Card-Content--' + design.palette" placeholder="Type your message..."></textarea>

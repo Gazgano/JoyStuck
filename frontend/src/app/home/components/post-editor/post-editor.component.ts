@@ -48,6 +48,9 @@ export class PostEditorComponent implements OnInit, OnDestroy {
       pattern: (fieldName: string) => `${fieldName} contains only spaces`
     }
   };
+
+  private maxImageSizeInBytes = Math.pow(2, 21); // 2 MB
+  public maxImageSizeString = Math.round(Math.pow(this.maxImageSizeInBytes, 1/21)) + ' MB';
   
   constructor(
     private authService: AuthService, 
@@ -78,9 +81,20 @@ export class PostEditorComponent implements OnInit, OnDestroy {
     const fileNames: string[] = [];
     // tslint:disable-next-line: prefer-for-of
     for (let i = 0; i < files.length; i++) {
+      // format control
       if (files[i].type.match(/image\/*/) == null) {
         this.matSnackBar.open(`Only images are supported`, 'Dismiss', { duration: 3000 });
         return;
+      }
+
+      // size control
+      if (files[i].size >= this.maxImageSizeInBytes) {
+        this.matSnackBar.open(
+          `Provided image is too big. Maximum size is ${this.maxImageSizeString}`, 
+          'Dismiss', 
+          { duration: 3000 }
+        );
+        return false;
       }
       
       // const reader = new FileReader();
