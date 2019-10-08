@@ -23,6 +23,7 @@ interface Image {
   url: ArrayBuffer | string;
   sizeInBytes: number;
   title: string;
+  dimensionsRate: number;
 }
 
 @Component({
@@ -39,17 +40,17 @@ export class PostEditorComponent implements OnInit, OnDestroy {
   public sendPostState$: Observable<CallState>;
   public sendPostSuccessAction$: Observable<any>;
   private sendPostSuccessActionSubscription: Subscription;
-  
+
   public currentUser: User;
-  
+
   public form: FormGroup;
   public formSubmitted = false;
   private errorsMessages = {
-    title: { 
+    title: {
       required: (fieldName: string) => `${fieldName} is required`,
       pattern: (fieldName: string) => `${fieldName} contains only spaces`
     },
-    message: { 
+    message: {
       required: (fieldName: string) => `${fieldName} is required`,
       pattern: (fieldName: string) => `${fieldName} contains only spaces`
     }
@@ -58,14 +59,14 @@ export class PostEditorComponent implements OnInit, OnDestroy {
   private maxImageSizeInBytes = Math.pow(2, 21); // 2 MB
   public maxImageSizeString = Math.round(Math.pow(this.maxImageSizeInBytes, 1/21)) + ' MB';
   public images: Image[] = [];
-  
+
   constructor(
-    private authService: AuthService, 
+    private authService: AuthService,
     private formService: FormService,
     private store: Store<Post[]>,
     private actions$: Actions,
     private cd: ChangeDetectorRef,
-    private matSnackBar: MatSnackBar 
+    private matSnackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -76,14 +77,12 @@ export class PostEditorComponent implements OnInit, OnDestroy {
   }
 
   get design(): PostEditorDesign {
-    return this.postEditorType? 
+    return this.postEditorType?
       POST_EDITOR_TYPES_DESIGNS[this.postEditorType]:
       POST_EDITOR_TYPES_DESIGNS.message;
   }
 
   readFiles() {
-    this.images = [];
-    
     const files: FileList = this.filesInput.nativeElement.files;
     if (files.length === 0) { return; }
 
@@ -98,26 +97,35 @@ export class PostEditorComponent implements OnInit, OnDestroy {
       // size control
       if (files[i].size >= this.maxImageSizeInBytes) {
         this.matSnackBar.open(
-          `Provided image is too big. Maximum size is ${this.maxImageSizeString}`, 
-          'Dismiss', 
+          `Provided image is too big. Maximum size is ${this.maxImageSizeString}`,
+          'Dismiss',
           { duration: 3000 }
         );
         return;
       }
-      
+
       const reader = new FileReader();
-      reader.readAsDataURL(files[i]); 
-      reader.onloadend = event => { 
-        this.images.push({
-          title: files[i].name,
-          url: reader.result,
-          sizeInBytes: files[i].size
-        });
-        this.refreshView();
+      reader.readAsDataURL(files[i]);
+      reader.onloadend = event => {
+        const img = new Image();
+        img.onload = () => {
+          this.images.push({
+            title: files[i].name,
+            url: reader.result as string,
+            sizeInBytes: files[i].size,
+            dimensionsRate: img.width/img.height
+          });
+          this.refreshView();
+        };
+        img.src = reader.result as string;
       };
     }
-    
+
     return;
+  }
+
+  deleteFile(index: number) {
+    this.images.splice(index, 1);
   }
 
   getErrorMessage(path: string | string[], fieldName: string) {
@@ -133,7 +141,7 @@ export class PostEditorComponent implements OnInit, OnDestroy {
   publish() {
     this.form.markAllAsTouched();
     this.formSubmitted = true;
-    
+
     if (this.form.valid) {
       const title = this.form.get('title').value.trim();
       const message = this.form.get('message').value;
@@ -159,7 +167,7 @@ export class PostEditorComponent implements OnInit, OnDestroy {
     .pipe(ofType(postActions.sendPostSuccess))
     .subscribe(() => this.closeEditor());
   }
-  
+
   private createPendingPost(title: string, message: string): Post {
     return {
       id: uid(20),

@@ -36,30 +36,33 @@
 
 .PostEditor-Card-ImagesUploader {
   margin-bottom: 20px;
-  button { margin-top: 5px; }
   input[type=file] { display: none; }
 }
 
 .PostEditor-Card-Images {
   display: flex;
+  flex-wrap: wrap;
   & > *:not(:last-child) { margin-right: 10px; }
-  margin-top: 10px;
 }
 
-$virtual-padding: 10px;
 %PostEditor-Card-ImageContainer {
   width: 100px;
   height: 100px;
   overflow: hidden;
-  img {
-    max-width: 100px - $virtual-padding;
-    max-height: 100px - $virtual-padding;
-  }
   display: flex;
   align-items: center;
   justify-content: center;
   border-style: dashed;
-  border-radius: $virtual-padding;
+  border-radius: 10px;
+  padding: 5px;
+  position: relative;
+  margin-top: 10px;
+}
+
+.PostEditor-Card-ImageContainer-DeleteButton {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 .PostEditor-Card-Actions {
@@ -76,7 +79,7 @@ $virtual-padding: 10px;
       border-color: get-theme-color($ink-theme, $name, 200, null);
     }
   }
-  
+
   .PostEditor-Card-Title-Input--#{$name} {
     @extend %PostEditor-Card-Title-Input;
     color: get-theme-color($ink-theme, $name, default-contrast, null);
@@ -89,6 +92,17 @@ $virtual-padding: 10px;
   .PostEditor-Card-ImageContainer--#{$name} {
     @extend %PostEditor-Card-ImageContainer;
     border-color: get-theme-color($ink-theme, $name, default, null);
+  }
+
+  .PostEditor-Card-AddButton--#{$name} {
+    @extend .PostEditor-Card-ImageContainer--#{$name};
+
+    cursor: pointer;
+    color: get-theme-color($ink-theme, $name, default, null);
+
+    $icon-size: 50px;
+    font-size: $icon-size;
+    .mat-icon { width: $icon-size; height: $icon-size; }
   }
 }
 
