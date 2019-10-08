@@ -40,6 +40,28 @@
   input[type=file] { display: none; }
 }
 
+.PostEditor-Card-Images {
+  display: flex;
+  & > *:not(:last-child) { margin-right: 10px; }
+  margin-top: 10px;
+}
+
+$virtual-padding: 10px;
+%PostEditor-Card-ImageContainer {
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  img {
+    max-width: 100px - $virtual-padding;
+    max-height: 100px - $virtual-padding;
+  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-style: dashed;
+  border-radius: $virtual-padding;
+}
+
 .PostEditor-Card-Actions {
   margin: 0 !important;
   display: flex;
@@ -62,6 +84,11 @@
     &::placeholder {
       color: get-theme-color($ink-theme, $name, default-contrast, null);
     }
+  }
+
+  .PostEditor-Card-ImageContainer--#{$name} {
+    @extend %PostEditor-Card-ImageContainer;
+    border-color: get-theme-color($ink-theme, $name, default, null);
   }
 }
 

@@ -19,6 +19,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 const log = new Logger('PostEditorComponent');
 
+interface Image {
+  url: ArrayBuffer | string;
+  sizeInBytes: number;
+  title: string;
+}
+
 @Component({
   selector: 'app-post-editor',
   templateUrl: './post-editor.component.html',
@@ -51,7 +57,7 @@ export class PostEditorComponent implements OnInit, OnDestroy {
 
   private maxImageSizeInBytes = Math.pow(2, 21); // 2 MB
   public maxImageSizeString = Math.round(Math.pow(this.maxImageSizeInBytes, 1/21)) + ' MB';
-  public filesURLs: (ArrayBuffer | string)[] = [];
+  public images: Image[] = [];
   
   constructor(
     private authService: AuthService, 
@@ -76,6 +82,8 @@ export class PostEditorComponent implements OnInit, OnDestroy {
   }
 
   readFiles() {
+    this.images = [];
+    
     const files: FileList = this.filesInput.nativeElement.files;
     if (files.length === 0) { return; }
 
@@ -100,7 +108,11 @@ export class PostEditorComponent implements OnInit, OnDestroy {
       const reader = new FileReader();
       reader.readAsDataURL(files[i]); 
       reader.onloadend = event => { 
-        this.filesURLs.push(reader.result);
+        this.images.push({
+          title: files[i].name,
+          url: reader.result,
+          sizeInBytes: files[i].size
+        });
         this.refreshView();
       };
     }

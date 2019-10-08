@@ -12,9 +12,11 @@
       <div>Attach pictures (<i>.jpg</i>, <i>.jpeg</i>, <i>.png</i>). Max size per file: {{ maxImageSizeString }}.</div>
       <button (click)="imageUploader.click()" mat-button [color]="design.palette">Choose pictures</button>
       <input #imageUploader type="file" accept=".jpg, .jpeg, .png" multiple (change)="readFiles()">
-      <ng-container *ngFor="let url of filesURLs">
-        <img [src]="url">
-      </ng-container>
+      <div class="PostEditor-Card-Images">
+        <div *ngFor="let image of images" [ngClass]="'PostEditor-Card-ImageContainer--' + design.palette">
+          <img [src]="image.url" [title]="image.title">
+        </div>
+      </div>
     </div>
     <textarea formControlName="message" [ngClass]="'PostEditor-Card-Content--' + design.palette" placeholder="Type your message..."></textarea>
     <mat-error *ngIf="formSubmitted">{{ getErrorMessage('message', 'message') | uppercaseFirstLetter }}</mat-error>
