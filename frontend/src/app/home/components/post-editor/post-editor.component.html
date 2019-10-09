@@ -10,7 +10,7 @@
   <mat-card-content>
     <div class="PostEditor-Card-ImagesUploader" [ngStyle]="{display: postEditorType === 'screenshotShare'? 'block' : 'none'}">
       <div>Attach pictures (<i>.jpg</i>, <i>.jpeg</i>, <i>.png</i>). Max size per file: {{ maxImageSizeInBytes | fileSize }}.</div>
-      <app-images-previewer class="PostEditor-Card-ImagesPreviewer" [palette]="design.palette" [maxImageSizeInBytes]="maxImageSizeInBytes"></app-images-previewer>
+      <app-images-previewer #imagesPreviewer class="PostEditor-Card-ImagesPreviewer" [palette]="design.palette" [maxImageSizeInBytes]="maxImageSizeInBytes"></app-images-previewer>
     </div>
     <textarea formControlName="message" [ngClass]="'PostEditor-Card-Content--' + design.palette" placeholder="Type your message..."></textarea>
     <mat-error *ngIf="formSubmitted">{{ getErrorMessage('message', 'message') | uppercaseFirstLetter }}</mat-error>

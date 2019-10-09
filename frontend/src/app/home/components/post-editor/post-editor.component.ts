@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ViewChild } from '@angular/core';
 import { Validators, FormControl, FormGroup } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import * as uid from 'uid';
@@ -15,6 +15,7 @@ import * as postSelectors from '@app/home/store/post/post.selectors';
 import { Observable, Subscription } from 'rxjs';
 import { CallState } from '@app/core/models/call-state.model';
 import { Actions, ofType } from '@ngrx/effects';
+import { ImagesPreviewerComponent } from '@app/shared/components/images-previewer/images-previewer.component';
 
 const log = new Logger('PostEditorComponent');
 
@@ -27,6 +28,7 @@ export class PostEditorComponent implements OnInit, OnDestroy {
 
   @Input() postEditorType: PostEditorType;
   @Output() close = new EventEmitter<boolean>();
+  @ViewChild('imagesPreviewer', { static: false }) imagesPreviewer: ImagesPreviewerComponent;
 
   public sendPostState$: Observable<CallState>;
   public sendPostSuccessAction$: Observable<any>;
@@ -77,6 +79,7 @@ export class PostEditorComponent implements OnInit, OnDestroy {
     this.close.emit(true);
     this.form.reset();
     this.formSubmitted = false;
+    this.imagesPreviewer.deleteAllFiles();
   }
 
   publish() {

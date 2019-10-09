@@ -44,6 +44,10 @@ export class ImagesPreviewerComponent {
   deleteFile(index: number) {
     this.images.splice(index, 1);
   }
+
+  deleteAllFiles() {
+    this.images = [];
+  }
   
   refreshView() {
     this.cd.detectChanges();
@@ -71,7 +75,6 @@ export class ImagesPreviewerComponent {
 
   private readAndStoreImage(file: File) {
     const reader = new FileReader();
-    reader.readAsDataURL(file);
     reader.onloadend = event => {
       const img = new Image();
       img.onload = () => {
@@ -85,5 +88,6 @@ export class ImagesPreviewerComponent {
       };
       img.src = reader.result as string;
     };
+    reader.readAsDataURL(file);
   }
 }
