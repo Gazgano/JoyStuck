@@ -23,12 +23,13 @@
 }
 
 .PostPage-Container {
-  width: $md;
+  max-width: $md;
+  min-width: 320px;
   align-self: center;
 }
 
 .PostPage-AddPostActions {
-  padding: 20px 0;
+  padding: 20px;
   display: flex;
   & > *:not(:last-child) {
     margin-right: 10px;

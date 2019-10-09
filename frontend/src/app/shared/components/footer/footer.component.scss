@@ -1,15 +1,16 @@
 @import 'ink-theme';
 @import 'mixins';
+@import 'breakpoints';
 
 .Footer-Container {
     font-size: 14px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
 }
 
 .Footer-Github {
-    display: flex;
+    display: none;
     align-items: center;
 }
 
@@ -23,6 +24,19 @@
     margin-left: 3px;
 }
 
+.Footer-Version {
+    display: none;
+}
+
 .Footer-Author {
     line-height: normal;
+    text-align: center;
+}
+
+// Breakpoints
+@media (min-width: $sm) {
+    .Footer-Container { justify-content: space-between; }
+    .Footer-Github { display: flex; }
+    .Footer-Version { display: block; }
+    .Footer-Author { text-align: right; }
 }
