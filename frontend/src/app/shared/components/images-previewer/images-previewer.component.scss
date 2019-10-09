@@ -1,0 +1,49 @@
+@import 'ink-theme';
+@import 'mixins';
+
+:host {
+  input[type=file] { display: none; }
+}
+
+.ImagesPreviewer-Images {
+  display: flex;
+  flex-wrap: wrap;
+  & > *:not(:last-child) { margin-right: 10px; }
+}
+
+%ImagesPreviewer-ImageContainer {
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-style: dashed;
+  border-radius: 10px;
+  padding: 5px;
+  position: relative;
+}
+
+.ImagesPreviewer-ImageContainer-DeleteButton {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+@each $name in $palettes {
+  .ImagesPreviewer-ImageContainer--#{$name} {
+    @extend %ImagesPreviewer-ImageContainer;
+    border-color: get-theme-color($ink-theme, $name, default, null);
+  }
+
+  .ImagesPreviewer-AddButton--#{$name} {
+    @extend .ImagesPreviewer-ImageContainer--#{$name};
+
+    cursor: pointer;
+    color: get-theme-color($ink-theme, $name, default, null);
+
+    $icon-size: 50px;
+    font-size: $icon-size;
+    .mat-icon { width: $icon-size; height: $icon-size; }
+  }
+}

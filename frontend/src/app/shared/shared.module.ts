@@ -27,6 +27,8 @@ import { UppercaseFirstLetterPipe } from './pipes/uppercase-first-letter.pipe';
 import { ProfileFormComponent } from './components/profile-form/profile-form.component';
 import { ChecklistItemComponent } from './components/checklist-item/checklist-item.component';
 import { ProfileImageComponent } from './components/profile-image/profile-image.component';
+import { ImagesPreviewerComponent } from './components/images-previewer/images-previewer.component';
+import { FileSizePipe } from './pipes/file-size.pipe';
 
 
 @NgModule({
@@ -38,7 +40,9 @@ import { ProfileImageComponent } from './components/profile-image/profile-image.
     UppercaseFirstLetterPipe,
     ProfileFormComponent,
     ChecklistItemComponent,
-    ProfileImageComponent
+    ProfileImageComponent,
+    ImagesPreviewerComponent,
+    FileSizePipe
   ],
   imports: [
     CommonModule,
@@ -65,8 +69,10 @@ import { ProfileImageComponent } from './components/profile-image/profile-image.
   exports: [
     ChecklistItemComponent,
     CommonModule,
+    FileSizePipe,
     FontAwesomeModule,
     FormsModule,
+    ImagesPreviewerComponent,
     LoaderComponent,
     MatButtonModule,
     MatCardModule,

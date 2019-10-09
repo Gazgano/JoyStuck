@@ -9,17 +9,8 @@
 
   <mat-card-content>
     <div class="PostEditor-Card-ImagesUploader" [ngStyle]="{display: postEditorType === 'screenshotShare'? 'block' : 'none'}">
-      <div>Attach pictures (<i>.jpg</i>, <i>.jpeg</i>, <i>.png</i>). Max size per file: {{ maxImageSizeString }}.</div>
-      <input #imageUploader type="file" accept=".jpg, .jpeg, .png" multiple (change)="readFiles()">
-      <div class="PostEditor-Card-Images">
-        <div *ngFor="let image of images; index as i" [ngClass]="'PostEditor-Card-ImageContainer--' + design.palette">
-          <button (click)="deleteFile(i)" class="PostEditor-Card-ImageContainer-DeleteButton" mat-icon-button [color]="design.palette"><mat-icon>delete</mat-icon></button>
-          <img [src]="image.url" [title]="image.title" [ngStyle]="{width: image.dimensionsRate > 1? 'auto' : '100%', height: image.dimensionsRate > 1? '100%' : 'auto'}">
-        </div>
-        <div (click)="imageUploader.click()" [ngClass]="'PostEditor-Card-AddButton--' + design.palette">
-          <mat-icon [inline]="true">add</mat-icon>
-        </div>
-      </div>
+      <div>Attach pictures (<i>.jpg</i>, <i>.jpeg</i>, <i>.png</i>). Max size per file: {{ maxImageSizeInBytes | fileSize }}.</div>
+      <app-images-previewer class="PostEditor-Card-ImagesPreviewer" [palette]="design.palette" [maxImageSizeInBytes]="maxImageSizeInBytes"></app-images-previewer>
     </div>
     <textarea formControlName="message" [ngClass]="'PostEditor-Card-Content--' + design.palette" placeholder="Type your message..."></textarea>
     <mat-error *ngIf="formSubmitted">{{ getErrorMessage('message', 'message') | uppercaseFirstLetter }}</mat-error>
