@@ -1,6 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ViewChild } from '@angular/core';
 import { Validators, FormControl, FormGroup } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
+import { Actions, ofType } from '@ngrx/effects';
 import * as uid from 'uid';
 import * as moment from 'moment';
 
@@ -12,10 +15,9 @@ import { FormService } from '@app/shared/services/form.service';
 import { Post } from '@app/home/models/post.model';
 import * as postActions from '@app/home/store/post/post.actions';
 import * as postSelectors from '@app/home/store/post/post.selectors';
-import { Observable, Subscription } from 'rxjs';
 import { CallState } from '@app/core/models/call-state.model';
-import { Actions, ofType } from '@ngrx/effects';
 import { ImagesPreviewerComponent } from '@app/shared/components/images-previewer/images-previewer.component';
+import { StorageService } from '@app/core/services/storage.service';
 
 const log = new Logger('PostEditorComponent');
 
@@ -55,7 +57,9 @@ export class PostEditorComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private formService: FormService,
     private store: Store<Post[]>,
-    private actions$: Actions
+    private actions$: Actions,
+    private storageService: StorageService,
+    private matSnackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -87,9 +91,23 @@ export class PostEditorComponent implements OnInit, OnDestroy {
     this.formSubmitted = true;
 
     if (this.form.valid) {
+      
+      const fileToUpload = this.imagesPreviewer.images[0].file;
+      let imageURL: string;
+      const uploadTask = this.storageService.uploadPostImage(fileToUpload);
+      uploadTask
+      .then(() => uploadTask.snapshot.ref.getDownloadURL())
+      .then(downloadUrl => {
+        log.info(`Profile image uploaded successfully.`);
+        imageURL = downloadUrl;
+      }).catch(err => {
+        this.matSnackBar.open(`An error happened while uploading '${fileToUpload.name}'`, 'Dismiss', { duration: 3000 });
+        log.handleError(err);
+      });
+      
       const title = this.form.get('title').value.trim();
       const message = this.form.get('message').value;
-      const pendingPost = this.createPendingPost(title, message);
+      const pendingPost = this.createPendingPost(title, message, [imageURL]);
       this.store.dispatch(postActions.sendPost({ pendingPost }));
     }
   }
@@ -108,7 +126,7 @@ export class PostEditorComponent implements OnInit, OnDestroy {
     .subscribe(() => this.closeEditor());
   }
 
-  private createPendingPost(title: string, message: string): Post {
+  private createPendingPost(title: string, message: string, imagesURLs: string[]): Post {
     return {
       id: uid(20),
       timestamp: moment().format(),
@@ -121,7 +139,8 @@ export class PostEditorComponent implements OnInit, OnDestroy {
       title,
       likeIds: [],
       commentsCount: 0,
-      content: message
+      content: message,
+      imagesURLs
     };
   }
 

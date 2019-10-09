@@ -4,9 +4,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { FileSizePipe } from '@app/shared/pipes/file-size.pipe';
 
 export interface Image {
+  file: File;
   url: ArrayBuffer | string;
-  sizeInBytes: number;
-  title: string;
   dimensionsRate: number;
 }
 
@@ -79,9 +78,8 @@ export class ImagesPreviewerComponent {
       const img = new Image();
       img.onload = () => {
         this.images.push({
-          title: file.name,
+          file,
           url: reader.result as string,
-          sizeInBytes: file.size,
           dimensionsRate: img.width/img.height
         });
         this.refreshView();

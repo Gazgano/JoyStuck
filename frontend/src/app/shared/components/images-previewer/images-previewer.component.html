@@ -2,7 +2,8 @@
 <div class="ImagesPreviewer-Images">
   <div *ngFor="let image of images; index as i" [ngClass]="'ImagesPreviewer-ImageContainer--' + palette">
     <button (click)="deleteFile(i)" class="ImagesPreviewer-ImageContainer-DeleteButton" mat-icon-button [color]="palette"><mat-icon>delete</mat-icon></button>
-    <img [src]="image.url" [title]="image.title" [ngStyle]="{width: image.dimensionsRate > 1? 'auto' : '100%', height: image.dimensionsRate > 1? '100%' : 'auto'}">
+    <img [src]="image.url" [title]="image.file.name" [ngStyle]="{width: image.dimensionsRate > 1? 'auto' : '100%', height: image.dimensionsRate > 1? '100%' : 'auto'}">
+    <!-- <mat-progress-bar class="ImagesPreviewer-ImageContainer-ProgressBar" mode="determinate" [value]="40" [color]="palette"></mat-progress-bar> -->
   </div>
   <div (click)="imageUploader.click()" [ngClass]="'ImagesPreviewer-AddButton--' + palette">
     <mat-icon [inline]="true">add</mat-icon>
