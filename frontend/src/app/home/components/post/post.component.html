@@ -14,8 +14,8 @@
 
     <mat-card-content>
         <p>{{ post.content }}</p>
-        <div *ngIf="post.imagesStorageURLs?.length > 0" class="PostCard-ImagesGrid">
-            <img *ngFor="let url of post.imagesStorageURLs" [src]="url" class="PostCard-ImageContainer">
+        <div *ngIf="images.length > 0" class="PostCard-ImagesGrid">
+            <img *ngFor="let img of images" [src]="img.url" class="PostCard-ImageContainer">
         </div>
     </mat-card-content>
 

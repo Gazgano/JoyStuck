@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
@@ -29,11 +29,14 @@ export class PostComponent implements OnInit {
   public postDesign: PostDesign;
   public commentsOpen = false;
   public commentsCount$: Observable<number>;
+  public currentUser: User;
+  public images: { url: string, dimensionsRate: number }[] = [];
+  
+  // font awesome icons
   public author: User;
   public faBullhorn = faBullhorn;
-  public currentUser: User;
 
-  constructor(private store: Store<UserComment[]>, private authService: AuthService) { }
+  constructor(private store: Store<UserComment[]>, private authService: AuthService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.postDesign = POST_TYPES_DESIGNS[this.post.type];
@@ -44,6 +47,7 @@ export class PostComponent implements OnInit {
       profileImageSrcUrl: this.post.author.photoURL
     };
     this.currentUser = this.authService.getCurrentUser();
+    this.loadImages();
   }
 
   get elapsedTime(): string {
@@ -65,5 +69,25 @@ export class PostComponent implements OnInit {
 
   loadComments() {
     this.store.dispatch(commentsActions.loadComments({ postId: this.post.id }));
+  }
+
+  private loadImages() {
+    if (this.post.imagesStorageURLs) {
+      this.post.imagesStorageURLs.forEach(imageURL => {
+        const img = new Image();
+        
+        img.onload = () => {
+          const image = {
+            url: imageURL,
+            dimensionsRate: img.width / img.height
+          };
+          this.images.push(image);
+          this.cd.detectChanges();
+        };
+        img.onerror = () => log.warn(`One of the images from Post '${this.post.id}' has not been found.`, imageURL);
+
+        img.src = imageURL;
+      });
+    }
   }
 }

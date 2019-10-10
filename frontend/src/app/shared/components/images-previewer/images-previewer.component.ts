@@ -3,14 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import * as uid from 'uid';
 
 import { FileSizePipe } from '@app/shared/pipes/file-size.pipe';
-
-export interface Image {
-  uid: string;
-  file: File;
-  url: ArrayBuffer | string;
-  dimensionsRate: number;
-  progress: number | null;
-}
+import { Image } from '@app/core/models/image.model';
 
 @Component({
   selector: 'app-images-previewer',
@@ -85,7 +78,7 @@ export class ImagesPreviewerComponent {
           file,
           url: reader.result as string,
           dimensionsRate: img.width/img.height,
-          progress: null
+          uploadProgress: null
         });
         this.refreshView();
       };

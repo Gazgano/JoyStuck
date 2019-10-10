@@ -16,8 +16,9 @@ import { Post } from '@app/home/models/post.model';
 import * as postActions from '@app/home/store/post/post.actions';
 import * as postSelectors from '@app/home/store/post/post.selectors';
 import { CallState } from '@app/core/models/call-state.model';
-import { ImagesPreviewerComponent, Image } from '@app/shared/components/images-previewer/images-previewer.component';
+import { ImagesPreviewerComponent } from '@app/shared/components/images-previewer/images-previewer.component';
 import { StorageService } from '@app/core/services/storage.service';
+import { Image } from '@app/core/models/image.model';
 
 const log = new Logger('PostEditorComponent');
 
@@ -106,7 +107,7 @@ export class PostEditorComponent implements OnInit, OnDestroy {
     return new FormGroup({
       // we use the regexp constructor in order to avoid a global control (we want to stop on the first match)
       title: new FormControl(null, [Validators.required, Validators.pattern(new RegExp('\\S+'))]),
-      message: new FormControl(null, [Validators.required, Validators.pattern(new RegExp('\\S+'))])
+      message: new FormControl(null, Validators.pattern(new RegExp('\\S+')))
     });
   }
 
@@ -141,7 +142,7 @@ export class PostEditorComponent implements OnInit, OnDestroy {
       uploadTask.on('state_changed', 
         snapshot => {
           const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          image.progress = progress;
+          image.uploadProgress = progress;
           this.imagesPreviewer.refreshView();
         },
         err => {
