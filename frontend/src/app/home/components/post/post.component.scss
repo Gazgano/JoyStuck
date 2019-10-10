@@ -25,6 +25,17 @@ $ribbon-icon-size: 30px;
   padding: 0 3px;
 }
 
+.PostCard-ImagesGrid {
+  width: 100%;
+  height: 300px;
+  display: flex;
+}
+
+.PostCard-ImageContainer {
+  flex: 1;
+  overflow: hidden;
+}
+
 .PostCard-Actions {
   display: flex;
   justify-content: flex-end;

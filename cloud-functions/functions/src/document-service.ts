@@ -1,5 +1,5 @@
 import { DocumentData, Timestamp } from '@google-cloud/firestore';
-import { isString } from 'lodash';
+import { isString, isArray } from 'lodash';
 import { DbServiceError } from './models/db-service-error.model';
 
 export function createComment(obj: any, userId: string): DocumentData {
@@ -25,6 +25,11 @@ export function createPost(obj: any, userId: string): DocumentData {
     throw new DbServiceError({}, 'title is not valid', 400);
   } else if (obj.content && !isString(obj.content)) {
     throw new DbServiceError({}, 'content is not valid', 400);
+  } else if (
+    obj.imagesStorageURLs && 
+    (!isArray(obj.imagesStorageURLs) || !obj.imagesStorageURLs.every(url => isString(url)))
+  ) {
+    throw new DbServiceError({}, 'imagesStorageURLs is not valid', 400);
   } else {
     return {
       timestamp: Timestamp.now(),
@@ -33,7 +38,8 @@ export function createPost(obj: any, userId: string): DocumentData {
       title: obj.title,
       likeIds: [],
       commentsCount: 0,
-      content: obj.content || null
+      content: obj.content || null,
+      imagesStorageURLs: obj.imagesStorageURLs
     };
   }
 }

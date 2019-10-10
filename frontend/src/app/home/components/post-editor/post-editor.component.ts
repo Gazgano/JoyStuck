@@ -91,15 +91,14 @@ export class PostEditorComponent implements OnInit, OnDestroy {
     this.formSubmitted = true;
 
     if (this.form.valid) {
-      
-      const imageToUpload = this.imagesPreviewer.images[0];
-      let imageStorageURL: string;
-      this.uploadPostImage(imageToUpload).then(downloadURL => imageStorageURL = downloadURL);
-      
-      const title = this.form.get('title').value.trim();
-      const message = this.form.get('message').value;
-      const pendingPost = this.createPendingPost(title, message, [imageStorageURL]);
-      this.store.dispatch(postActions.sendPost({ pendingPost }));
+      Promise.all(this.imagesPreviewer.images.map(image => 
+        this.uploadPostImage(image)
+      )).then(imagesStorageURLs => {
+        const title = this.form.get('title').value.trim();
+        const message = this.form.get('message').value;
+        const pendingPost = this.createPendingPost(title, message, imagesStorageURLs);
+        this.store.dispatch(postActions.sendPost({ pendingPost }));
+      });
     }
   }
 

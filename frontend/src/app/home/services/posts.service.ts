@@ -57,7 +57,8 @@ export class PostsService {
       likeIds: obj.likeIds || [],
       commentsCount: obj.commentsCount || 0,
       title: obj.title,
-      type: obj.type
+      type: obj.type,
+      imagesStorageURLs: obj.imagesStorageURLs || []
     };
   }
 }
