@@ -11,5 +11,5 @@ export interface Post {
     commentsCount: number;
     likeIds?: string[];
     content?: string;
-    imagesURLs?: string[];
+    imagesStorageURLs?: string[];
 }

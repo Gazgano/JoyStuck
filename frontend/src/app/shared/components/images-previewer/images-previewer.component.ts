@@ -1,12 +1,15 @@
 import { Component, ViewChild, ElementRef, ChangeDetectorRef, Input } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import * as uid from 'uid';
 
 import { FileSizePipe } from '@app/shared/pipes/file-size.pipe';
 
 export interface Image {
+  uid: string;
   file: File;
   url: ArrayBuffer | string;
   dimensionsRate: number;
+  progress: number | null;
 }
 
 @Component({
@@ -78,9 +81,11 @@ export class ImagesPreviewerComponent {
       const img = new Image();
       img.onload = () => {
         this.images.push({
+          uid: uid(20),
           file,
           url: reader.result as string,
-          dimensionsRate: img.width/img.height
+          dimensionsRate: img.width/img.height,
+          progress: null
         });
         this.refreshView();
       };

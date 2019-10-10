@@ -16,7 +16,7 @@ import { Post } from '@app/home/models/post.model';
 import * as postActions from '@app/home/store/post/post.actions';
 import * as postSelectors from '@app/home/store/post/post.selectors';
 import { CallState } from '@app/core/models/call-state.model';
-import { ImagesPreviewerComponent } from '@app/shared/components/images-previewer/images-previewer.component';
+import { ImagesPreviewerComponent, Image } from '@app/shared/components/images-previewer/images-previewer.component';
 import { StorageService } from '@app/core/services/storage.service';
 
 const log = new Logger('PostEditorComponent');
@@ -51,7 +51,7 @@ export class PostEditorComponent implements OnInit, OnDestroy {
     }
   };
 
-  public maxImageSizeInBytes = 2*Math.pow(2, 20); // 2 MB
+  public maxImageSizeInBytes = 6*Math.pow(2, 20); // 6 MB
 
   constructor(
     private authService: AuthService,
@@ -92,22 +92,13 @@ export class PostEditorComponent implements OnInit, OnDestroy {
 
     if (this.form.valid) {
       
-      const fileToUpload = this.imagesPreviewer.images[0].file;
-      let imageURL: string;
-      const uploadTask = this.storageService.uploadPostImage(fileToUpload);
-      uploadTask
-      .then(() => uploadTask.snapshot.ref.getDownloadURL())
-      .then(downloadUrl => {
-        log.info(`Profile image uploaded successfully.`);
-        imageURL = downloadUrl;
-      }).catch(err => {
-        this.matSnackBar.open(`An error happened while uploading '${fileToUpload.name}'`, 'Dismiss', { duration: 3000 });
-        log.handleError(err);
-      });
+      const imageToUpload = this.imagesPreviewer.images[0];
+      let imageStorageURL: string;
+      this.uploadPostImage(imageToUpload).then(downloadURL => imageStorageURL = downloadURL);
       
       const title = this.form.get('title').value.trim();
       const message = this.form.get('message').value;
-      const pendingPost = this.createPendingPost(title, message, [imageURL]);
+      const pendingPost = this.createPendingPost(title, message, [imageStorageURL]);
       this.store.dispatch(postActions.sendPost({ pendingPost }));
     }
   }
@@ -126,7 +117,7 @@ export class PostEditorComponent implements OnInit, OnDestroy {
     .subscribe(() => this.closeEditor());
   }
 
-  private createPendingPost(title: string, message: string, imagesURLs: string[]): Post {
+  private createPendingPost(title: string, message: string, imagesStorageURLs: string[]): Post {
     return {
       id: uid(20),
       timestamp: moment().format(),
@@ -140,8 +131,30 @@ export class PostEditorComponent implements OnInit, OnDestroy {
       likeIds: [],
       commentsCount: 0,
       content: message,
-      imagesURLs
+      imagesStorageURLs
     };
+  }
+
+  private uploadPostImage(image: Image): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const uploadTask = this.storageService.uploadPostImage(image.uid, image.file);
+      
+      uploadTask.on('state_changed', 
+        snapshot => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          image.progress = progress;
+          this.imagesPreviewer.refreshView();
+        },
+        err => {
+          this.matSnackBar.open(`An error happened while uploading '${image.file.name}'`, 'Dismiss', { duration: 3000 });
+          log.handleError(err);
+        },
+        () => uploadTask.snapshot.ref.getDownloadURL().then(downloadUrl => {
+          log.info(`${image.file.name} uploaded successfully.`);
+          resolve(downloadUrl);
+        })
+      );
+    });
   }
 
   ngOnDestroy() {
