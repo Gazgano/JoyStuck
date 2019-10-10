@@ -25,14 +25,23 @@ $ribbon-icon-size: 30px;
   padding: 0 3px;
 }
 
-.PostCard-ImagesGrid {
+%PostCard-PreviewsGrid {
   width: 100%;
-  height: 300px;
-  display: flex;
+  height: 600px;
+  display: grid;
+  grid-gap: 5px;
 }
 
-.PostCard-ImageContainer {
-  flex: 1;
+@for $i from 2 to 5 {
+  .PostCard-PreviewsGrid--#{$i} {
+    @extend %PostCard-PreviewsGrid;
+    & > div:first-child { grid-row: #{1} / #{$i+1}; }
+    grid-template-columns: auto 150px;
+    grid-template-rows: repeat($i - 1, auto);
+  }
+}
+
+.PostCard-PreviewContainer {
   overflow: hidden;
 }
 

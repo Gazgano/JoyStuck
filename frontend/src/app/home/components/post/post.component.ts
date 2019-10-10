@@ -30,7 +30,8 @@ export class PostComponent implements OnInit {
   public commentsOpen = false;
   public commentsCount$: Observable<number>;
   public currentUser: User;
-  public images: { url: string, dimensionsRate: number }[] = [];
+  public previews: { url: string, dimensionsRate: number }[] = [];
+  private maxPreviewsCount = 5; // SCSS must be changed accordingly (@for loop)
   
   // font awesome icons
   public author: User;
@@ -73,20 +74,22 @@ export class PostComponent implements OnInit {
 
   private loadImages() {
     if (this.post.imagesStorageURLs) {
-      this.post.imagesStorageURLs.forEach(imageURL => {
-        const img = new Image();
-        
-        img.onload = () => {
-          const image = {
-            url: imageURL,
-            dimensionsRate: img.width / img.height
+      this.post.imagesStorageURLs.forEach((imageURL, index) => {
+        if (index < this.maxPreviewsCount) {
+          const img = new Image();
+          
+          img.onload = () => {
+            const image = {
+              url: imageURL,
+              dimensionsRate: img.width / img.height
+            };
+            this.previews.push(image);
+            this.cd.detectChanges();
           };
-          this.images.push(image);
-          this.cd.detectChanges();
-        };
-        img.onerror = () => log.warn(`One of the images from Post '${this.post.id}' has not been found.`, imageURL);
+          img.onerror = () => log.warn(`One of the images from Post '${this.post.id}' has not been found.`, imageURL);
 
-        img.src = imageURL;
+          img.src = imageURL;
+        }
       });
     }
   }
