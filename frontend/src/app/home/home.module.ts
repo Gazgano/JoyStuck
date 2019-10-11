@@ -17,6 +17,7 @@ import { PostListComponent } from './components/post-list/post-list.component';
 import { CommentListComponent } from './components/comment-list/comment-list.component';
 import { CommentPageComponent } from './containers/comment-page/comment-page.component';
 import { PostEditorComponent } from './components/post-editor/post-editor.component';
+import { ImageViewerComponent } from './components/image-viewer/image-viewer.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,7 @@ import { PostEditorComponent } from './components/post-editor/post-editor.compon
     PostListComponent, 
     CommentListComponent, 
     CommentPageComponent, 
-    PostEditorComponent 
+    PostEditorComponent, ImageViewerComponent 
   ],
   imports: [
     CommonModule,
@@ -35,6 +36,7 @@ import { PostEditorComponent } from './components/post-editor/post-editor.compon
     StoreModule.forFeature('home', reducersMap),
     EffectsModule.forFeature([PostEffects, CommentsEffects])
   ],
-  providers: [PostsService, CommentsService]
+  providers: [PostsService, CommentsService],
+  entryComponents: [ImageViewerComponent]
 })
 export class HomeModule { }

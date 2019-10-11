@@ -61,10 +61,14 @@ $maxPreviewsCount: 5;
 }
 
 .PostCard-PreviewContainer {
+  cursor: pointer;
   display: flex; // to support object-fit property
   overflow: hidden;
   position: relative; // to make children use absolute
-  & > img { object-fit: cover; }
+  & > img {
+    object-fit: cover;
+    max-width: 100%;
+  }
 }
 
 .PostCard-RemainingPreviews {
@@ -126,6 +130,7 @@ $maxPreviewsCount: 5;
     position: absolute;
     right: 0;
     top: 0;
+    z-index: 1; // defining a z-index to be sure to be above. Others are auto so should be below
 }
 
 .PostCard-Comments {

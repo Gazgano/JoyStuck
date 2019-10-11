@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
@@ -14,6 +15,7 @@ import * as commentsActions from '../../store/comments/comments.actions';
 import * as commentsSelectors from '../../store/comments/comments.selectors';
 import * as postActions from '../../store/post/post.actions';
 import { AuthService } from '@app/core/services/auth.service';
+import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
 
 const log = new Logger('PostComponent');
 
@@ -38,7 +40,12 @@ export class PostComponent implements OnInit {
   public author: User;
   public faBullhorn = faBullhorn;
 
-  constructor(private store: Store<UserComment[]>, private authService: AuthService, private cd: ChangeDetectorRef) { }
+  constructor(
+    private store: Store<UserComment[]>, 
+    private authService: AuthService, 
+    private cd: ChangeDetectorRef,
+    private matDialog: MatDialog
+  ) { }
 
   ngOnInit() {
     this.postDesign = POST_TYPES_DESIGNS[this.post.type];
@@ -77,6 +84,13 @@ export class PostComponent implements OnInit {
     this.store.dispatch(commentsActions.loadComments({ postId: this.post.id }));
   }
 
+  openImageViewer(index: number) {
+    this.matDialog.open(ImageViewerComponent, { 
+      maxHeight: '80vh',
+      data: { images: this.images, selectedImageIndex: index } 
+    });
+  }
+  
   private loadImages() {
     if (this.post.imagesStorageURLs) {
       this.post.imagesStorageURLs.forEach(imageURL => {
