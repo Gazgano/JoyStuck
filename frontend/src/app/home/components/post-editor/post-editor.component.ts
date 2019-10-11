@@ -52,7 +52,7 @@ export class PostEditorComponent implements OnInit, OnDestroy {
     }
   };
 
-  public maxImageSizeInBytes = 6*Math.pow(2, 20); // 6 MB
+  public maxImageSizeInBytes = 4*Math.pow(2, 20); // 4 MB
 
   constructor(
     private authService: AuthService,

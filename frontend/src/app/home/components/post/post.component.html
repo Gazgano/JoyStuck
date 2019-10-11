@@ -14,9 +14,10 @@
 
     <mat-card-content>
         <p>{{ post.content }}</p>
-        <div *ngIf="previewsCount > 0" [ngClass]="'PostCard-PreviewsGrid--' + previewsCount">
-            <div *ngFor="let img of previews" class="PostCard-PreviewContainer">
-                <img [src]="img.url">
+        <div *ngIf="images.length > 0" [ngClass]="'PostCard-PreviewsGrid--' + previewsCount">
+            <div *ngFor="let img of images.slice(0, maxPreviewsCount); last as isLast" class="PostCard-PreviewContainer">
+                <div *ngIf="isLast && images.length > maxPreviewsCount" class="PostCard-RemainingPreviews">+ {{ images.length - previewsCount  }}</div>
+                <img [src]="img.src">
             </div>
         </div>
     </mat-card-content>

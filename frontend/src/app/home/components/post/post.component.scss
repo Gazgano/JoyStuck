@@ -63,7 +63,20 @@ $maxPreviewsCount: 5;
 .PostCard-PreviewContainer {
   display: flex; // to support object-fit property
   overflow: hidden;
+  position: relative; // to make children use absolute
   & > img { object-fit: cover; }
+}
+
+.PostCard-RemainingPreviews {
+  position: absolute;
+  color: white;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.6);
+  font-size: 2em;
 }
 
 .PostCard-Actions {

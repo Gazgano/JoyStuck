@@ -30,8 +30,9 @@ export class PostComponent implements OnInit {
   public commentsOpen = false;
   public commentsCount$: Observable<number>;
   public currentUser: User;
-  public previews: { url: string, dimensionsRate: number }[] = [];
-  private maxPreviewsCount = 5; // SCSS (var $maxPreviewsCount) must be changed accordingly (@for loop)
+  
+  public images: HTMLImageElement[] = [];
+  public maxPreviewsCount = 5; // SCSS (var $maxPreviewsCount) must be changed accordingly (@for loop)
   
   // font awesome icons
   public author: User;
@@ -55,8 +56,8 @@ export class PostComponent implements OnInit {
     return moment(this.post.timestamp).fromNow();
   }
 
-  get previewsCount(): string {
-    return '' + Math.min(this.previews.length, this.maxPreviewsCount);
+  get previewsCount() {
+    return Math.min(this.images.length, this.maxPreviewsCount);
   }
 
   toggleLikePost() {
@@ -78,22 +79,16 @@ export class PostComponent implements OnInit {
 
   private loadImages() {
     if (this.post.imagesStorageURLs) {
-      this.post.imagesStorageURLs.forEach((imageURL, index) => {
-        if (index < this.maxPreviewsCount) {
-          const img = new Image();
-          
-          img.onload = () => {
-            const image = {
-              url: imageURL,
-              dimensionsRate: img.width / img.height
-            };
-            this.previews.push(image);
-            this.cd.detectChanges();
-          };
-          img.onerror = () => log.warn(`One of the images from Post '${this.post.id}' has not been found.`, imageURL);
+      this.post.imagesStorageURLs.forEach(imageURL => {
+        const img = new Image();
+        
+        img.onload = () => {
+          this.images.push(img);
+          this.cd.detectChanges();
+        };
+        img.onerror = () => log.warn(`One of the images from Post '${this.post.id}' has not been found.`, imageURL);
 
-          img.src = imageURL;
-        }
+        img.src = imageURL;
       });
     }
   }
