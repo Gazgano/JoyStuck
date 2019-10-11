@@ -25,24 +25,39 @@ $ribbon-icon-size: 30px;
   padding: 0 3px;
 }
 
+$mat-card-padding: 16px;
+$maxPreviewsCount: 5;
+
 %PostCard-PreviewsGrid {
-  width: 100%;
-  height: 600px;
+  width: calc(100% + #{2*$mat-card-padding});
+  height: 500px;
+  margin-left: -$mat-card-padding; // compensate mat-card padding
   display: grid;
   grid-gap: 5px;
 }
 
-@for $i from 2 to 5 {
+/* Grid for 1 element: nothing, just display image
+   Grid for 2 elements: two halves, cut in vertical way
+   Grid for 3+ elements: 1st image on left half, others in a stack on the right half
+*/
+.PostCard-PreviewsGrid--2 {
+  @extend %PostCard-PreviewsGrid;
+  grid-template-columns: auto auto;
+}
+
+@for $i from 3 to $maxPreviewsCount+1 {
   .PostCard-PreviewsGrid--#{$i} {
     @extend %PostCard-PreviewsGrid;
-    & > div:first-child { grid-row: #{1} / #{$i+1}; }
-    grid-template-columns: auto 150px;
+    & > div:first-child { grid-row: #{1} / #{$i}; }
+    grid-template-columns: auto auto;
     grid-template-rows: repeat($i - 1, auto);
   }
 }
 
 .PostCard-PreviewContainer {
+  display: flex; // to support object-fit property
   overflow: hidden;
+  & > img { object-fit: cover; }
 }
 
 .PostCard-Actions {

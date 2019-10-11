@@ -14,9 +14,9 @@
 
     <mat-card-content>
         <p>{{ post.content }}</p>
-        <div *ngIf="previews.length > 0" [ngClass]="previews.length < maxPreviewsCount-1? 'PostCard-PreviewsGrid--' + previews.length : 'PostCard-PreviewsGrid--' + (maxPreviewsCount - 1)">
+        <div *ngIf="previewsCount > 0" [ngClass]="'PostCard-PreviewsGrid--' + previewsCount">
             <div *ngFor="let img of previews" class="PostCard-PreviewContainer">
-                <img [src]="img.url" [ngStyle]="{width: img.dimensionsRate > 1? 'auto' : '100%', height: img.dimensionsRate > 1? '100%' : 'auto'}">
+                <img [src]="img.url">
             </div>
         </div>
     </mat-card-content>

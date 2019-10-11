@@ -31,7 +31,7 @@ export class PostComponent implements OnInit {
   public commentsCount$: Observable<number>;
   public currentUser: User;
   public previews: { url: string, dimensionsRate: number }[] = [];
-  private maxPreviewsCount = 5; // SCSS must be changed accordingly (@for loop)
+  private maxPreviewsCount = 5; // SCSS (var $maxPreviewsCount) must be changed accordingly (@for loop)
   
   // font awesome icons
   public author: User;
@@ -53,6 +53,10 @@ export class PostComponent implements OnInit {
 
   get elapsedTime(): string {
     return moment(this.post.timestamp).fromNow();
+  }
+
+  get previewsCount(): string {
+    return '' + Math.min(this.previews.length, this.maxPreviewsCount);
   }
 
   toggleLikePost() {
