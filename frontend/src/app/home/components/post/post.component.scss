@@ -40,6 +40,12 @@ $maxPreviewsCount: 5;
    Grid for 2 elements: two halves, cut in vertical way
    Grid for 3+ elements: 1st image on left half, others in a stack on the right half
 */
+
+.PostCard-PreviewsGrid--1 {
+  @extend %PostCard-PreviewsGrid;
+  grid-template-columns: auto;
+}
+
 .PostCard-PreviewsGrid--2 {
   @extend %PostCard-PreviewsGrid;
   grid-template-columns: auto auto;

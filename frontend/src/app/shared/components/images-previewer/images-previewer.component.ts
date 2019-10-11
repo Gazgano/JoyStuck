@@ -70,20 +70,17 @@ export class ImagesPreviewerComponent {
 
   private readAndStoreImage(file: File) {
     const reader = new FileReader();
+    
     reader.onloadend = event => {
-      const img = new Image();
-      img.onload = () => {
-        this.images.push({
-          uid: uid(20),
-          file,
-          url: reader.result as string,
-          dimensionsRate: img.width/img.height,
-          uploadProgress: null
-        });
-        this.refreshView();
-      };
-      img.src = reader.result as string;
+      this.images.push({
+        uid: uid(20),
+        file,
+        url: reader.result as string,
+        uploadProgress: null
+      });
+      this.refreshView();
     };
+    
     reader.readAsDataURL(file);
   }
 }
