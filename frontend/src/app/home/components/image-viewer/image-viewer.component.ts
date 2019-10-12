@@ -1,6 +1,10 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
+import { Logger } from '@app/core/services/logger.service';
+
+const log = new Logger('ImageViewerComponent');
+
 @Component({
   selector: 'app-image-viewer',
   templateUrl: './image-viewer.component.html',
@@ -9,7 +13,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class ImageViewerComponent implements OnInit {
 
   public currentImageIndex: number;
-  
+
   constructor(public dialogRef: MatDialogRef<ImageViewerComponent>, @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
@@ -23,18 +27,18 @@ export class ImageViewerComponent implements OnInit {
   }
 
   nextImage() {
-    if (this.currentImageIndex === this.data.images - 1) {
+    if (this.currentImageIndex === this.data.images.length - 1) {
       this.currentImageIndex = 0;
     } else {
-      ++this.currentImageIndex; 
+      ++this.currentImageIndex;
     }
   }
 
   previousImage() {
     if (this.currentImageIndex === 0) {
-      this.currentImageIndex = this.data.images - 1;
+      this.currentImageIndex = this.data.images.length - 1;
     } else {
-      --this.currentImageIndex; 
+      --this.currentImageIndex;
     }
   }
 

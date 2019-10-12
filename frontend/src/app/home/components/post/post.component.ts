@@ -32,17 +32,17 @@ export class PostComponent implements OnInit {
   public commentsOpen = false;
   public commentsCount$: Observable<number>;
   public currentUser: User;
-  
+
   public images: HTMLImageElement[] = [];
   public maxPreviewsCount = 5; // SCSS (var $maxPreviewsCount) must be changed accordingly (@for loop)
-  
+
   // font awesome icons
   public author: User;
   public faBullhorn = faBullhorn;
 
   constructor(
-    private store: Store<UserComment[]>, 
-    private authService: AuthService, 
+    private store: Store<UserComment[]>,
+    private authService: AuthService,
     private cd: ChangeDetectorRef,
     private matDialog: MatDialog
   ) { }
@@ -85,17 +85,17 @@ export class PostComponent implements OnInit {
   }
 
   openImageViewer(index: number) {
-    this.matDialog.open(ImageViewerComponent, { 
-      maxHeight: '80vh',
-      data: { images: this.images, selectedImageIndex: index } 
+    this.matDialog.open(ImageViewerComponent, {
+      maxHeight: '90vh',
+      data: { images: this.images, selectedImageIndex: index }
     });
   }
-  
+
   private loadImages() {
     if (this.post.imagesStorageURLs) {
       this.post.imagesStorageURLs.forEach(imageURL => {
         const img = new Image();
-        
+
         img.onload = () => {
           this.images.push(img);
           this.cd.detectChanges();

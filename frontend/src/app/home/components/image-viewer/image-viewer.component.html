@@ -1,5 +1,6 @@
-<!-- <div class="ImageViewer-PageButtons">
-  <button mat-icon-button (click)="nextImage()"><mat-icon>keyboard_arrow_left</mat-icon></button>
-  <button mat-icon-button (click)="previousImage()"><mat-icon>keyboard_arrow_right</mat-icon></button>
-</div> -->
-<img class="ImageViewer-Image" [src]="currentImage.src">
+<img (click)="nextImage()" class="ImageViewer-Image" [src]="currentImage.src">
+<div class="ImageViewer-PageButtons">
+  <button mat-icon-button (click)="previousImage()"><mat-icon>keyboard_arrow_left</mat-icon></button>
+  <div>{{ currentImageIndex + 1 }} / {{ this.data.images.length }}</div>
+  <button mat-icon-button (click)="nextImage()"><mat-icon>keyboard_arrow_right</mat-icon></button>
+</div>
