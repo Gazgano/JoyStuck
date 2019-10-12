@@ -5,11 +5,11 @@
 </div>
 
 <div class="ProfilePage-UploadImage">
-  <app-profile-image class="ProfilePage-UploadImage-Image" [user]="currentUser" [sizeInPixel]="'64'"></app-profile-image>
+  <app-profile-image class="ProfilePage-UploadImage-Image" [user]="currentUser" [sizeInPixel]="'64'" [loadedFileURL]="loadedImageURL$ | async"></app-profile-image>
 
   <div class="ProfilePage-UploadImage-Actions">
     <div>Accepted formats: <i>.jpg</i>, <i>.jpeg</i>, <i>.png</i></div>
-    <input #file type="file" accept=".jpg, .jpeg, .png">
+    <input #file type="file" accept=".jpg, .jpeg, .png" (change)="readFile()">
   </div>
 </div>
 

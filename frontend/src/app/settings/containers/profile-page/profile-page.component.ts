@@ -1,12 +1,13 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 
 import { AuthService } from '@app/core/services/auth.service';
 import { User } from '@app/core/models/user.model';
 import { Logger } from '@app/core/services/logger.service';
 import { FormService } from '@app/shared/services/form.service';
 import { StorageService } from '@app/core/services/storage.service';
+import { FileService } from '@app/core/services/file.service';
 
 const log = new Logger('ProfilePage');
 
@@ -21,14 +22,18 @@ export class ProfilePageComponent implements OnInit {
   @ViewChild('file', { static: true }) fileInput: ElementRef;
 
   public currentUser: User;
+
   public isSubmitting = false;
   private submissionSubject = new Subject<boolean>();
   public submissionObservable = this.submissionSubject.asObservable();
 
+  public loadedImageURL$: Observable<string>;
+
   constructor(
     private authService: AuthService,
     private matSnackBar: MatSnackBar,
-    private storageService: StorageService
+    private storageService: StorageService,
+    private fileService: FileService
   ) { }
 
   ngOnInit() {
@@ -44,6 +49,11 @@ export class ProfilePageComponent implements OnInit {
     this.uploadProfileImage()
     .then(imageUrl => this.updateProfile({...profileData, imageUrl }))
     .finally(() => this.isSubmitting = false);
+  }
+
+  readFile() {
+    const file = this.fileInput.nativeElement.files[0];
+    this.loadedImageURL$ = this.fileService.readAndGetFileURL(file);
   }
 
   private async updateProfile(profileData: any): Promise<void> {
