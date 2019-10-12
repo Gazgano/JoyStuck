@@ -1,9 +1,11 @@
 import { Component, ViewChild, ElementRef, ChangeDetectorRef, Input } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import * as uid from 'uid';
 
-import { FileSizePipe } from '@app/shared/pipes/file-size.pipe';
 import { Image } from '@app/core/models/image.model';
+import { FileService } from '@app/core/services/file.service';
+import { Logger } from '@app/core/services/logger.service';
+
+const log = new Logger('ImagesPreviewerComponent');
 
 @Component({
   selector: 'app-images-previewer',
@@ -15,11 +17,11 @@ export class ImagesPreviewerComponent {
   @ViewChild('imageUploader', { static: true }) filesInput: ElementRef;
   @Input() palette: string;
   @Input() maxImageSizeInBytes: number;
-  
+
   public images: Image[] = [];
-  
+
   constructor(
-    private matSnackBar: MatSnackBar, 
+    private fileService: FileService,
     private cd: ChangeDetectorRef
   ) { }
 
@@ -29,7 +31,9 @@ export class ImagesPreviewerComponent {
 
     // tslint:disable-next-line: prefer-for-of
     for (let i = 0; i < files.length; i++) {
-      if (!this.controlFiles(files[i])) { return; }
+      if (!this.fileService.controlFiles(files[i], { typePattern: /image\/*/, maxSizeInBytes: this.maxImageSizeInBytes })) {
+        return;
+      }
       this.readAndStoreImage(files[i]);
     }
 
@@ -43,44 +47,18 @@ export class ImagesPreviewerComponent {
   deleteAllFiles() {
     this.images = [];
   }
-  
+
   refreshView() {
     this.cd.detectChanges();
   }
 
-  private controlFiles(file: File): boolean {
-    // format control
-    if (file.type.match(/image\/*/) == null) {
-      this.matSnackBar.open(`Only images are supported`, 'Dismiss', { duration: 5000 });
-      return false;
-    }
-
-    // size control
-    if (this.maxImageSizeInBytes && file.size >= this.maxImageSizeInBytes) {
-      this.matSnackBar.open(
-        `'${file.name}' is too big. Maximum size is ${new FileSizePipe().transform(this.maxImageSizeInBytes)}`,
-        'Dismiss',
-        { duration: 5000 }
-      );
-      return false;
-    }
-
-    return true;
-  }
-
   private readAndStoreImage(file: File) {
-    const reader = new FileReader();
-    
-    reader.onloadend = event => {
-      this.images.push({
-        uid: uid(20),
-        file,
-        url: reader.result as string,
-        uploadProgress: null
-      });
-      this.refreshView();
-    };
-    
-    reader.readAsDataURL(file);
+    this.fileService.readAndGetFileURL(file).subscribe(
+      url => {
+        this.images.push({uid: uid(20), file, url, uploadProgress: null});
+        this.refreshView();
+      },
+      error => log.warn(`An error occured when reading the file '${file.name}'`)
+    );
   }
 }
