@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, HostListener } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { Logger } from '@app/core/services/logger.service';
@@ -44,5 +44,17 @@ export class ImageViewerComponent implements OnInit {
 
   closeDialog() {
     this.dialogRef.close();
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  reactOnKeyboard(keyEvent: KeyboardEvent) {
+    switch (keyEvent.key) {
+      case 'ArrowLeft':
+        this.previousImage();
+        break;
+      case 'ArrowRight':
+        this.nextImage();
+        break;
+    }
   }
 }

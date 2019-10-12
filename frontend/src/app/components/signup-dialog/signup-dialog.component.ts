@@ -20,8 +20,8 @@ type SignupFormStep = 'FORM_FILL' | 'CONFIRMATION';
   animations: [stepTransition(
     'moveStepForwardTrigger',
     'right',
-    'FORM_FILL => CONFIRMATION', 
-    '.Signup-Form', 
+    'FORM_FILL => CONFIRMATION',
+    '.Signup-Form',
     '.Signup-Confirmation'
   )]
 })
@@ -36,7 +36,7 @@ export class SignupDialogComponent implements OnInit, OnDestroy {
 
   constructor(
     public dialogRef: MatDialogRef<SignupDialogComponent>,
-    private authService: AuthService, 
+    private authService: AuthService,
     private matSnackBar: MatSnackBar,
     private router: Router
   ) { }
@@ -44,7 +44,7 @@ export class SignupDialogComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.reactToEnterKey();
   }
-  
+
   submitForm() {
     this.submissionSubject.next(true);
   }
@@ -52,7 +52,7 @@ export class SignupDialogComponent implements OnInit, OnDestroy {
   onFormSubmit(formData: any) {
     this.isSubmitting = true;
     this.capturedEmail = formData.email;
-    
+
     this.authService.createNewUser(formData)
     .then(() => this.authService.sendVerificationEmail())
     .then(() => this.currentStep = 'CONFIRMATION')
@@ -70,7 +70,7 @@ export class SignupDialogComponent implements OnInit, OnDestroy {
   }
 
   private reactToEnterKey() {
-    this.enterKeySubscription = fromEvent<KeyboardEvent>(document, 'keypress')
+    this.enterKeySubscription = this.dialogRef.keydownEvents()
     .pipe(filter(keyEvent => keyEvent.key === 'Enter'))
     .subscribe(() => {
       switch (this.currentStep) {
