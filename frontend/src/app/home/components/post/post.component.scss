@@ -67,7 +67,8 @@ $maxPreviewsCount: 5;
   position: relative; // to make children use absolute
   & > img {
     object-fit: cover;
-    max-width: 100%;
+    width: 100%;
+    height: 100%;
   }
 }
 
