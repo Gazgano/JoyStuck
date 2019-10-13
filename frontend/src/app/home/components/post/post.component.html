@@ -1,7 +1,7 @@
 <!-- Usual card -->
 <mat-card *ngIf="postDesign.componentStyle === 0" class="PostCard">
     <mat-card-header>
-        <app-profile-image mat-card-avatar [user]="author" [sizeInPixel]="'40'"></app-profile-image>
+        <app-profile-image mat-card-avatar [user]="postAuthor" [sizeInPixel]="'40'" [matTooltip]="postAuthor.username + ' - ' + postTimestamp"></app-profile-image>
         <mat-card-title class="PostCard-Title">
                <div *ngFor="let word of post.title.split(' ')" [ngClass]="'PostCard-Title-Word--' + postDesign.palette">{{ word }}</div>
         </mat-card-title>

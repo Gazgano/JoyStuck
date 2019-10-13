@@ -32,12 +32,13 @@ export class PostComponent implements OnInit {
   public commentsOpen = false;
   public commentsCount$: Observable<number>;
   public currentUser: User;
+  public postAuthor: User;
+  public postTimestamp: string;
 
   public images: HTMLImageElement[] = [];
   public maxPreviewsCount = 5; // SCSS (var $maxPreviewsCount) must be changed accordingly (@for loop)
 
   // font awesome icons
-  public author: User;
   public faBullhorn = faBullhorn;
 
   constructor(
@@ -50,11 +51,12 @@ export class PostComponent implements OnInit {
   ngOnInit() {
     this.postDesign = POST_TYPES_DESIGNS[this.post.type];
     this.commentsCount$ = this.store.pipe(select(commentsSelectors.selectCommentsCountByPostId(this.post.id)));
-    this.author = {
+    this.postAuthor = {
       id: this.post.author.uid,
       username: this.post.author.displayName,
       profileImageSrcUrl: this.post.author.photoURL
     };
+    this.postTimestamp = moment(this.post.timestamp).format('D MMM HH:mm');
     this.currentUser = this.authService.getCurrentUser();
     this.loadImages();
   }
