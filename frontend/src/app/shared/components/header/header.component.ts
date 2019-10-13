@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 
 import { AuthService } from '@app/core/services/auth.service';
 import { User } from '@app/core/models/user.model';
@@ -10,12 +11,12 @@ import { User } from '@app/core/models/user.model';
 })
 export class HeaderComponent implements OnInit {
 
-  public currentUser: User;
+  public currentUser$: Observable<User>;
 
   constructor(private authService: AuthService) { }
 
   ngOnInit() {
-    this.currentUser = this.authService.getCurrentUser();
+    this.currentUser$ = this.authService.currentUser$;
   }
 
   logout() {

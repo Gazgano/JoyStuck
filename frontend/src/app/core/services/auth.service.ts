@@ -20,8 +20,8 @@ export class AuthService {
      public observable, to be read by external objects
      distinctUntilChanged added because the object can be potentially big
   */
-  private currentUserSubject = new BehaviorSubject<User>({} as User);
-  public currentUser = this.currentUserSubject.asObservable().pipe(distinctUntilChanged());
+  private currentUserSubject$ = new BehaviorSubject<User>({} as User);
+  public currentUser$ = this.currentUserSubject$.asObservable().pipe(distinctUntilChanged());
 
   /* we use a replaysubject so that every new subscribers can get the state set before its subscription
      buffer set to 1 to still only have one current state
@@ -60,7 +60,7 @@ export class AuthService {
   }
 
   getCurrentUser(): User {
-    return this.currentUserSubject.getValue();
+    return this.currentUserSubject$.getValue();
   }
 
   async createNewUser(userData: any) {
@@ -92,16 +92,16 @@ export class AuthService {
       updateProfilePromise = updateProfilePromise.then(() => currentUser.updatePassword(profileInfos.password));
     }
 
-    return updateProfilePromise;
+    return updateProfilePromise.then(() => this.currentUserSubject$.next(this.mapUser(currentUser)));
   }
 
   private onAuthStateChanged(user: firebase.User) {
     if (user) {
-      this.currentUserSubject.next(this.mapUser(user));
+      this.currentUserSubject$.next(this.mapUser(user));
       this.isAuthenticatedSubject.next(true);
       log.info(`User ${user.displayName} is now signed in`);
     } else {
-      this.currentUserSubject.next({} as User);
+      this.currentUserSubject$.next({} as User);
       this.isAuthenticatedSubject.next(false);
       log.info('User is signed out');
     }

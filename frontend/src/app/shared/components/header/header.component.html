@@ -14,24 +14,26 @@
     <mat-icon>notifications_none</mat-icon>
   </button> -->
 
-  <button mat-button [matMenuTriggerFor]="menu">
-    <app-profile-image class="Header-Image" [user]="currentUser" [inline]="true"></app-profile-image>
+  <ng-container *ngIf="currentUser$ | async as currentUser">
+    <button mat-button [matMenuTriggerFor]="menu">
+      <app-profile-image class="Header-Image" [user]="currentUser" [inline]="true"></app-profile-image>
 
-    <span class="Header-Name">{{ currentUser.username }}</span>
-    <mat-icon>arrow_drop_down</mat-icon>
-  </button>
-  <mat-menu #menu="matMenu" xPosition="before">
-    <a class="noHoverDecoration" mat-menu-item routerLink="/settings/profile">
-      <mat-icon>account_circle</mat-icon>
-      My account
-    </a>
-    <a class="noHoverDecoration" mat-menu-item routerLink="/admin">
-      <mat-icon>perm_data_setting</mat-icon>
-      Admin
-    </a>
-    <button mat-menu-item (click)="logout()">
-      <mat-icon>power_settings_new</mat-icon>
-      Logout
+      <span class="Header-Name">{{ currentUser.username }}</span>
+      <mat-icon>arrow_drop_down</mat-icon>
     </button>
-  </mat-menu>
+    <mat-menu #menu="matMenu" xPosition="before">
+      <a class="noHoverDecoration" mat-menu-item routerLink="/settings/profile">
+        <mat-icon>account_circle</mat-icon>
+        My account
+      </a>
+      <a class="noHoverDecoration" mat-menu-item routerLink="/admin">
+        <mat-icon>perm_data_setting</mat-icon>
+        Admin
+      </a>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>power_settings_new</mat-icon>
+        Logout
+      </button>
+    </mat-menu>
+  </ng-container>
 </mat-toolbar>
