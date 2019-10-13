@@ -23,11 +23,10 @@ export class ProfilePageComponent implements OnInit {
 
   public currentUser: User;
 
-  public isSubmitting = false;
   private submissionSubject$ = new Subject<boolean>();
   public submissionObservable$ = this.submissionSubject$.asObservable();
 
-  private loadedImageSubject$ = new BehaviorSubject<any>({});
+  private loadedImageSubject$ = new BehaviorSubject<any>(null);
   public loadedImage$ = this.loadedImageSubject$.asObservable();
 
   constructor(
@@ -43,7 +42,7 @@ export class ProfilePageComponent implements OnInit {
 
   cleanFileInput() { // reset the file input and display current user's image
     this.fileInput.nativeElement.value = '';
-    this.loadedImageSubject$.next({});
+    this.loadedImageSubject$.next(null);
   }
 
   deleteProfileImage() { // delete user's current image
@@ -55,15 +54,14 @@ export class ProfilePageComponent implements OnInit {
     this.submissionSubject$.next(true);
   }
 
-  onSubmit(profileData: any) {
-    /* If loadedImageSubject last value is {} (initial value), then we don't update the profile image.
+  onChildFormSubmitAnswer(profileData: any) {
+    /* If loadedImageSubject last value is null (initial value), then we don't update the profile image.
        If it's { file: null, url: null }, we delete it (user deleted it). Otherwise ({ file: ..., url: ... }), we update it.
     */
-    this.isSubmitting = true;
     const lastLoadedImage = this.loadedImageSubject$.getValue();
     let updatingProfilePromise: Promise<any>;
 
-    if (lastLoadedImage === {}) {
+    if (lastLoadedImage === null) {
       updatingProfilePromise = this.updateProfile({ ...profileData });
     } else if (lastLoadedImage.file === null) {
       updatingProfilePromise = this.updateProfile({...profileData, imageUrl: null });
@@ -72,7 +70,7 @@ export class ProfilePageComponent implements OnInit {
       .then(imageUrl => this.updateProfile({...profileData, imageUrl }));
     }
 
-    updatingProfilePromise.finally(() => this.isSubmitting = false);
+    updatingProfilePromise.finally(() => this.submissionSubject$.next(false));
   }
 
   readFile() {
@@ -82,7 +80,7 @@ export class ProfilePageComponent implements OnInit {
 
   private async updateProfile(profileData: any): Promise<void> {
     return this.authService.updateProfile({
-      displayName: profileData.username,
+      displayName: profileData.displayName,
       email: profileData.email,
       password: profileData.password,
       photoURL: profileData.imageUrl

@@ -5,6 +5,7 @@ import { Subscription, Observable } from 'rxjs';
 import { FormService } from '@app/shared/services/form.service';
 import { User } from '@app/core/models/user.model';
 import { Logger } from '@app/core/services/logger.service';
+import { filter } from 'rxjs/operators';
 
 export type ProfileFormType = 'UPDATE' | 'NEW';
 
@@ -35,7 +36,7 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
       email: (fieldName: string) => `${fieldName} format is not valid`
     },
     'passwords/password' : {
-      required: (fieldName: string) => `${fieldName} is required`, 
+      required: (fieldName: string) => `${fieldName} is required`,
       pattern: (fieldName: string) => `${fieldName} format is not valid`,
       minlength: (fieldName: string, errors: any) => `${fieldName} must be at least ${errors.minlength.requiredLength} characters`
     },
@@ -53,15 +54,15 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
     this.profileForm = this.initProfileForm();
     this.reactToSubmissionTrigger();
   }
-  
+
   private initProfileForm(): FormGroup {
     return this.fb.group({
-      username: [ 
-        this.profileFormType === 'UPDATE'? this.currentUser.username : '', 
+      username: [
+        this.profileFormType === 'UPDATE'? this.currentUser.username : '',
         [Validators.required, this.formService.notEmptyStringValidator, Validators.minLength(3)]
       ],
       email: [
-        this.profileFormType === 'UPDATE'? this.currentUser.email : '', 
+        this.profileFormType === 'UPDATE'? this.currentUser.email : '',
         [Validators.required, Validators.email]
       ],
       passwords: this.fb.group({
@@ -88,7 +89,10 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
   }
 
   private reactToSubmissionTrigger() {
-    this.triggerSubmissionSubscription = this.triggerSubmission.subscribe(() => this.onSubmit());
+    this.triggerSubmissionSubscription = this.triggerSubmission.pipe(
+      filter(b => b === true)
+    )
+    .subscribe(() => this.onSubmit());
   }
 
   ngOnDestroy() {

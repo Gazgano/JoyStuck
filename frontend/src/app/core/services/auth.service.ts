@@ -71,16 +71,28 @@ export class AuthService {
 
   async updateProfile(profileInfos: any) {
     const currentUser = firebase.auth().currentUser;
-    return currentUser.updateProfile({
-      displayName: profileInfos.displayName,
-      photoURL: profileInfos.photoURL
-    })
-    .then(() => currentUser.updateEmail(profileInfos.email))
-    .then(() => { if (profileInfos.password) {
-        return currentUser.updatePassword(profileInfos.password);
-      } else {
-        return;
-    }});
+    let updateProfilePromise = Promise.resolve();
+
+    // if something is wrong, we don't update it (exception for photoURL which can be null)
+    if (profileInfos.photoURL !== undefined && profileInfos.displayName) {
+      updateProfilePromise = updateProfilePromise.then(() =>
+        currentUser.updateProfile({ displayName: profileInfos.displayName, photoURL: profileInfos.photoURL })
+      );
+    } else if (profileInfos.displayName) {
+      updateProfilePromise = updateProfilePromise.then(() => currentUser.updateProfile({ displayName: profileInfos.displayName }));
+    } else if (profileInfos.photoURL !== undefined) {
+      updateProfilePromise = updateProfilePromise.then(() => currentUser.updateProfile({ photoURL: profileInfos.photoURL }));
+    }
+
+    if (profileInfos.email) {
+      updateProfilePromise = updateProfilePromise.then(() => currentUser.updateEmail(profileInfos.email));
+    }
+
+    if (profileInfos.password) {
+      updateProfilePromise = updateProfilePromise.then(() => currentUser.updatePassword(profileInfos.password));
+    }
+
+    return updateProfilePromise;
   }
 
   private onAuthStateChanged(user: firebase.User) {

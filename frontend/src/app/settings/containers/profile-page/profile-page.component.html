@@ -24,10 +24,10 @@
 </div>
 
 <div class="ProfilePage-Form">
-  <app-profile-form [profileFormType]="'UPDATE'" [currentUser]="currentUser" [triggerSubmission]="submissionObservable$" (formSubmit)="onSubmit($event)" ></app-profile-form>
+  <app-profile-form [profileFormType]="'UPDATE'" [currentUser]="currentUser" [triggerSubmission]="submissionObservable$" (formSubmit)="onChildFormSubmitAnswer($event)" ></app-profile-form>
 </div>
 
 <div class="ProfilePage-ActionButtons">
   <button [disabled]="false" (click)="submitForm()" class="ProfilePage-SubmitButton" color="primary" mat-flat-button>Save changes</button>
-  <mat-spinner *ngIf="isSubmitting" [diameter]="20" color="primary"></mat-spinner>
+  <mat-spinner *ngIf="submissionObservable$ | async" [diameter]="20" color="primary"></mat-spinner>
 </div>
