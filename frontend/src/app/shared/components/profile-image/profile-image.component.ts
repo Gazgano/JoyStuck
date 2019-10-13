@@ -2,6 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 
 import { User } from '@app/core/models/user.model';
 import { AuthService } from '@app/core/services/auth.service';
+import { Logger } from '@app/core/services/logger.service';
+
+const log = new Logger('ProfileImageComponent');
 
 @Component({
   selector: 'app-profile-image',
@@ -10,10 +13,11 @@ import { AuthService } from '@app/core/services/auth.service';
 })
 export class ProfileImageComponent implements OnInit {
 
-  @Input() user: User;
+  @Input() user: User; // if not provided, fetch current user
+  @Input() loadedFileURL: string; // to preview loaded image (or future deleted image if null)
+
   @Input() inline = false;
   @Input() sizeInPixel = 30;
-  @Input() loadedFileURL: string;
 
   public hue: string;
 
@@ -24,9 +28,13 @@ export class ProfileImageComponent implements OnInit {
   }
 
   get imageUrl(): string {
-    return this.loadedFileURL
-      || (this.user && this.user.profileImageSrcUrl)
-      || this.authService.getCurrentUser().profileImageSrcUrl;
+    if (this.loadedFileURL === null) { // to preview image deletion
+      return null;
+    } else {
+      return this.loadedFileURL
+        || (this.user && this.user.profileImageSrcUrl)
+        || this.authService.getCurrentUser().profileImageSrcUrl;
+    }
   }
 
   /* Purpose of this function is to generate a 'random' hue from the user id.

@@ -18,7 +18,7 @@
     <input class="ProfilePage-UploadImage-Actions-Input" #file type="file" accept=".jpg, .jpeg, .png" (change)="readFile()">
     <div class="ProfilePage-UploadImage-Actions-ButtonsContainer">
       <button mat-stroked-button color="primary" (click)="file.click()">Choose a file</button>
-      <button mat-button color="primary">Delete image</button>
+      <button mat-button color="primary" (click)="deleteProfileImage()">Delete image</button>
     </div>
   </div>
 </div>

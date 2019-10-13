@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subject } from 'rxjs';
+import { Subject, BehaviorSubject } from 'rxjs';
 
 import { AuthService } from '@app/core/services/auth.service';
 import { User } from '@app/core/models/user.model';
@@ -27,7 +27,7 @@ export class ProfilePageComponent implements OnInit {
   private submissionSubject$ = new Subject<boolean>();
   public submissionObservable$ = this.submissionSubject$.asObservable();
 
-  private loadedImageSubject$ = new Subject<any>();
+  private loadedImageSubject$ = new BehaviorSubject<any>({});
   public loadedImage$ = this.loadedImageSubject$.asObservable();
 
   constructor(
@@ -41,9 +41,14 @@ export class ProfilePageComponent implements OnInit {
     this.currentUser = this.authService.getCurrentUser();
   }
 
-  cleanFileInput() {
+  cleanFileInput() { // reset the file input and display current user's image
     this.fileInput.nativeElement.value = '';
     this.loadedImageSubject$.next({});
+  }
+
+  deleteProfileImage() { // delete user's current image
+    this.fileInput.nativeElement.value = '';
+    this.loadedImageSubject$.next({ file: null, url: null });
   }
 
   submitForm() {
@@ -51,10 +56,23 @@ export class ProfilePageComponent implements OnInit {
   }
 
   onSubmit(profileData: any) {
+    /* If loadedImageSubject last value is {} (initial value), then we don't update the profile image.
+       If it's { file: null, url: null }, we delete it (user deleted it). Otherwise ({ file: ..., url: ... }), we update it.
+    */
     this.isSubmitting = true;
-    this.uploadProfileImage()
-    .then(imageUrl => this.updateProfile({...profileData, imageUrl }))
-    .finally(() => this.isSubmitting = false);
+    const lastLoadedImage = this.loadedImageSubject$.getValue();
+    let updatingProfilePromise: Promise<any>;
+
+    if (lastLoadedImage === {}) {
+      updatingProfilePromise = this.updateProfile({ ...profileData });
+    } else if (lastLoadedImage.file === null) {
+      updatingProfilePromise = this.updateProfile({...profileData, imageUrl: null });
+    } else {
+      updatingProfilePromise = this.uploadStoredProfileImage(lastLoadedImage.file)
+      .then(imageUrl => this.updateProfile({...profileData, imageUrl }));
+    }
+
+    updatingProfilePromise.finally(() => this.isSubmitting = false);
   }
 
   readFile() {
@@ -77,8 +95,7 @@ export class ProfilePageComponent implements OnInit {
     });
   }
 
-  private async uploadProfileImage(): Promise<string | null> {
-    const file = this.fileInput.nativeElement.files[0];
+  private async uploadStoredProfileImage(file: File): Promise<string | null> {
     if (file) {
       const uploadTask = this.storageService.uploadProfileImage(file, this.currentUser);
       return uploadTask
