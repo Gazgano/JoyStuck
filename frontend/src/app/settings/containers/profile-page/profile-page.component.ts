@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subject, Observable } from 'rxjs';
+import { Subject } from 'rxjs';
 
 import { AuthService } from '@app/core/services/auth.service';
 import { User } from '@app/core/models/user.model';
@@ -19,15 +19,16 @@ const log = new Logger('ProfilePage');
 })
 export class ProfilePageComponent implements OnInit {
 
-  @ViewChild('file', { static: true }) fileInput: ElementRef;
+  @ViewChild('file', { static: false }) fileInput: ElementRef;
 
   public currentUser: User;
 
   public isSubmitting = false;
-  private submissionSubject = new Subject<boolean>();
-  public submissionObservable = this.submissionSubject.asObservable();
+  private submissionSubject$ = new Subject<boolean>();
+  public submissionObservable$ = this.submissionSubject$.asObservable();
 
-  public loadedImageURL$: Observable<string>;
+  private loadedImageSubject$ = new Subject<any>();
+  public loadedImage$ = this.loadedImageSubject$.asObservable();
 
   constructor(
     private authService: AuthService,
@@ -40,8 +41,13 @@ export class ProfilePageComponent implements OnInit {
     this.currentUser = this.authService.getCurrentUser();
   }
 
+  cleanFileInput() {
+    this.fileInput.nativeElement.value = '';
+    this.loadedImageSubject$.next({});
+  }
+
   submitForm() {
-    this.submissionSubject.next(true);
+    this.submissionSubject$.next(true);
   }
 
   onSubmit(profileData: any) {
@@ -53,7 +59,7 @@ export class ProfilePageComponent implements OnInit {
 
   readFile() {
     const file = this.fileInput.nativeElement.files[0];
-    this.loadedImageURL$ = this.fileService.readAndGetFileURL(file);
+    this.fileService.readAndGetFileURL(file).subscribe(url => this.loadedImageSubject$.next({ url, file }));
   }
 
   private async updateProfile(profileData: any): Promise<void> {

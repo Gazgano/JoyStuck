@@ -5,6 +5,10 @@
   display: inline-flex;
 }
 
+.ProfileImage-Image {
+  object-fit: cover;
+}
+
 %ProfileImage-Default {
   color: white;
   text-transform: uppercase;

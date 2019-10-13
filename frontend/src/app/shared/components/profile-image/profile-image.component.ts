@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 import { User } from '@app/core/models/user.model';
+import { AuthService } from '@app/core/services/auth.service';
 
 @Component({
   selector: 'app-profile-image',
@@ -16,14 +17,16 @@ export class ProfileImageComponent implements OnInit {
 
   public hue: string;
 
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {
     this.hue = this.getHueFromId(this.user.id);
   }
 
   get imageUrl(): string {
-    return this.loadedFileURL || this.user.profileImageSrcUrl;
+    return this.loadedFileURL
+      || (this.user && this.user.profileImageSrcUrl)
+      || this.authService.getCurrentUser().profileImageSrcUrl;
   }
 
   /* Purpose of this function is to generate a 'random' hue from the user id.

@@ -37,3 +37,17 @@
     margin-right: 10px;
   }
 }
+
+.ProfilePage-UploadImage-ClearButton {
+  font-size: 20px;
+}
+
+.ProfilePage-UploadImage-Actions-Input {
+  display: none;
+}
+
+.ProfilePage-UploadImage-Actions-ButtonsContainer {
+  display: flex;
+  align-items: center;
+  & > *:not(:last-child) { margin-right: 5px; }
+}

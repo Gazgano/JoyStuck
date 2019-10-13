@@ -1,25 +1,25 @@
-<div
-  *ngIf="!imageUrl; else profileImage"
-  [ngClass]="'ProfileImage-Default--' + hue"
+<img
+  *ngIf="imageUrl; else defaultImage"
+  [attr.src]="imageUrl"
+  class="ProfileImage-Image"
   [ngStyle]="{
     width: sizeInPixel+'px',
     height: sizeInPixel+'px',
-    borderRadius: sizeInPixel/2+'px',
-    fontSize: sizeInPixel/2+'px',
-    display: inline? 'inline-flex' : 'flex'
+    borderRadius: sizeInPixel/2+'px'
   }"
 >
-  <span>{{ user.username.substring(0,1) }}</span>
-</div>
 
-<ng-template #profileImage>
-  <img
-    class="ProfileImage-Image"
-    [attr.src]="imageUrl"
+<ng-template #defaultImage>
+  <div
+    [ngClass]="'ProfileImage-Default--' + hue"
     [ngStyle]="{
       width: sizeInPixel+'px',
       height: sizeInPixel+'px',
-      borderRadius: sizeInPixel/2+'px'
+      borderRadius: sizeInPixel/2+'px',
+      fontSize: sizeInPixel/2+'px',
+      display: inline? 'inline-flex' : 'flex'
     }"
   >
+    <span>{{ user.username.substring(0,1) }}</span>
+  </div>
 </ng-template>
