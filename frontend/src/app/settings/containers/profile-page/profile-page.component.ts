@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subject, BehaviorSubject } from 'rxjs';
+import { Subject, BehaviorSubject, Subscription } from 'rxjs';
 
 import { AuthService } from '@app/core/services/auth.service';
 import { User } from '@app/core/models/user.model';
@@ -17,17 +17,19 @@ const log = new Logger('ProfilePage');
   styleUrls: ['./profile-page.component.scss'],
   providers: [FormService]
 })
-export class ProfilePageComponent implements OnInit {
+export class ProfilePageComponent implements OnInit, OnDestroy {
 
   @ViewChild('file', { static: false }) fileInput: ElementRef;
 
   public currentUser: User;
 
   private submissionSubject$ = new Subject<boolean>();
-  public submissionObservable$ = this.submissionSubject$.asObservable();
+  public submission$ = this.submissionSubject$.asObservable();
 
   private loadedImageSubject$ = new BehaviorSubject<any>(null);
   public loadedImage$ = this.loadedImageSubject$.asObservable();
+
+  private readFileServiceSubscription: Subscription;
 
   constructor(
     private authService: AuthService,
@@ -75,7 +77,8 @@ export class ProfilePageComponent implements OnInit {
 
   readFile() {
     const file = this.fileInput.nativeElement.files[0];
-    this.fileService.readAndGetFileURL(file).subscribe(url => this.loadedImageSubject$.next({ url, file }));
+    this.readFileServiceSubscription = this.fileService.readAndGetFileURL(file)
+    .subscribe(url => this.loadedImageSubject$.next({ url, file }));
   }
 
   private async updateProfile(profileData: any): Promise<void> {
@@ -108,6 +111,12 @@ export class ProfilePageComponent implements OnInit {
         });
     } else {
       return new Promise(resolve => resolve(null));
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.readFileServiceSubscription) {
+      this.readFileServiceSubscription.unsubscribe();
     }
   }
 }
