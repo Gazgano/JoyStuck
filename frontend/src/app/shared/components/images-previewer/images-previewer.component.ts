@@ -1,7 +1,5 @@
 import { Component, ViewChild, ElementRef, ChangeDetectorRef, Input } from '@angular/core';
-import * as uid from 'uid';
 
-import { Image } from '@app/core/models/image.model';
 import { FileService } from '@app/core/services/file.service';
 import { Logger } from '@app/core/services/logger.service';
 
@@ -18,7 +16,7 @@ export class ImagesPreviewerComponent {
   @Input() palette: string;
   @Input() maxImageSizeInBytes: number;
 
-  public images: Image[] = [];
+  public images: { file: File, storageURL: string, uploadProgress: number }[] = [];
 
   constructor(
     private fileService: FileService,
@@ -55,7 +53,7 @@ export class ImagesPreviewerComponent {
   private readAndStoreImage(file: File) {
     this.fileService.readAndGetFileURL(file).subscribe(
       url => {
-        this.images.push({uid: uid(20), file, url, uploadProgress: null});
+        this.images.push({file, storageURL: url, uploadProgress: null});
         this.refreshView();
       },
       error => log.warn(`An error occured when reading the file '${file.name}'`)

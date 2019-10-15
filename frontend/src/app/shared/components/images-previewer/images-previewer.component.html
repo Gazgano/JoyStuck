@@ -3,7 +3,7 @@
   <div *ngFor="let image of images; index as i" [ngClass]="'ImagesPreviewer-ImageContainer--' + palette">
     <button *ngIf="image.uploadProgress != 100" (click)="deleteFile(i)" class="ImagesPreviewer-ImageContainer-DeleteButton" mat-icon-button [color]="palette"><mat-icon>delete</mat-icon></button>
     <mat-icon *ngIf="image.uploadProgress == 100" class="ImagesPreviewer-ImageContainer-UploadedBadge" [color]="palette">check_circle_outline</mat-icon>
-    <img [src]="image.url" [title]="image.file.name" class="ImagesPreviewer-ImageContainer-Image">
+    <img [src]="image.storageURL" [title]="image.file.name" class="ImagesPreviewer-ImageContainer-Image">
     <mat-progress-bar *ngIf="image.uploadProgress != null && image.uploadProgress != 100" class="ImagesPreviewer-ImageContainer-ProgressBar" mode="determinate" [value]="image.uploadProgress" [color]="palette"></mat-progress-bar>
   </div>
   <div (click)="imageUploader.click()" [ngClass]="'ImagesPreviewer-AddButton--' + palette">

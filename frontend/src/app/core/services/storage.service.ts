@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as firebase from 'firebase/app';
 import * as moment from 'moment';
+import * as uid from 'uid';
 
 import { User } from '../models/user.model';
 
@@ -34,14 +35,14 @@ export class StorageService {
     return storageFileRef.put(imageFile);
   }
 
-  uploadPostImage(uid: string, imageFile: File) {
+  uploadPostImage(imageFile: File) {
     const extension = imageFile.name.split('.').pop();
     if (!['jpg', 'jpeg', 'png'].includes(extension)) {
       throw new Error('Provided file format is not valid');
     }
 
     const date = moment().format('YYYYMMDD');
-    const storageFileRef = this.storage.ref().child(`post-images/${date}/${uid}.${extension}`);
+    const storageFileRef = this.storage.ref().child(`post-images/${date}/${uid(20)}.${extension}`);
     return storageFileRef.put(imageFile);
   }
 }

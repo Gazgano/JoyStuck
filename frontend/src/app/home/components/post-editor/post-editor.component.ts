@@ -18,7 +18,6 @@ import * as postSelectors from '@app/home/store/post/post.selectors';
 import { CallState } from '@app/core/models/call-state.model';
 import { ImagesPreviewerComponent } from '@app/shared/components/images-previewer/images-previewer.component';
 import { StorageService } from '@app/core/services/storage.service';
-import { Image } from '@app/core/models/image.model';
 
 const log = new Logger('PostEditorComponent');
 
@@ -135,9 +134,9 @@ export class PostEditorComponent implements OnInit, OnDestroy {
     };
   }
 
-  private uploadPostImage(image: Image): Promise<string> {
+  private uploadPostImage(image: { file: File, storageURL: string, uploadProgress: number }): Promise<string> {
     return new Promise((resolve, reject) => {
-      const uploadTask = this.storageService.uploadPostImage(image.uid, image.file);
+      const uploadTask = this.storageService.uploadPostImage(image.file);
       
       uploadTask.on('state_changed', 
         snapshot => {
