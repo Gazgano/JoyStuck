@@ -69,7 +69,7 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
         // Minimum eight characters, if changed, think to change help sentence in HTML as well
         password: ['', [Validators.minLength(8), this.profileFormType === 'NEW'? Validators.required : Validators.nullValidator]],
         confirmPassword: [''] // can contain 'mismatch' error, added by confirmPasswords validator
-      }, { validators: this.formService.confirmPasswordsValidator })
+      }, { validators: this.formService.sameValueValidator('password', 'confirmPassword') })
     });
   }
 

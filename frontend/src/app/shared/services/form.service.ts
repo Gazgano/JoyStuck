@@ -48,18 +48,23 @@ export class FormService {
     }
   }
 
-  confirmPasswordsValidator(formGroup: FormGroup): ValidationErrors | null { 
-    const passwordControl = formGroup.controls.password; 
-    const confirmPasswordControl = formGroup.controls.confirmPassword;
-    if (passwordControl.value !== confirmPasswordControl.value) {
-        confirmPasswordControl.setErrors({ ...confirmPasswordControl.errors, mismatch: true });
-        return { mismatch: true };
-    } else {
-      if (confirmPasswordControl.errors && confirmPasswordControl.errors.mismatch) {
-        delete confirmPasswordControl.errors.mismatch;
+  sameValueValidator(
+    formControlPath1: string | (string | number)[], 
+    formControlPath2: string | (string | number)[]
+  ): (formGroup: FormGroup) => (ValidationErrors | null) { 
+    return (formGroup: FormGroup) => {
+      const formControl1 = formGroup.get(formControlPath1); 
+      const formControl2 = formGroup.get(formControlPath2);
+      if (formControl1.value !== formControl2.value) {
+          formControl2.setErrors({ ...formControl2.errors, mismatch: true });
+          return { mismatch: true };
+      } else {
+        if (formControl2.errors && formControl2.errors.mismatch) {
+          delete formControl2.errors.mismatch;
+        }
+        return null;
       }
-      return null;
-    }
+    };
   }
 
   notEmptyStringValidator(control: FormControl): ValidationErrors | null { 
