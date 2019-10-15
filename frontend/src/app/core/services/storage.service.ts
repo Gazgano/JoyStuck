@@ -10,6 +10,12 @@ import { Logger } from './logger.service';
 
 const log = new Logger('StorageService');
 
+export interface FileUploadState {
+  file: File; 
+  uploadProgress: number | null; 
+  storageURL: string | null;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -30,17 +36,17 @@ export class StorageService {
     }
   }
 
-  uploadProfileImage(imageFile: File, user: User) {
-    const extension = imageFile.name.split('.').pop();
+  uploadProfileImage(file: File, user: User) {
+    const extension = file.name.split('.').pop();
     if (!['jpg', 'jpeg', 'png'].includes(extension)) {
       throw new Error('Provided file format is not valid');
     }
 
     const storageFileRef = this.storage.ref().child(`profile-images/${user.id}.${extension}`);
-    return storageFileRef.put(imageFile);
+    return this.uploadFile(file, storageFileRef);
   }
 
-  uploadPostImage(file: File): Observable<{ file: File, uploadProgress: number | null, storageURL: string | null }> {
+  uploadPostImage(file: File): Observable<FileUploadState> {
     const extension = file.name.split('.').pop();
     if (!['jpg', 'jpeg', 'png'].includes(extension)) {
       throw new Error('Provided file format is not valid');
@@ -48,6 +54,10 @@ export class StorageService {
 
     const date = moment().format('YYYYMMDD');
     const storageFileRef = this.storage.ref().child(`post-images/${date}/${uid(20)}.${extension}`);
+    return this.uploadFile(file, storageFileRef);
+  }
+
+  private uploadFile(file: File, storageFileRef: firebase.storage.Reference): Observable<FileUploadState> {
     const uploadTask = storageFileRef.put(file);
 
     return new Observable(subscriber => {

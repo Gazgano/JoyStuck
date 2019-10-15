@@ -2,6 +2,7 @@ import { Component, ViewChild, ElementRef, ChangeDetectorRef, Input } from '@ang
 
 import { FileService } from '@app/core/services/file.service';
 import { Logger } from '@app/core/services/logger.service';
+import { FileUploadState } from '@app/core/services/storage.service';
 
 const log = new Logger('ImagesPreviewerComponent');
 
@@ -16,7 +17,7 @@ export class ImagesPreviewerComponent {
   @Input() palette: string;
   @Input() maxImageSizeInBytes: number;
 
-  public images: { file: File, storageURL: string, uploadProgress: number }[] = [];
+  public images: FileUploadState[] = [];
 
   constructor(
     private fileService: FileService,

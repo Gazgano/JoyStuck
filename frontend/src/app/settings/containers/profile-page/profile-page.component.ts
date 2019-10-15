@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject, BehaviorSubject, Subscription } from 'rxjs';
 
 import { AuthService } from '@app/core/services/auth.service';
@@ -34,7 +33,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
-    private matSnackBar: MatSnackBar,
     private storageService: StorageService,
     private fileService: FileService
   ) { }
@@ -70,8 +68,9 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     } else if (lastLoadedImage.file === null) {
       updatingProfilePromise = this.updateProfile({...profileData, imageUrl: null });
     } else {
-      updatingProfilePromise = this.uploadStoredProfileImage(lastLoadedImage.file)
-      .then(imageUrl => this.updateProfile({...profileData, imageUrl }));
+      updatingProfilePromise = this.storageService.uploadProfileImage(lastLoadedImage.file, this.currentUser)
+      .toPromise()
+      .then(upload => this.updateProfile({...profileData, imageUrl: upload.storageURL }));
     }
 
     updatingProfilePromise.finally(() => {
@@ -93,24 +92,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       password: profileData.password,
       photoURL: profileData.imageUrl
     });
-  }
-
-  private async uploadStoredProfileImage(file: File): Promise<string | null> {
-    if (file) {
-      const uploadTask = this.storageService.uploadProfileImage(file, this.currentUser);
-      return uploadTask
-        .then(() => uploadTask.snapshot.ref.getDownloadURL())
-        .then(downloadUrl => {
-          log.info(`Profile image uploaded successfully.`);
-          return downloadUrl;
-        })
-        .catch(err => {
-          this.matSnackBar.open('An error happened while uploading profile image', 'Dismiss', { duration: 3000 });
-          log.handleError(err);
-        });
-    } else {
-      return new Promise(resolve => resolve(null));
-    }
   }
 
   ngOnDestroy() {
