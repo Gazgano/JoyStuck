@@ -1,5 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject, ReplaySubject } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 import * as firebase from 'firebase/app';
@@ -7,6 +8,7 @@ import * as firebase from 'firebase/app';
 import { Logger } from '@app/core/services/logger.service';
 import { User } from '@app/core/models/user.model';
 import { WINDOW } from '../providers/window.provider';
+import { ErrorService } from './error.service';
 
 const log = new Logger('AuthService');
 
@@ -29,34 +31,45 @@ export class AuthService {
   private isAuthenticatedSubject = new ReplaySubject<boolean>(1);
   public isAuthenticated = this.isAuthenticatedSubject.asObservable();
 
-  constructor(private router: Router, @Inject(WINDOW) private window: Window) { }
+  constructor(
+    private router: Router, 
+    @Inject(WINDOW) private window: Window,
+    private errorService: ErrorService,
+    private matSnackBar: MatSnackBar
+  ) { }
 
   initializeAuth() { // called in app.component.ts
     firebase.auth().onAuthStateChanged(user => this.onAuthStateChanged(user));
   }
 
-  signIn(email: string, password: string): Promise<firebase.auth.UserCredential> {
-    return firebase.auth().signInWithEmailAndPassword(email, password);
+  async signIn(email: string, password: string): Promise<firebase.auth.UserCredential> {
+    return firebase.auth().signInWithEmailAndPassword(email, password)
+    .catch(err => { throw this.errorService.handleError(err, 'An error happened while signing in'); });
   }
 
-  sendVerificationEmail() {
-    return firebase.auth().currentUser.sendEmailVerification();
+  async sendVerificationEmail() {
+    return firebase.auth().currentUser.sendEmailVerification()
+    .catch(err => { throw this.errorService.handleError(err, 'An error happened while sending the verification email'); });
   }
 
-  sendPwdResetEmail(email: string) {
+  async sendPwdResetEmail(email: string) {
     const continueUrl = `${this.window.location.origin}/`;
     const actionCodeSettings = {
       url: continueUrl,
       handleCodeInApp: true
     };
 
-    return firebase.auth().sendPasswordResetEmail(email, actionCodeSettings);
+    return firebase.auth().sendPasswordResetEmail(email, actionCodeSettings)
+    .catch(err => { throw this.errorService.handleError(err, 'An error happened while sending the reset password email'); });
   }
 
   signOut(): void {
-    firebase.auth().signOut();
-    log.info('Signed out');
-    this.router.navigate(['login']);
+    firebase.auth().signOut()
+    .then(() => {
+      log.info('Signed out');
+      this.router.navigate(['login']);
+    })
+    .catch(err => { throw this.errorService.handleError(err, 'An error happened while logging out'); });
   }
 
   getCurrentUser(): User {
@@ -66,11 +79,23 @@ export class AuthService {
   async createNewUser(userData: any) {
     return firebase.auth().createUserWithEmailAndPassword(userData.email, userData.password)
     .then(() => firebase.auth().currentUser.updateProfile({ displayName: userData.displayName }))
-    .then(() => this.onAuthStateChanged(firebase.auth().currentUser)); // we refresh this.currentUser with the new profile data
+    .then(() => this.onAuthStateChanged(firebase.auth().currentUser)) // we refresh this.currentUser with the new profile data
+    .catch(err => { throw this.errorService.handleError(err, 'An error happened while creating the account'); });
   }
 
   async updateProfile(profileInfos: any) {
     const currentUser = firebase.auth().currentUser;
+    
+    return this.buildUpdateProfilePromise(profileInfos, currentUser)
+    .then(() => this.currentUserSubject$.next(this.mapUser(currentUser)))
+    .then(() => {
+      this.matSnackBar.open(`User's infos updated successfully`, 'Dismiss', { duration: 3000 });
+      log.info(`User's infos updated successfully`);
+    })
+    .catch(err => { throw this.errorService.handleError(err, 'An error happened while updating profile'); });
+  }
+
+  private buildUpdateProfilePromise(profileInfos: any, currentUser: firebase.User) {
     let updateProfilePromise = Promise.resolve();
 
     // if something is wrong, we don't update it (exception for photoURL which can be null)
@@ -92,9 +117,9 @@ export class AuthService {
       updateProfilePromise = updateProfilePromise.then(() => currentUser.updatePassword(profileInfos.password));
     }
 
-    return updateProfilePromise.then(() => this.currentUserSubject$.next(this.mapUser(currentUser)));
+    return updateProfilePromise;
   }
-
+  
   private onAuthStateChanged(user: firebase.User) {
     if (user) {
       this.currentUserSubject$.next(this.mapUser(user));

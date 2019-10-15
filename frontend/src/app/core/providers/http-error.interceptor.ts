@@ -8,7 +8,7 @@ const log = new Logger('HttpErrorInterceptor');
 export class HttpErrorInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
-      retry(1), // we always retry once
+      // retry(1), // create infinite loop of http calls
       catchError((err: HttpErrorResponse) => {
         let errorMessage = '';
         if (err.error instanceof ErrorEvent) { // client-side error

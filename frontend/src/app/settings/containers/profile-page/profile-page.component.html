@@ -29,5 +29,5 @@
 
 <div class="ProfilePage-ActionButtons">
   <button [disabled]="false" (click)="submitForm()" class="ProfilePage-SubmitButton" color="primary" mat-flat-button>Save changes</button>
-  <mat-spinner *ngIf="submission$ | async" [diameter]="20" color="primary"></mat-spinner>
+  <mat-spinner *ngIf="isSubmitting" [diameter]="20" color="primary"></mat-spinner>
 </div>

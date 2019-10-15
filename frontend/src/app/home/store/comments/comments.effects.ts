@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { mergeMap, map, catchError, exhaustMap, switchMap } from 'rxjs/operators';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 import * as commentsActions from './comments.actions';
 import { CommentsService } from '../../services/comments.service';
@@ -15,8 +14,7 @@ export class CommentsEffects {
   constructor(
     private actions$: Actions,
     private commentsService: CommentsService,
-    private matSnackBar: MatSnackBar
-  ) {}
+  ) { }
 
   ////////////////////////////////////////
   // Effects
@@ -34,11 +32,7 @@ export class CommentsEffects {
     ofType(commentsActions.likeComment),
     switchMap(action => this.commentsService.likeComment(action.comment.id).pipe(
       map(comment => commentsActions.likeCommentSuccess()),
-      catchError(err => {
-        this.matSnackBar.open('An error happened while liking the comment', 'Dismiss', { duration: 3000 });
-        log.handleError(err);
-        return of(commentsActions.likeCommentFailure({ comment: action.comment, currentUserId: action.currentUserId }));
-      })
+      catchError(err => of(commentsActions.likeCommentFailure({ comment: action.comment, currentUserId: action.currentUserId })))
     ))
   ));
 
@@ -46,11 +40,7 @@ export class CommentsEffects {
     ofType(commentsActions.unlikeComment),
     switchMap(action => this.commentsService.unlikeComment(action.comment.id).pipe(
       map(comment => commentsActions.unlikeCommentSuccess()),
-      catchError(err => {
-        this.matSnackBar.open('An error happened while unliking the comment', 'Dismiss', { duration: 3000 });
-        log.handleError(err);
-        return of(commentsActions.unlikeCommentFailure({ comment: action.comment, currentUserId: action.currentUserId }));
-      })
+      catchError(err => of(commentsActions.unlikeCommentFailure({ comment: action.comment, currentUserId: action.currentUserId })))
     ))
   ));
 
@@ -69,9 +59,7 @@ export class CommentsEffects {
     exhaustMap(action => {
       return this.commentsService.postComment(action.failedComment).pipe(
         map(comment => commentsActions.retrySendCommentSuccess({ failedComment: action.failedComment, comment })),
-        catchError(err => of(commentsActions.retrySendCommentFailure({
-          failedCommentId: action.failedComment.id
-        })))
+        catchError(err => of(commentsActions.retrySendCommentFailure({failedCommentId: action.failedComment.id})))
       );
     })
   ));

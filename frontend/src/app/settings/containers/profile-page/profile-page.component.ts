@@ -22,6 +22,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   @ViewChild('file', { static: false }) fileInput: ElementRef;
 
   public currentUser: User;
+  public isSubmitting = false;
 
   private submissionSubject$ = new Subject<boolean>();
   public submission$ = this.submissionSubject$.asObservable();
@@ -60,6 +61,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     /* If loadedImageSubject last value is null (initial value), then we don't update the profile image.
        If it's { file: null, url: null }, we delete it (user deleted it). Otherwise ({ file: ..., url: ... }), we update it.
     */
+    this.isSubmitting = true;
     const lastLoadedImage = this.loadedImageSubject$.getValue();
     let updatingProfilePromise: Promise<any>;
 
@@ -72,7 +74,10 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       .then(imageUrl => this.updateProfile({...profileData, imageUrl }));
     }
 
-    updatingProfilePromise.finally(() => this.submissionSubject$.next(false));
+    updatingProfilePromise.finally(() => {
+      this.isSubmitting = false;
+      this.submissionSubject$.next(false);
+    });
   }
 
   readFile() {
@@ -87,12 +92,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       email: profileData.email,
       password: profileData.password,
       photoURL: profileData.imageUrl
-    }).then(() => {
-      this.matSnackBar.open(`User's infos updated successfully`, 'Dismiss', { duration: 3000 });
-      log.info(`User's infos updated successfully`);
-    }).catch(err => {
-      this.matSnackBar.open('An error happened while updating profile', 'Dismiss', { duration: 3000 });
-      log.handleError(err);
     });
   }
 

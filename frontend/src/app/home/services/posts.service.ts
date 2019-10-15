@@ -1,42 +1,59 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, from } from 'rxjs';
-import { mergeMap, map } from 'rxjs/operators';
+import { mergeMap, map, catchError } from 'rxjs/operators';
 import { isEmpty } from 'lodash';
 
 import { baseUrl, ApiService } from '@app/core/services/api.service';
 import { Logger } from '@app/core/services/logger.service';
 import { Post } from '../models/post.model';
+import { ErrorService } from '@app/core/services/error.service';
 
 const log = new Logger('PostsService');
 
 @Injectable()
 export class PostsService {
 
-  constructor(private http: HttpClient, private apiService: ApiService) { }
+  constructor(
+    private http: HttpClient, 
+    private apiService: ApiService,
+    private errorService: ErrorService
+  ) { }
 
   getPosts(): Observable<Post[]> {
     return from(this.apiService.getReqOptions()).pipe(
-      mergeMap(options => this.http.get<Post[]>(`${baseUrl}posts`, options))
+      mergeMap(options => this.http.get<Post[]>(`${baseUrl}posts`, options)),
+      catchError(err => {
+        throw this.errorService.handleError(err, 'An error happened while getting the posts');
+      })
     );
   }
 
   likePost(id: string): Observable<Post | null> {
     return from(this.apiService.getReqOptions()).pipe(
-      mergeMap(options => this.http.put<Post>(`${baseUrl}posts/${id}/like`, {}, options))
+      mergeMap(options => this.http.put<Post>(`${baseUrl}posts/${id}/like`, {}, options)),
+      catchError(err => {
+        throw this.errorService.handleError(err, 'An error happened while liking the post');
+      })
     );
   }
 
   unlikePost(id: string): Observable<Post | null> {
     return from(this.apiService.getReqOptions()).pipe(
-      mergeMap(options => this.http.put<Post>(`${baseUrl}posts/${id}/unlike`, {}, options))
+      mergeMap(options => this.http.put<Post>(`${baseUrl}posts/${id}/unlike`, {}, options)),
+      catchError(err => {
+        throw this.errorService.handleError(err, 'An error happened while unliking the post');
+      })
     );
   }
 
   postPost(pendingPost: any): Observable<Post | null> {
     return from(this.apiService.getReqOptions()).pipe(
       mergeMap(options => this.http.post<Post>(`${baseUrl}posts/`, pendingPost, options)),
-      map(post => this.mapPost(post))
+      map(post => this.mapPost(post)),
+      catchError(err => {
+        throw this.errorService.handleError(err, 'An error happened while publishing the post');
+      })
     );
   }
 

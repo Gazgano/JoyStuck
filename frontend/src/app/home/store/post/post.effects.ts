@@ -27,11 +27,7 @@ export class PostEffects {
     ofType(postActions.likePost),
     switchMap(action => this.postsService.likePost(action.post.id).pipe(
       map(post => postActions.likePostSuccess()),
-      catchError(err => {
-        this.matSnackBar.open('An error happened while liking the post', 'Dismiss', { duration: 3000 });
-        log.handleError(err);
-        return of(postActions.likePostFailure({ post: action.post, currentUserId: action.currentUserId }));
-      })
+      catchError(err => of(postActions.likePostFailure({ post: action.post, currentUserId: action.currentUserId })))
     ))
   ));
 
@@ -39,11 +35,7 @@ export class PostEffects {
     ofType(postActions.unlikePost),
     switchMap(action => this.postsService.unlikePost(action.post.id).pipe(
       map(post => postActions.unlikePostSuccess()),
-      catchError(err => {
-        this.matSnackBar.open('An error happened while unliking the post', 'Dismiss', { duration: 3000 });
-        log.handleError(err);
-        return of(postActions.unlikePostFailure({ post: action.post, currentUserId: action.currentUserId }));
-      })
+      catchError(err => of(postActions.unlikePostFailure({ post: action.post, currentUserId: action.currentUserId })))
     ))
   ));
 

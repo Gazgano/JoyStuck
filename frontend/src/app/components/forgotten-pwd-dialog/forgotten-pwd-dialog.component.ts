@@ -6,7 +6,6 @@ import { filter } from 'rxjs/operators';
 
 import { Logger } from '@app/core/services/logger.service';
 import { AuthService } from '@app/core/services/auth.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { stepTransition } from '@app/shared/animations/step-transition.animation';
 
 const log = new Logger('ForgottenPwdDialogComponent');
@@ -36,7 +35,6 @@ export class ForgottenPwdDialogComponent implements OnInit, OnDestroy {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any, 
     private authService: AuthService, 
-    private matSnackBar: MatSnackBar,
     public dialogRef: MatDialogRef<ForgottenPwdDialogComponent>,
   ) { }
 
@@ -52,10 +50,6 @@ export class ForgottenPwdDialogComponent implements OnInit, OnDestroy {
       this.capturedEmail = this.recoveryEmailControl.value;
       this.authService.sendPwdResetEmail(this.capturedEmail)
       .then(() => this.currentStep = 'CONFIRMATION')
-      .catch(err => {
-        this.matSnackBar.open('An error happened while sending the recovery email', 'Dismiss', { duration: 5000 });
-        log.handleError(err);
-      })
       .finally(() => this.isSubmitting = false);
     }
   }

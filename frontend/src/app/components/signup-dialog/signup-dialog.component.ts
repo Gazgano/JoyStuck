@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Subscription, fromEvent, Subject } from 'rxjs';
+import { Subscription, Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { Logger } from '@app/core/services/logger.service';
@@ -37,7 +36,6 @@ export class SignupDialogComponent implements OnInit, OnDestroy {
   constructor(
     public dialogRef: MatDialogRef<SignupDialogComponent>,
     private authService: AuthService,
-    private matSnackBar: MatSnackBar,
     private router: Router
   ) { }
 
@@ -56,7 +54,6 @@ export class SignupDialogComponent implements OnInit, OnDestroy {
     this.authService.createNewUser(formData)
     .then(() => this.authService.sendVerificationEmail())
     .then(() => this.currentStep = 'CONFIRMATION')
-    .catch(err => this.handleError(err, 'An error happened while creating your account', 5000))
     .finally(() => this.isSubmitting = false);
   }
 
@@ -82,11 +79,6 @@ export class SignupDialogComponent implements OnInit, OnDestroy {
           break;
       }
     });
-  }
-
-  private handleError(err: any, message: string, duration?: number) {
-    this.matSnackBar.open(message, 'Dismiss', { duration: duration || 3000 });
-    log.handleError(err);
   }
 
   ngOnDestroy() {
