@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ViewChild } from '@angular/core';
 import { Validators, FormControl, FormGroup } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, forkJoin } from 'rxjs';
+import { tap, takeLast } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { Actions, ofType } from '@ngrx/effects';
 import * as uid from 'uid';
@@ -58,8 +58,7 @@ export class PostEditorComponent implements OnInit, OnDestroy {
     private formService: FormService,
     private store: Store<Post[]>,
     private actions$: Actions,
-    private storageService: StorageService,
-    private matSnackBar: MatSnackBar
+    private storageService: StorageService
   ) { }
 
   ngOnInit() {
@@ -91,9 +90,21 @@ export class PostEditorComponent implements OnInit, OnDestroy {
     this.formSubmitted = true;
 
     if (this.form.valid) {
-      Promise.all(this.imagesPreviewer.images.map(image => 
-        this.uploadPostImage(image)
-      )).then(imagesStorageURLs => {
+      // we call the upload service for each image 
+      const postImageUploads$ = this.imagesPreviewer.images.map(image =>
+        this.storageService.uploadPostImage(image.file).pipe(
+          tap(upload => {
+            image.uploadProgress = upload.uploadProgress; // refresh progress on view
+            this.imagesPreviewer.refreshView();
+          })
+        )
+      );
+      
+      // when all images are uploaded, we create the posts with the returned URL
+      forkJoin(postImageUploads$)
+      .pipe(takeLast(1))
+      .subscribe(uploadResults => {
+        const imagesStorageURLs = uploadResults.map(upload => upload.storageURL);
         const title = this.form.get('title').value.trim();
         const message = this.form.get('message').value;
         const pendingPost = this.createPendingPost(title, message, imagesStorageURLs);
@@ -132,28 +143,6 @@ export class PostEditorComponent implements OnInit, OnDestroy {
       content: message,
       imagesStorageURLs
     };
-  }
-
-  private uploadPostImage(image: { file: File, storageURL: string, uploadProgress: number }): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const uploadTask = this.storageService.uploadPostImage(image.file);
-      
-      uploadTask.on('state_changed', 
-        snapshot => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          image.uploadProgress = progress;
-          this.imagesPreviewer.refreshView();
-        },
-        err => {
-          this.matSnackBar.open(`An error happened while uploading '${image.file.name}'`, 'Dismiss', { duration: 3000 });
-          log.handleError(err);
-        },
-        () => uploadTask.snapshot.ref.getDownloadURL().then(downloadUrl => {
-          log.info(`${image.file.name} uploaded successfully.`);
-          resolve(downloadUrl);
-        })
-      );
-    });
   }
 
   ngOnDestroy() {
