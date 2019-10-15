@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { AuthService } from '@app/core/services/auth.service';
 import { User } from '@app/core/models/user.model';
 
 @Component({
@@ -9,17 +8,14 @@ import { User } from '@app/core/models/user.model';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
 
-  public currentUser$: Observable<User>;
+  @Input() currentUser$: Observable<User>;
+  @Output() signout = new EventEmitter<boolean>();
 
-  constructor(private authService: AuthService) { }
-
-  ngOnInit() {
-    this.currentUser$ = this.authService.currentUser$;
-  }
+  constructor() { }
 
   logout() {
-    this.authService.signOut();
+    this.signout.emit(true);
   }
 }

@@ -1,4 +1,4 @@
-<app-header></app-header>
+<app-header [currentUser$]="currentUser$" (signout)="onSignout($event)"></app-header>
   <div class="AppContent">
     <ng-content></ng-content>
   </div>

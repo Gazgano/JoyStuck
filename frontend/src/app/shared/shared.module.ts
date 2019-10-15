@@ -22,7 +22,7 @@ import { RouterModule } from '@angular/router';
 
 import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
-import { ShellComponent } from './components/shell/shell.component';
+import { ShellComponent } from './containers/shell/shell.component';
 import { LoaderComponent } from './components/loader/loader.component';
 import { UppercaseFirstLetterPipe } from './pipes/uppercase-first-letter.pipe';
 import { ProfileFormComponent } from './components/profile-form/profile-form.component';

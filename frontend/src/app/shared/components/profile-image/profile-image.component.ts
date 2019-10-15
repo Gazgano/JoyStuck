@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 import { User } from '@app/core/models/user.model';
-import { AuthService } from '@app/core/services/auth.service';
 import { Logger } from '@app/core/services/logger.service';
 
 const log = new Logger('ProfileImageComponent');
@@ -21,7 +20,7 @@ export class ProfileImageComponent implements OnInit {
 
   public hue: string;
 
-  constructor(private authService: AuthService) { }
+  constructor() { }
 
   ngOnInit() {
     this.hue = this.getHueFromId(this.user.id);
@@ -31,9 +30,7 @@ export class ProfileImageComponent implements OnInit {
     if (this.loadedFileURL === null) { // to preview image deletion
       return null;
     } else {
-      return this.loadedFileURL
-        || (this.user && this.user.profileImageSrcUrl)
-        || this.authService.getCurrentUser().profileImageSrcUrl;
+      return this.loadedFileURL || (this.user && this.user.profileImageSrcUrl);
     }
   }
 
