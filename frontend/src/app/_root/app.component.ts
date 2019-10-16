@@ -3,7 +3,7 @@ import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/storage';
 
-import { Logger } from './core/services/logger.service';
+import { Logger } from '@app/core/services/logger.service';
 import { AuthService } from '@app/core/services/auth.service';
 
 const log = new Logger('AppComponent');

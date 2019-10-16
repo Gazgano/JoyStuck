@@ -8,17 +8,17 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 const routes: Routes = [
   { 
     path: 'home', 
-    loadChildren: () => import('./home/home.module').then(m => m.HomeModule),
+    loadChildren: () => import('@app/home/home.module').then(m => m.HomeModule),
     canLoad: [AuthGuard]
   },
   { 
     path: 'admin', 
-    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
+    loadChildren: () => import('@app/admin/admin.module').then(m => m.AdminModule),
     canLoad: [AuthGuard]
   },
   {
     path: 'settings',
-    loadChildren: () => import('./settings/settings.module').then(m => m.SettingsModule),
+    loadChildren: () => import('@app/settings/settings.module').then(m => m.SettingsModule),
     canLoad: [AuthGuard]
   },
   { path: 'login', component: LoginComponent },

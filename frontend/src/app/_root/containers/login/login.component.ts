@@ -5,8 +5,8 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { AuthService } from '@app/core/services/auth.service';
 import { Logger } from '@app/core/services/logger.service';
-import { SignupDialogComponent } from '@app/containers/signup-dialog/signup-dialog.component';
-import { ForgottenPwdDialogComponent } from '@app/containers/forgotten-pwd-dialog/forgotten-pwd-dialog.component';
+import { SignupDialogComponent } from '@app/_root/containers/signup-dialog/signup-dialog.component';
+import { ForgottenPwdDialogComponent } from '@app/_root/containers/forgotten-pwd-dialog/forgotten-pwd-dialog.component';
 
 const log = new Logger('LoginComponent');
 

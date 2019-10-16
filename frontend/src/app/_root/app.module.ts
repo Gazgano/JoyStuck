@@ -8,11 +8,11 @@ import { LoginComponent } from './containers/login/login.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { SharedModule } from '@app/shared/shared.module';
 import { HttpErrorInterceptor } from '@app/core/providers/http-error.interceptor';
-import { FormService } from './shared/services/form.service';
+import { FormService } from '@app/shared/services/form.service';
 import { SignupDialogComponent } from './containers/signup-dialog/signup-dialog.component';
 import { ForgottenPwdDialogComponent } from './containers/forgotten-pwd-dialog/forgotten-pwd-dialog.component';
-import { WINDOW_PROVIDERS } from './core/providers/window.provider';
-import { AppErrorHandler } from './core/providers/error-handler.provider';
+import { WINDOW_PROVIDERS } from '@app/core/providers/window.provider';
+import { AppErrorHandler } from '@app/core/providers/error-handler.provider';
 
 @ NgModule({
   declarations: [
