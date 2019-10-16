@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ViewChild } from '@angular/core';
 import { Validators, FormControl, FormGroup } from '@angular/forms';
 import { Observable, Subscription, forkJoin } from 'rxjs';
-import { tap, takeLast } from 'rxjs/operators';
+import { tap, takeLast, map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { Actions, ofType } from '@ngrx/effects';
 import * as uid from 'uid';
@@ -90,21 +90,7 @@ export class PostEditorComponent implements OnInit, OnDestroy {
     this.formSubmitted = true;
 
     if (this.form.valid) {
-      // we call the upload service for each image 
-      const postImageUploads$ = this.imagesPreviewer.images.map(image =>
-        this.storageService.uploadPostImage(image.file).pipe(
-          tap(upload => {
-            image.uploadProgress = upload.uploadProgress; // refresh progress on view
-            this.imagesPreviewer.refreshView();
-          })
-        )
-      );
-      
-      // when all images are uploaded, we create the posts with the returned URL
-      forkJoin(postImageUploads$)
-      .pipe(takeLast(1))
-      .subscribe(uploadResults => {
-        const imagesStorageURLs = uploadResults.map(upload => upload.storageURL);
+      this.uploadImages().then(imagesStorageURLs => {
         const title = this.form.get('title').value.trim();
         const message = this.form.get('message').value;
         const pendingPost = this.createPendingPost(title, message, imagesStorageURLs);
@@ -119,6 +105,28 @@ export class PostEditorComponent implements OnInit, OnDestroy {
       title: new FormControl(null, [Validators.required, Validators.pattern(new RegExp('\\S+'))]),
       message: new FormControl(null, Validators.pattern(new RegExp('\\S+')))
     });
+  }
+
+  private async uploadImages(): Promise<string[]> {
+    if (!this.imagesPreviewer.images || this.imagesPreviewer.images.length === 0) {
+      return Promise.resolve([]);
+    }
+    
+    // we call the upload service for each image 
+    const postImageUploads$ = this.imagesPreviewer.images.map(image =>
+      this.storageService.uploadPostImage(image.file).pipe(
+        tap(upload => { // refresh progress on view
+          image.uploadProgress = upload.uploadProgress; 
+          this.imagesPreviewer.refreshView();
+        })
+      )
+    );
+    
+    // when all images are uploaded, we return the result URLs array
+    return forkJoin(postImageUploads$).pipe(
+      takeLast(1),
+      map(uploadResults => uploadResults.map(upload => upload.storageURL))
+    ).toPromise();
   }
 
   private closeEditorOnSuccess(): Subscription {

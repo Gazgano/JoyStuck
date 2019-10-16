@@ -1,4 +1,4 @@
-<mat-card [ngStyle]="{display: ['message', 'screenshotShare'].includes(postEditorType)? 'block' : 'none'}" class="PostEditor-Card" [formGroup]="form">
+<mat-card [ngStyle]="{display: postEditorType? 'block' : 'none'}" class="PostEditor-Card" [formGroup]="form">
   <mat-card-header class="PostEditor-Card-Header">
     <app-profile-image mat-card-avatar [user]="currentUser" [sizeInPixel]="'40'"></app-profile-image>
     <mat-card-title class="PostEditor-Card-Title">
