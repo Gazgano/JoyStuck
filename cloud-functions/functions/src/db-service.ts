@@ -135,11 +135,11 @@ export class DbService {
   ///////////////////////////////////
 
   private buildQuery(collectionPath: string, conditions?: {[key: string]: string}): Query {
-    let query = this.db.collection(collectionPath).limit(100);
+    let query = this.db.collection(collectionPath).offset(0);
     for(let key in conditions) {
       query = query.where(key, '==', conditions[key]);
     }
-    return query;
+    return query.orderBy('timestamp', 'desc').limit(10);
   }
 
   private async formatQuerySnapshot(querySnapshot: QuerySnapshot, collectionPath: string): Promise<DbServiceData<DocumentData[]>> {
