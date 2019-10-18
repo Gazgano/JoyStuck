@@ -1,20 +1,20 @@
-<app-shell *ngIf="callState$ | async as callState">
-  <app-loader *ngIf="callState === 'LOADING'" class="PostPage-Loader" palette="primary"></app-loader>
+<app-shell *ngIf="loadingState$ | async as loadingState">
+  <app-loader *ngIf="loadingState === 'LOADING'" class="PostPage-Loader" palette="primary"></app-loader>
 
-  <div *ngIf="getErrorMessage(callState)" class="PostPage-ErrorPage">
+  <div *ngIf="getErrorMessage(loadingState)" class="PostPage-ErrorPage">
     <div class="PostPage-ErrorPage-Icon">
       <mat-icon color="primary" [inline]="true">error_outline</mat-icon>
     </div>
-    <h3>Oups! {{ getErrorMessage(callState) }}</h3>
+    <h3>Oups! {{ getErrorMessage(loadingState) }}</h3>
     <button (click)="refresh()" color="primary" mat-raised-button>Retry</button>
   </div>
 
-  <div class="PostPage-Container" *ngIf="callState === 'LOADED'">
+  <div class="PostPage-Container" *ngIf="loadingState === 'LOADED'">
     <div class="PostPage-AddPostActions">
       <button mat-fab color="primary" title="Post a message" (click)="toggleEditor('message')"><mat-icon>edit</mat-icon></button>
       <button mat-fab color="accent" title="Share an image" (click)="toggleEditor('screenshotShare')"><mat-icon>image</mat-icon></button>
     </div>
-    <app-post-editor [postEditorType]="displayedEditor" (close)="closeEditor($event)"></app-post-editor>
+    <app-post-editor [postEditorType]="displayedEditor" [currentUser]="currentUser" [sendPostState$]="sendPostState$" [sendPostSuccessAction$]="sendPostSuccessAction$" (action)="onPostAction($event)"></app-post-editor>
     <ng-container *ngIf="posts$ | async as posts">
       <div *ngIf="posts && posts.length === 0; else postsList" class="PostPage-ErrorPage">
         <h3>No post to display for now</h3>

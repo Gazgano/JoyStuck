@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
+import { Actions, ofType } from '@ngrx/effects';
 
 import { Logger } from '@app/core/services/logger.service';
 import { Post } from '../../models/post.model';
@@ -13,6 +14,7 @@ import { PostEditorType } from '@app/home/components/post-editor/post-editor.con
 import { PostAction } from '@app/home/components/post/post.component';
 import { AuthService } from '@app/core/services/auth.service';
 import { User } from '@app/core/models/user.model';
+import { PostEditorAction } from '@app/home/components/post-editor/post-editor.config';
 
 const log = new Logger('PostPageComponent');
 
@@ -25,15 +27,19 @@ const log = new Logger('PostPageComponent');
 export class PostPageComponent implements OnInit {
 
   public posts$: Observable<Post[]>;
-  public callState$: Observable<CallState>;
+  public loadingState$: Observable<CallState>;
+  public sendPostState$: Observable<CallState>;
+  public sendPostSuccessAction$: Observable<any>;
   public displayedEditor: PostEditorType;
   public currentUser: User;
 
-  constructor(private store: Store<Post[]>, private authService: AuthService) { }
+  constructor(private store: Store<Post[]>, private authService: AuthService, private actions$: Actions) { }
 
   ngOnInit() {
     this.posts$ = this.store.pipe(select(postsSelectors.selectPostsArray));
-    this.callState$ = this.store.pipe(select(postsSelectors.selectLoadPostsState));
+    this.loadingState$ = this.store.pipe(select(postsSelectors.selectLoadPostsState));
+    this.sendPostState$ = this.store.pipe(select(postsSelectors.selectSendPostState));
+    this.sendPostSuccessAction$ = this.actions$.pipe(ofType(postsActions.sendPostSuccess));
     this.currentUser = this.authService.getCurrentUser();
     this.refresh();
   }
@@ -58,7 +64,7 @@ export class PostPageComponent implements OnInit {
     return this.store.pipe(select(commentsSelectors.selectCommentsCountByPostId(postId)));
   }
 
-  onPostAction(postAction: PostAction) {
+  onPostAction(postAction: PostAction | PostEditorAction) {
     switch (postAction.action) {
       case 'like':
         this.store.dispatch(postsActions.likePost({ post: postAction.post, currentUserId: this.currentUser.id }));
@@ -69,11 +75,13 @@ export class PostPageComponent implements OnInit {
       case 'loadComments':
         this.store.dispatch(commentsActions.loadComments({ postId: postAction.post.id }));
         break;
+      case 'sendPost':
+        this.store.dispatch(postsActions.sendPost({ pendingPost: postAction.post }));
+        break;
+      case 'closeEditor':
+        this.displayedEditor = null;
+        break;
     }
-  }
-
-  closeEditor() {
-    this.displayedEditor = null;
   }
 
   trackByPost(index: number, post: Post) {

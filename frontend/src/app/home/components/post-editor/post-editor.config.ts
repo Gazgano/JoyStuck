@@ -1,4 +1,10 @@
 import { Palette } from '@app/core/models/palette.model';
+import { Post } from '@app/home/models/post.model';
+
+export interface PostEditorAction {
+  action: 'sendPost' | 'closeEditor';
+  post?: Post;
+}
 
 export type PostEditorType = 'screenshotShare' | 'message' | null;
 

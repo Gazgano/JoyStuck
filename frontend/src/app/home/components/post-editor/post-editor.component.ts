@@ -2,19 +2,14 @@ import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ViewChild } 
 import { Validators, FormControl, FormGroup } from '@angular/forms';
 import { Observable, Subscription, forkJoin } from 'rxjs';
 import { tap, takeLast, map } from 'rxjs/operators';
-import { Store, select } from '@ngrx/store';
-import { Actions, ofType } from '@ngrx/effects';
 import * as uid from 'uid';
 import * as moment from 'moment';
 
 import { User } from '@app/core/models/user.model';
-import { AuthService } from '@app/core/services/auth.service';
-import { PostEditorType, PostEditorDesign, POST_EDITOR_TYPES_DESIGNS } from './post-editor.config';
+import { PostEditorType, PostEditorDesign, POST_EDITOR_TYPES_DESIGNS, PostEditorAction } from './post-editor.config';
 import { Logger } from '@app/core/services/logger.service';
 import { FormService } from '@app/shared/services/form.service';
 import { Post } from '@app/home/models/post.model';
-import * as postActions from '@app/home/store/post/post.actions';
-import * as postSelectors from '@app/home/store/post/post.selectors';
 import { CallState } from '@app/core/models/call-state.model';
 import { ImagesPreviewerComponent } from '@app/shared/components/images-previewer/images-previewer.component';
 import { StorageService } from '@app/core/services/storage.service';
@@ -29,14 +24,15 @@ const log = new Logger('PostEditorComponent');
 export class PostEditorComponent implements OnInit, OnDestroy {
 
   @Input() postEditorType: PostEditorType;
-  @Output() close = new EventEmitter<boolean>();
+  @Input() currentUser: User;
+  @Input() sendPostState$: Observable<CallState>;
+  @Input() sendPostSuccessAction$: Observable<any>;
+
+  @Output() action = new EventEmitter<PostEditorAction>();
+
   @ViewChild('imagesPreviewer', { static: false }) imagesPreviewer: ImagesPreviewerComponent;
 
-  public sendPostState$: Observable<CallState>;
-  public sendPostSuccessAction$: Observable<any>;
   private sendPostSuccessActionSubscription: Subscription;
-
-  public currentUser: User;
 
   public form: FormGroup;
   public formSubmitted = false;
@@ -53,19 +49,11 @@ export class PostEditorComponent implements OnInit, OnDestroy {
 
   public maxImageSizeInBytes = 4*Math.pow(2, 20); // 4 MB
 
-  constructor(
-    private authService: AuthService,
-    private formService: FormService,
-    private store: Store<Post[]>,
-    private actions$: Actions,
-    private storageService: StorageService
-  ) { }
+  constructor(private formService: FormService, private storageService: StorageService) { }
 
   ngOnInit() {
-    this.sendPostState$ = this.store.pipe(select(postSelectors.selectSendPostState));
-    this.currentUser = this.authService.getCurrentUser();
     this.form = this.initializeForm();
-    this.sendPostSuccessActionSubscription = this.closeEditorOnSuccess();
+    this.closeEditorOnSuccess();
   }
 
   get design(): PostEditorDesign {
@@ -79,7 +67,7 @@ export class PostEditorComponent implements OnInit, OnDestroy {
   }
 
   closeEditor() {
-    this.close.emit(true);
+    this.action.emit({ action: 'closeEditor' });
     this.form.reset();
     this.formSubmitted = false;
     this.imagesPreviewer.deleteAllFiles();
@@ -94,7 +82,7 @@ export class PostEditorComponent implements OnInit, OnDestroy {
         const title = this.form.get('title').value.trim();
         const message = this.form.get('message').value;
         const pendingPost = this.createPendingPost(title, message, imagesStorageURLs);
-        this.store.dispatch(postActions.sendPost({ pendingPost }));
+        this.action.emit({ action: 'sendPost', post: pendingPost });
       });
     }
   }
@@ -111,17 +99,17 @@ export class PostEditorComponent implements OnInit, OnDestroy {
     if (!this.imagesPreviewer.images || this.imagesPreviewer.images.length === 0) {
       return Promise.resolve([]);
     }
-    
-    // we call the upload service for each image 
+
+    // we call the upload service for each image
     const postImageUploads$ = this.imagesPreviewer.images.map(image =>
       this.storageService.uploadPostImage(image.file).pipe(
         tap(upload => { // refresh progress on view
-          image.uploadProgress = upload.uploadProgress; 
+          image.uploadProgress = upload.uploadProgress;
           this.imagesPreviewer.refreshView();
         })
       )
     );
-    
+
     // when all images are uploaded, we return the result URLs array
     return forkJoin(postImageUploads$).pipe(
       takeLast(1),
@@ -129,10 +117,8 @@ export class PostEditorComponent implements OnInit, OnDestroy {
     ).toPromise();
   }
 
-  private closeEditorOnSuccess(): Subscription {
-    return this.actions$
-    .pipe(ofType(postActions.sendPostSuccess))
-    .subscribe(() => this.closeEditor());
+  private closeEditorOnSuccess() {
+    this.sendPostSuccessActionSubscription = this.sendPostSuccessAction$.subscribe(() => this.closeEditor());
   }
 
   private createPendingPost(title: string, message: string, imagesStorageURLs: string[]): Post {
