@@ -51,4 +51,18 @@ export class FileService {
       reader.readAsDataURL(file);
     });
   }
+
+  imageFromURL(url: string) {
+    return new Observable<HTMLImageElement>((subscriber: Subscriber<HTMLImageElement>) => {
+      const img = new Image();
+
+      img.onload = () => {
+        subscriber.next(img);
+        subscriber.complete();
+      };
+      img.onerror = error => subscriber.error(error);
+
+      img.src = url;
+    });
+  }
 }

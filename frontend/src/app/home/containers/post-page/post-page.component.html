@@ -20,10 +20,10 @@
         <h3>No post to display for now</h3>
         <button (click)="refresh()" color="primary" mat-raised-button>Refresh</button>
       </div>
-      
+
       <ng-template #postsList>
         <div class="PostPage-PostsList">
-          <app-post *ngFor="let post of posts; trackBy: trackByPost" [post]="post"></app-post>
+          <app-post *ngFor="let post of posts; trackBy: trackByPost" [post]="post" [currentUser]="currentUser" [commentsCount$]="getCommentsCount$(post.id)" (action)="onPostAction($event)"></app-post>
           <button class="PostPage-PostsList-RefreshButton" mat-button color="primary" (click)="refresh()">Refresh</button>
         </div>
       </ng-template>

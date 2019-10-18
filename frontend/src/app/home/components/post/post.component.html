@@ -14,12 +14,14 @@
 
     <mat-card-content>
         <p>{{ post.content }}</p>
-        <div *ngIf="images.length > 0" [ngClass]="'PostCard-PreviewsGrid--' + previewsCount">
-            <div *ngFor="let img of images.slice(0, maxPreviewsCount); index as i; last as isLast" (click)="openImageViewer(i)" class="PostCard-PreviewContainer">
-                <div *ngIf="isLast && images.length > maxPreviewsCount" class="PostCard-RemainingPreviews">+ {{ images.length - previewsCount  }}</div>
-                <img [src]="img.src">
-            </div>
-        </div>
+        <ng-container *ngIf="images$ | async as images">
+          <div *ngIf="images.length > 0" [ngClass]="'PostCard-PreviewsGrid--' + getPreviewsCount(images.length)">
+              <div *ngFor="let img of images.slice(0, maxPreviewsCount); index as i; last as isLast" (click)="openImageViewer(images, i)" class="PostCard-PreviewContainer">
+                  <div *ngIf="isLast && images.length > maxPreviewsCount" class="PostCard-RemainingPreviews">+ {{ images.length - getPreviewsCount(images.length)  }}</div>
+                  <img [src]="img.src">
+              </div>
+          </div>
+        </ng-container>
     </mat-card-content>
 
     <mat-card-actions [ngClass]="'PostCard-Actions--' + postDesign.palette">
