@@ -8,17 +8,12 @@ import { faBullhorn } from '@fortawesome/free-solid-svg-icons';
 import { Logger } from '@app/core/services/logger.service';
 import { Post } from '../../models/post.model';
 import { User } from '@app/core/models/user.model';
-import { PostDesign, POST_TYPES_DESIGNS } from './post.config';
+import { PostDesign, POST_TYPES_DESIGNS, PostAction } from './post.config';
 import { openCloseTrigger } from './post.animation';
 import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
 import { FileService } from '@app/core/services/file.service';
 
 const log = new Logger('PostComponent');
-
-export interface PostAction {
-  action: 'like' | 'unlike' | 'loadComments';
-  post: Post;
-}
 
 @Component({
   selector: 'app-post',

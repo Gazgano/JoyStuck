@@ -11,7 +11,7 @@ import * as commentsSelectors from '../../store/comments/comments.selectors';
 import * as commentsActions from '../../store/comments/comments.actions';
 import { CallState, getErrorMessage } from '@app/core/models/call-state.model';
 import { PostEditorType } from '@app/home/components/post-editor/post-editor.config';
-import { PostAction } from '@app/home/components/post/post.component';
+import { PostAction } from '@app/home/components/post/post.config';
 import { AuthService } from '@app/core/services/auth.service';
 import { User } from '@app/core/models/user.model';
 import { PostEditorAction } from '@app/home/components/post-editor/post-editor.config';

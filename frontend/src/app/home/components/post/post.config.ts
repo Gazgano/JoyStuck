@@ -1,8 +1,14 @@
 import { Palette } from '@app/core/models/palette.model';
+import { Post } from '@app/home/models/post.model';
 
 export enum PostType {
   Normal = 0,
   Light
+}
+
+export interface PostAction {
+  action: 'like' | 'unlike' | 'loadComments';
+  post: Post;
 }
 
 export interface PostDesign {
