@@ -67,7 +67,7 @@ export class StorageService {
           subscriber.next({ file, uploadProgress, storageURL: null });
         },
         err => {
-          subscriber.error(this.errorService.handleError(err, `An error happened while uploading '${file.name}'`));
+          subscriber.error(this.errorService.handleError(err, `An error happened while uploading '${file.name}'`, true));
         },
         () => uploadTask.snapshot.ref.getDownloadURL().then(storageURL => {
           log.info(`${file.name} uploaded successfully.`);

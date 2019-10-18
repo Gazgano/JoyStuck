@@ -44,9 +44,7 @@ function onLoadCommentsSuccess(state: CommentsState, props: any) {
 
 function onLoadCommentsFailure(state: CommentsState, props: any) {
   const statesByPostId = {...state.statesByPostId};
-  statesByPostId[props.postId] = {
-    errorMessage: props.error && props.error.message  || 'An error occured while loading comments'
-  };
+  statesByPostId[props.postId] = { errorMessage: props.error.message };
   return { ...state, statesByPostId };
 }
 

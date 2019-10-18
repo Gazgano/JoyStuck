@@ -12,17 +12,18 @@ export class ErrorService {
 
   constructor(private matSnackBar: MatSnackBar) { }
 
-  handleError(error: any, defaultMessage: string) {
+  handleError(error: any, defaultMessage: string, displaySnackbar: boolean = false) {
     log.error(error);
     
-    let message: string;
-    if (error.code && error.message) {
-      message = error.message;
-    } else {
-      message = defaultMessage;
+    const resultError = {...error};
+    if (!resultError.message || !resultError.code) {
+      resultError.message = defaultMessage;
     }
-    this.matSnackBar.open(message, 'Dismiss', { duration: 5000 });
 
-    return error;
+    if (displaySnackbar) {
+      this.matSnackBar.open(resultError.message, 'Dismiss', { duration: 5000 });
+    }
+
+    return resultError;
   }
 }

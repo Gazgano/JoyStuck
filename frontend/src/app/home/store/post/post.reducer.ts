@@ -68,9 +68,7 @@ const reducer = createReducer(
     return postAdapter.addAll(props.posts, {...state, loadPostsState: LoadingState.LOADED });
   }),
   on(postActions.loadPostsFailure, (state, props) => {
-    const errorState: ErrorState = {
-      errorMessage: props.error && props.error.message  || 'An error occured while loading comments'
-    };
+    const errorState: ErrorState = { errorMessage: props.error.message };
     return { ...state, loadPostsState: errorState };
   }),
 
@@ -88,9 +86,7 @@ const reducer = createReducer(
     return postAdapter.addOne(props.post, {...state, sendPostState: LoadingState.LOADED });
   }),
   on(postActions.sendPostFailure, (state, props) => {
-    const errorState: ErrorState = {
-      errorMessage: props.error && props.error.message  || 'An error occured while publishing your post'
-    };
+    const errorState: ErrorState = { errorMessage: props.error.message };
     return { ...state, sendPostState: errorState };
   }),
 );

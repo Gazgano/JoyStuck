@@ -44,12 +44,12 @@ export class AuthService {
 
   async signIn(email: string, password: string): Promise<firebase.auth.UserCredential> {
     return firebase.auth().signInWithEmailAndPassword(email, password)
-    .catch(err => { throw this.errorService.handleError(err, 'An error happened while signing in'); });
+    .catch(err => { throw this.errorService.handleError(err, 'An error happened while signing in', true); });
   }
 
   async sendVerificationEmail() {
     return firebase.auth().currentUser.sendEmailVerification()
-    .catch(err => { throw this.errorService.handleError(err, 'An error happened while sending the verification email'); });
+    .catch(err => { throw this.errorService.handleError(err, 'An error happened while sending the verification email', true); });
   }
 
   async sendPwdResetEmail(email: string) {
@@ -60,7 +60,7 @@ export class AuthService {
     };
 
     return firebase.auth().sendPasswordResetEmail(email, actionCodeSettings)
-    .catch(err => { throw this.errorService.handleError(err, 'An error happened while sending the reset password email'); });
+    .catch(err => { throw this.errorService.handleError(err, 'An error happened while sending the reset password email', true); });
   }
 
   signOut(): void {
@@ -69,7 +69,7 @@ export class AuthService {
       log.info('Signed out');
       this.router.navigate(['login']);
     })
-    .catch(err => { throw this.errorService.handleError(err, 'An error happened while logging out'); });
+    .catch(err => { throw this.errorService.handleError(err, 'An error happened while logging out', true); });
   }
 
   getCurrentUser(): User {
@@ -80,7 +80,7 @@ export class AuthService {
     return firebase.auth().createUserWithEmailAndPassword(userData.email, userData.password)
     .then(() => firebase.auth().currentUser.updateProfile({ displayName: userData.displayName }))
     .then(() => this.onAuthStateChanged(firebase.auth().currentUser)) // we refresh this.currentUser with the new profile data
-    .catch(err => { throw this.errorService.handleError(err, 'An error happened while creating the account'); });
+    .catch(err => { throw this.errorService.handleError(err, 'An error happened while creating the account', true); });
   }
 
   async updateProfile(profileInfos: any) {
@@ -92,7 +92,7 @@ export class AuthService {
       this.matSnackBar.open(`User's infos updated successfully`, 'Dismiss', { duration: 3000 });
       log.info(`User's infos updated successfully`);
     })
-    .catch(err => { throw this.errorService.handleError(err, 'An error happened while updating profile'); });
+    .catch(err => { throw this.errorService.handleError(err, 'An error happened while updating profile', true); });
   }
 
   private buildUpdateProfilePromise(profileInfos: any, currentUser: firebase.User) {

@@ -21,7 +21,9 @@ export class CommentsService {
 
   getCommentsByPostId(postId: string): Observable<UserComment[]> {
     return from(this.apiService.getReqOptions()).pipe(
-      mergeMap(options => this.http.get<UserComment[]>(`${baseUrl}comments/?post_id=${postId}`, options)),
+      mergeMap(options => this.http.get<UserComment[]>(`${baseUrl}comments/?post_id=${postId}`, options).pipe(
+        catchError(err => { throw new Error(err); }) // to avoid desagregation issue of the error
+      )),
       map(comments => comments.map(comment => this.mapComment(comment))),
       catchError(err => {
         throw this.errorService.handleError(err, 'An error happened while getting the comments');
@@ -31,30 +33,36 @@ export class CommentsService {
 
   likeComment(id: string): Observable<UserComment | null> {
     return from(this.apiService.getReqOptions()).pipe(
-      mergeMap(options => this.http.put<UserComment>(`${baseUrl}comments/${id}/like`, {}, options)),
+      mergeMap(options => this.http.put<UserComment>(`${baseUrl}comments/${id}/like`, {}, options).pipe(
+        catchError(err => { throw new Error(err); }) // to avoid desagregation issue of the error
+      )),
       map(comment => this.mapComment(comment)),
       catchError(err => {
-        throw this.errorService.handleError(err, 'An error happened while liking the comment');
+        throw this.errorService.handleError(err, 'An error happened while liking the comment', true);
       })
     );
   }
 
   unlikeComment(id: string): Observable<UserComment | null> {
     return from(this.apiService.getReqOptions()).pipe(
-      mergeMap(options => this.http.put<UserComment>(`${baseUrl}comments/${id}/unlike`, {}, options)),
+      mergeMap(options => this.http.put<UserComment>(`${baseUrl}comments/${id}/unlike`, {}, options).pipe(
+        catchError(err => { throw new Error(err); }) // to avoid desagregation issue of the error
+      )),
       map(comment => this.mapComment(comment)),
       catchError(err => {
-        throw this.errorService.handleError(err, 'An error happened while unliking the comment');
+        throw this.errorService.handleError(err, 'An error happened while unliking the comment', true);
       })
     );
   }
 
   postComment(pendingComment: any): Observable<UserComment | null> {
     return from(this.apiService.getReqOptions()).pipe(
-      mergeMap(options => this.http.post<UserComment>(`${baseUrl}comments/`, pendingComment, options)),
+      mergeMap(options => this.http.post<UserComment>(`${baseUrl}comments/`, pendingComment, options).pipe(
+        catchError(err => { throw new Error(err); }) // to avoid desagregation issue of the error
+      )),
       map(comment => this.mapComment(comment)),
       catchError(err => {
-        throw this.errorService.handleError(err, 'An error happened while posting the comment');
+        throw this.errorService.handleError(err, 'An error happened while posting the comment', true);
       })
     );
   }

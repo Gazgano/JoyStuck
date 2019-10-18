@@ -22,7 +22,9 @@ export class PostsService {
 
   getPosts(): Observable<Post[]> {
     return from(this.apiService.getReqOptions()).pipe(
-      mergeMap(options => this.http.get<Post[]>(`${baseUrl}posts`, options)),
+      mergeMap(options => this.http.get<Post[]>(`${baseUrl}posts`, options).pipe(
+        catchError(err => { throw new Error(err); }) // to avoid desagregation issue of the error
+      )),
       catchError(err => {
         throw this.errorService.handleError(err, 'An error happened while getting the posts');
       })
@@ -31,28 +33,34 @@ export class PostsService {
 
   likePost(id: string): Observable<Post | null> {
     return from(this.apiService.getReqOptions()).pipe(
-      mergeMap(options => this.http.put<Post>(`${baseUrl}posts/${id}/like`, {}, options)),
+      mergeMap(options => this.http.put<Post>(`${baseUrl}posts/${id}/like`, {}, options).pipe(
+        catchError(err => { throw new Error(err); }) // to avoid desagregation issue of the error
+      )),
       catchError(err => {
-        throw this.errorService.handleError(err, 'An error happened while liking the post');
+        throw this.errorService.handleError(err, 'An error happened while liking the post', true);
       })
     );
   }
 
   unlikePost(id: string): Observable<Post | null> {
     return from(this.apiService.getReqOptions()).pipe(
-      mergeMap(options => this.http.put<Post>(`${baseUrl}posts/${id}/unlike`, {}, options)),
+      mergeMap(options => this.http.put<Post>(`${baseUrl}posts/${id}/unlike`, {}, options).pipe(
+        catchError(err => { throw new Error(err); }) // to avoid desagregation issue of the error
+      )),
       catchError(err => {
-        throw this.errorService.handleError(err, 'An error happened while unliking the post');
+        throw this.errorService.handleError(err, 'An error happened while unliking the post', true);
       })
     );
   }
 
   postPost(pendingPost: any): Observable<Post | null> {
     return from(this.apiService.getReqOptions()).pipe(
-      mergeMap(options => this.http.post<Post>(`${baseUrl}posts/`, pendingPost, options)),
+      mergeMap(options => this.http.post<Post>(`${baseUrl}posts/`, pendingPost, options).pipe(
+        catchError(err => { throw new Error(err); }) // to avoid desagregation issue of the error
+      )),
       map(post => this.mapPost(post)),
       catchError(err => {
-        throw this.errorService.handleError(err, 'An error happened while publishing the post');
+        throw this.errorService.handleError(err, 'An error happened while publishing the post', true);
       })
     );
   }
