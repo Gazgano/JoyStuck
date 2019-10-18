@@ -50,4 +50,8 @@ export class PostPageComponent implements OnInit {
   closeEditor() {
     this.displayedEditor = null;
   }
+
+  trackByPost(index: number, post: Post) {
+    return post.id;
+  }
 }

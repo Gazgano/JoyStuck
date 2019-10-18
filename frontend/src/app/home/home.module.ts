@@ -13,8 +13,6 @@ import { PostEffects } from './store/post/post.effects';
 import { CommentsEffects } from './store/comments/comments.effects';
 import { PostsService } from './services/posts.service';
 import { CommentsService } from './services/comments.service';
-import { PostListComponent } from './components/post-list/post-list.component';
-import { CommentListComponent } from './components/comment-list/comment-list.component';
 import { CommentPageComponent } from './containers/comment-page/comment-page.component';
 import { PostEditorComponent } from './components/post-editor/post-editor.component';
 import { ImageViewerComponent } from './components/image-viewer/image-viewer.component';
@@ -24,8 +22,6 @@ import { ImageViewerComponent } from './components/image-viewer/image-viewer.com
     CommentComponent, 
     PostPageComponent, 
     PostComponent, 
-    PostListComponent, 
-    CommentListComponent, 
     CommentPageComponent, 
     PostEditorComponent, ImageViewerComponent 
   ],

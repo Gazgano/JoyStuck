@@ -68,4 +68,8 @@ export class CommentPageComponent implements OnInit {
   getErrorMessage(callState: CallState): string {
     return getErrorMessage(callState);
   }
+
+  trackByComment(index: number, comment: UserComment) {
+    return comment.id;
+  }
 }

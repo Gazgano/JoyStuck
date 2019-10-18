@@ -35,3 +35,14 @@
     margin-right: 10px;
   }
 }
+
+.PostPage-PostsList {
+  margin-top: -10px; // to compensate the margin-top of the first post
+  display: flex;
+  flex-direction: column;
+}
+
+.PostPage-PostsList-RefreshButton {
+  align-self: center;
+  margin: 20px 0;
+}
