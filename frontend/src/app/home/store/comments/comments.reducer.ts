@@ -39,7 +39,7 @@ function onLoadComments(state: CommentsState, props: any) {
 function onLoadCommentsSuccess(state: CommentsState, props: any) {
   const statesByPostId = {...state.statesByPostId};
   statesByPostId[props.postId] = LoadingState.LOADED;
-  return { ...commentsAdapter.addMany(props.comments, state), statesByPostId };
+  return { ...commentsAdapter.addAll(props.comments, state), statesByPostId };
 }
 
 function onLoadCommentsFailure(state: CommentsState, props: any) {

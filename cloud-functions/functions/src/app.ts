@@ -38,6 +38,10 @@ export class App {
       this.dbService.unlikePost('posts', req.params.id, req.user.user_id)
     ));
 
+    this.app.delete('/posts/:id', callDbService((req, res) => 
+      this.dbService.deletePost(req.params.id)
+    ));
+
     this.app.post('/posts', callDbService((req, res) => 
       this.dbService.addPost(req.body, req.user.user_id)
     ));
@@ -48,6 +52,10 @@ export class App {
 
     this.app.put('/comments/:id/unlike', callDbService((req, res) => 
       this.dbService.unlikeComment('comments', req.params.id, req.user.user_id)
+    ));
+
+    this.app.delete('/comments/:id', callDbService((req, res) => 
+      this.dbService.deleteComment(req.params.id)
     ));
 
     this.app.post('/comments', callDbService((req, res) => 

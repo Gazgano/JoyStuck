@@ -1,6 +1,6 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-import { DocumentData, QuerySnapshot, DocumentSnapshot, Firestore, Query, QueryDocumentSnapshot } from '@google-cloud/firestore';
+import { DocumentData, QuerySnapshot, DocumentSnapshot, Firestore, Query, QueryDocumentSnapshot, WriteResult, DocumentReference } from '@google-cloud/firestore';
 
 
 import { DbServiceError } from './models/db-service-error.model';
@@ -36,6 +36,43 @@ export class DbService {
     return this.db.doc(`${collectionPath}/${id}`).get()
     .then((ds: DocumentSnapshot) => this.formatDocumentSnapshot(ds, collectionPath))
     .catch(err => { throw handleError(err) })
+  }
+
+  async deletePost(id: string): Promise<DbServiceData<DocumentData>> {
+    const postRef = this.db.doc(`posts/${id}`);
+    
+    return postRef.get()
+    .then(doc => { 
+      if (!doc.exists) {
+        throw new DbServiceError({ id }, 'This post does not exist', 404);
+      } else {
+        return;
+      }
+    })
+    .then(() => postRef.delete())
+    .then(() => new DbServiceData({ id }))
+  }
+
+  async deleteComment(id: string): Promise<DbServiceData<DocumentData>> {
+    const commentRef = this.db.doc(`comments/${id}`);
+    
+    return commentRef.get()
+    .then(doc => { 
+      if (!doc.exists) {
+        throw new DbServiceError({ id }, 'This comment does not exist', 404);
+      } else {
+        const docData = doc.data();
+        return this.db.doc(`posts/${docData && docData.post_id}`);
+      }
+    })
+    .then(postRef => postRef.get())
+    .then(doc => {
+      if (doc.exists) {
+        doc.ref.update({ commentsCount: admin.firestore.FieldValue.increment(-1) })
+      }
+    })
+    .then(() => commentRef.delete())
+    .then(() => new DbServiceData({ id }));
   }
 
   async addPost(obj: any, userId: string): Promise<DbServiceData<DocumentData>> {
