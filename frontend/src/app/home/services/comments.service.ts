@@ -14,7 +14,7 @@ const log = new Logger('CommentsService');
 @Injectable()
 export class CommentsService {
   constructor(
-    private http: HttpClient, 
+    private http: HttpClient,
     private apiService: ApiService,
     private errorService: ErrorService
   ) {}
@@ -62,7 +62,7 @@ export class CommentsService {
       )),
       map(comment => this.mapComment(comment)),
       catchError(err => {
-        throw this.errorService.handleError(err, 'An error happened while posting the comment', true);
+        throw this.errorService.handleError(err, 'An error happened while posting the comment');
       })
     );
   }

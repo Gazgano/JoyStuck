@@ -11,7 +11,7 @@
   <ng-container *ngIf="callState === 'LOADED'">
     <ng-container *ngIf="comments$ | async as comments; else noCommentMessage">
       <div *ngIf="comments.length > 0; else noCommentMessage" class="PostComment-Comments">
-        <app-comment *ngFor="let comment of comments; trackBy: trackByComment" [comment]="comment" [palette]="palette" [postId]="postId" ></app-comment>
+        <app-comment *ngFor="let comment of comments; trackBy: trackByComment" [comment]="comment" [palette]="palette" [currentUser]="currentUser" (action)="onCommentAction($event)"></app-comment>
       </div>
     </ng-container>
 

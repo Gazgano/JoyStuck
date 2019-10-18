@@ -11,6 +11,7 @@ import { AuthService } from '@app/core/services/auth.service';
 import { User } from '@app/core/models/user.model';
 import { CallState, getErrorMessage } from '@app/core/models/call-state.model';
 import { Palette } from '@app/core/models/palette.model';
+import { CommentAction } from '@app/home/components/comment/comment.component';
 
 @Component({
   selector: 'app-comment-page',
@@ -46,6 +47,20 @@ export class CommentPageComponent implements OnInit {
 
   retryToLoad() {
     this.retryLoading.emit(true);
+  }
+
+  onCommentAction(commentAction: CommentAction) {
+    switch (commentAction.action) {
+      case 'like':
+        this.store.dispatch(commentsActions.likeComment({ comment: commentAction.comment, currentUserId: this.currentUser.id }));
+        break;
+      case 'unlike':
+        this.store.dispatch(commentsActions.unlikeComment({ comment: commentAction.comment, currentUserId: this.currentUser.id }));
+        break;
+      case 'resend':
+        this.store.dispatch(commentsActions.retrySendComment({ failedComment: commentAction.comment }));
+        break;
+    }
   }
 
   private createPendingComment(text: string, postId: string): UserComment {
