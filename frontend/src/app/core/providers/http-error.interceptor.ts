@@ -8,15 +8,21 @@ const log = new Logger('HttpErrorInterceptor');
 export class HttpErrorInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
-      // retry(1), // commented because create infinite loop of http calls
       catchError((err: HttpErrorResponse) => {
-        let errorMessage = '';
+        const resultError: any = {};
         if (err.error instanceof ErrorEvent) { // client-side error
-          errorMessage = `Error: ${err.error.message}`;
+          resultError.message = err.error.message;
+        } else if (err.error instanceof ProgressEvent) { // connection errors
+          resultError.code = err.status;
+          resultError.statusText = err.statusText;
         } else { // server-side error
-          errorMessage = `Error code: ${err.status}\nMessage: ${err.message}`;
+          resultError.code = err.status;
+          resultError.statusText = err.statusText;
+          resultError.message = err.error;
         }
-        return throwError(errorMessage);
+        log.debug(err);
+        log.debug(resultError);
+        return throwError(resultError);
       })
     );
   }
