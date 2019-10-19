@@ -55,24 +55,30 @@ export class DbService {
 
   async deleteComment(id: string): Promise<DbServiceData<DocumentData>> {
     const commentRef = this.db.doc(`comments/${id}`);
-    
-    return commentRef.get()
-    .then(doc => { 
-      if (!doc.exists) {
-        throw new DbServiceError({ id }, 'This comment does not exist', 404);
-      } else {
-        const docData = doc.data();
-        return this.db.doc(`posts/${docData && docData.post_id}`);
-      }
-    })
-    .then(postRef => postRef.get())
-    .then(doc => {
-      if (doc.exists) {
-        doc.ref.update({ commentsCount: admin.firestore.FieldValue.increment(-1) })
-      }
-    })
-    .then(() => commentRef.delete())
-    .then(() => new DbServiceData({ id }));
+
+    return this.db.runTransaction(t => {
+      return t.get(commentRef)
+      .then(commentDoc => { 
+        if (!commentDoc.exists) {
+          throw new DbServiceError({ id }, 'This comment does not exist', 404);
+        } else {
+          const commentData = commentDoc.data();
+          return commentData && commentData.post_id;
+        }
+      })
+      .then(postId => {
+        const postRef = this.db.doc(`posts/${postId}`);
+        return t.get(postRef);
+      })
+      .then(postDoc => {
+        if (postDoc.exists) {
+          postDoc.ref.update({ commentsCount: admin.firestore.FieldValue.increment(-1) });
+        }
+        return Promise.resolve();
+      })
+      .then(() => t.delete(commentRef))
+      .then(() => Promise.resolve(new DbServiceData({ id })))
+    });
   }
 
   async addPost(obj: any, userId: string): Promise<DbServiceData<DocumentData>> {
