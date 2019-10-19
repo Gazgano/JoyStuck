@@ -42,15 +42,27 @@ export class DbService {
     const postRef = this.db.doc(`posts/${id}`);
     
     return postRef.get()
-    .then(doc => { 
-      if (!doc.exists) {
+    .then(postDoc => { //check if post exists
+      if (!postDoc.exists) {
         throw new DbServiceError({ id }, 'This post does not exist', 404);
       } else {
         return;
       }
     })
-    .then(() => postRef.delete())
-    .then(() => new DbServiceData({ id }))
+    .then(() => { // build query to retrieve comments and execute it
+      return this.db.collection('comments').where('post_id', '==', id).get();
+    })
+    .then(querySnapshot => { 
+      if (!querySnapshot.empty) { // if existing comment(s), delete them and the post
+        return this.db.runTransaction(t => {
+          querySnapshot.forEach(commentDoc => t.delete(commentDoc.ref));
+          t.delete(postRef);
+          return Promise.resolve();
+        });
+      }
+      return Promise.resolve();
+    })
+    .then(() => new DbServiceData({ id }));
   }
 
   async deleteComment(id: string): Promise<DbServiceData<DocumentData>> {
