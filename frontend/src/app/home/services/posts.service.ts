@@ -50,14 +50,14 @@ export class PostsService {
   postPost(pendingPost: any): Observable<Post | null> {
     return from(this.apiService.getReqOptions()).pipe(
       mergeMap(options => this.http.post<Post>(`${baseUrl}posts/`, pendingPost, options)),
-      map(post => this.mapPost(post)),
+      map(post => this.mapPostToAPI(post)),
       catchError(err => {
         throw this.errorService.handleError(err, 'An error happened while publishing the post', true);
       })
     );
   }
 
-  private mapPost(obj: any): Post | null {
+  private mapPostToAPI(obj: any): Post | null {
     if (!obj || isEmpty(obj)) {
       return null;
     }

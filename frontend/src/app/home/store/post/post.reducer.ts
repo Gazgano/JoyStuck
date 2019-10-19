@@ -5,6 +5,9 @@ import * as moment from 'moment';
 import { Post } from '../../models/post.model';
 import * as postActions from './post.actions';
 import { CallState, LoadingState, ErrorState } from '@app/core/models/call-state.model';
+import { Logger } from '@app/core/services/logger.service';
+
+const log = new Logger('PostReducer');
 
 ////////////////////////////////////////////////
 // State
@@ -31,10 +34,10 @@ const initialState = postAdapter.getInitialState({
 
 function addLike(state: PostState, props: any) {
   let likeIds = props.post.likeIds || [];
-  likeIds = likeIds.includes(props.currentUserId)? 
-    props.post.likeIds: 
+  likeIds = likeIds.includes(props.currentUserId)?
+    props.post.likeIds:
     [...props.post.likeIds, props.currentUserId];
-  
+
   const update: Update<Post> = {
     id: props.post.id,
     changes: { likeIds }
@@ -44,10 +47,10 @@ function addLike(state: PostState, props: any) {
 
 function removeLike(state: PostState, props: any) {
   let likeIds = props.post.likeIds || [];
-  likeIds = likeIds.includes(props.currentUserId)? 
-    props.post.likeIds.filter((e: string) => e !== props.currentUserId): 
+  likeIds = likeIds.includes(props.currentUserId)?
+    props.post.likeIds.filter((e: string) => e !== props.currentUserId):
     props.post.likeIds;
-  
+
   const update: Update<Post> = {
     id: props.post.id,
     changes: { likeIds }
@@ -64,9 +67,7 @@ const reducer = createReducer(
 
   // load posts
   on(postActions.loadPosts, state => ({ ...state, loadPostsState: LoadingState.LOADING })),
-  on(postActions.loadPostsSuccess, (state, props) => {
-    return postAdapter.addAll(props.posts, {...state, loadPostsState: LoadingState.LOADED });
-  }),
+  on(postActions.loadPostsSuccess, (state, props) => postAdapter.addAll(props.posts, {...state, loadPostsState: LoadingState.LOADED })),
   on(postActions.loadPostsFailure, (state, props) => {
     const errorState: ErrorState = { errorMessage: props.error.message };
     return { ...state, loadPostsState: errorState };

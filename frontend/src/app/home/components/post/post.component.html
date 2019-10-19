@@ -13,7 +13,7 @@
     </mat-card-header>
 
     <mat-card-content>
-        <p>{{ post.content }}</p>
+        <p [innerHTML]="htmlFormattedContent"></p>
         <ng-container *ngIf="images$ | async as images">
           <div *ngIf="images.length > 0" [ngClass]="'PostCard-PreviewsGrid--' + getPreviewsCount(images.length)">
               <div *ngFor="let img of images.slice(0, maxPreviewsCount); index as i; last as isLast" (click)="openImageViewer(images, i)" class="PostCard-PreviewContainer">

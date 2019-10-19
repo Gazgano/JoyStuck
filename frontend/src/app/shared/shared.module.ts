@@ -30,6 +30,7 @@ import { ChecklistItemComponent } from './components/checklist-item/checklist-it
 import { ProfileImageComponent } from './components/profile-image/profile-image.component';
 import { ImagesPreviewerComponent } from './components/images-previewer/images-previewer.component';
 import { FileSizePipe } from './pipes/file-size.pipe';
+import { HtmlFormatPipe } from './pipes/html-format.pipe';
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import { FileSizePipe } from './pipes/file-size.pipe';
     ChecklistItemComponent,
     ProfileImageComponent,
     ImagesPreviewerComponent,
-    FileSizePipe
+    FileSizePipe,
+    HtmlFormatPipe
   ],
   imports: [
     CommonModule,
@@ -74,6 +76,7 @@ import { FileSizePipe } from './pipes/file-size.pipe';
     FileSizePipe,
     FontAwesomeModule,
     FormsModule,
+    HtmlFormatPipe,
     ImagesPreviewerComponent,
     LoaderComponent,
     MatButtonModule,

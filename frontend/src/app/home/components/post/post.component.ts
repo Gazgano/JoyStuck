@@ -12,6 +12,7 @@ import { PostDesign, POST_TYPES_DESIGNS, PostAction } from './post.config';
 import { openCloseTrigger } from './post.animation';
 import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
 import { FileService } from '@app/core/services/file.service';
+import { HtmlFormatPipe } from '@app/shared/pipes/html-format.pipe';
 
 const log = new Logger('PostComponent');
 
@@ -54,6 +55,10 @@ export class PostComponent implements OnInit {
 
   get elapsedTime(): string {
     return moment(this.post.timestamp).fromNow();
+  }
+
+  get htmlFormattedContent() {
+    return (new HtmlFormatPipe()).transform(this.post.content);
   }
 
   getPreviewsCount(imagesLength: number) {
