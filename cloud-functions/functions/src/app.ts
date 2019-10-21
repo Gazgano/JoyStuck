@@ -39,7 +39,7 @@ export class App {
     ));
 
     this.app.delete('/posts/:id', callDbService((req, res) => 
-      this.dbService.deletePost(req.params.id)
+      this.dbService.deletePost(req.params.id, req.user.user_id)
     ));
 
     this.app.post('/posts', callDbService((req, res) => 
@@ -55,7 +55,7 @@ export class App {
     ));
 
     this.app.delete('/comments/:id', callDbService((req, res) => 
-      this.dbService.deleteComment(req.params.id)
+      this.dbService.deleteComment(req.params.id, req.user.user_id)
     ));
 
     this.app.post('/comments', callDbService((req, res) => 

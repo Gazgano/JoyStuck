@@ -1,7 +1,7 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-import { DocumentData, QuerySnapshot, DocumentSnapshot, Firestore, Query, QueryDocumentSnapshot, WriteResult, DocumentReference } from '@google-cloud/firestore';
-
+import { DocumentData, QuerySnapshot, DocumentSnapshot, Firestore, Query, QueryDocumentSnapshot } from '@google-cloud/firestore';
+import { isEmpty } from 'lodash';
 
 import { DbServiceError } from './models/db-service-error.model';
 import { DbServiceData } from './models/db-service-data.model';
@@ -38,52 +38,56 @@ export class DbService {
     .catch(err => { throw handleError(err) })
   }
 
-  async deletePost(id: string): Promise<DbServiceData<DocumentData>> {
+  async deletePost(id: string, userId: string): Promise<DbServiceData<DocumentData>> {
     const postRef = this.db.doc(`posts/${id}`);
     
     return postRef.get()
     .then(postDoc => { //check if post exists
       if (!postDoc.exists) {
         throw new DbServiceError({ id }, 'This post does not exist', 404);
-      } else {
-        return;
       }
-    })
+      const postData = postDoc.data();
+      if (postData && postData.author_id != userId) {
+        throw new DbServiceError({ id }, 'You are not the author of this post', 403);
+      }
+      return;
+    })  
     .then(() => { // build query to retrieve comments and execute it
       return this.db.collection('comments').where('post_id', '==', id).get();
     })
     .then(querySnapshot => { 
-      if (!querySnapshot.empty) { // if existing comment(s), delete them and the post
-        return this.db.runTransaction(t => {
+      return this.db.runTransaction(t => {
+        if (!querySnapshot.empty) { // if existing comment(s), delete them and the post
           querySnapshot.forEach(commentDoc => t.delete(commentDoc.ref));
-          t.delete(postRef);
-          return Promise.resolve();
-        });
-      }
-      return Promise.resolve();
+        }
+        t.delete(postRef);
+        return Promise.resolve();
+      });
     })
     .then(() => new DbServiceData({ id }));
   }
 
-  async deleteComment(id: string): Promise<DbServiceData<DocumentData>> {
+  async deleteComment(id: string, userId: string): Promise<DbServiceData<DocumentData>> {
     const commentRef = this.db.doc(`comments/${id}`);
 
     return this.db.runTransaction(t => {
       return t.get(commentRef)
-      .then(commentDoc => { 
+      .then(commentDoc => { // get associated post_id if controls are OK
         if (!commentDoc.exists) {
           throw new DbServiceError({ id }, 'This comment does not exist', 404);
-        } else {
-          const commentData = commentDoc.data();
-          return commentData && commentData.post_id;
+        } 
+        const commentData = commentDoc.data();
+        if (commentData && commentData.author_id != userId) {
+          throw new DbServiceError({ id }, 'You are not the author of this comment', 403);
         }
+        return commentData && commentData.post_id;
       })
-      .then(postId => {
+      .then(postId => { // get associated post if exists
         const postRef = this.db.doc(`posts/${postId}`);
         return t.get(postRef);
       })
-      .then(postDoc => {
-        if (postDoc.exists) {
+      .then(postDoc => { // decrement commentsCount of associated post
+        if (postDoc && postDoc.exists) {
           postDoc.ref.update({ commentsCount: admin.firestore.FieldValue.increment(-1) });
         }
         return Promise.resolve();
