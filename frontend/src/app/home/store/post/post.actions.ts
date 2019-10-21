@@ -17,3 +17,7 @@ export const unlikePostFailure = createAction('[Home] Unlike Post failed', props
 export const sendPost = createAction('[Home] Send Post', props<{ pendingPost: Post }>());
 export const sendPostSuccess = createAction('[Home] Post sent successfully', props<{ post: Post }>());
 export const sendPostFailure = createAction('[Home] Send Post failed', props<{ error: any }>());
+
+export const deletePost = createAction('[Home] Delete Post', props<{ post: Post }>());
+export const deletePostSuccess = createAction('[Home] Post deleted successfully', props<{ post: Post }>());
+export const deletePostFailure = createAction('[Home] Delete Post failed', props<{ error: any, post: Post }>());

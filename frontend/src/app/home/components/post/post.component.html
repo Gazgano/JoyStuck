@@ -2,14 +2,26 @@
 <mat-card *ngIf="postDesign.componentStyle === 0" class="PostCard">
     <mat-card-header>
         <app-profile-image mat-card-avatar [user]="postAuthor" [sizeInPixel]="'40'" [matTooltip]="postAuthor.username + ' - ' + postTimestamp"></app-profile-image>
-        <mat-card-title class="PostCard-Title">
-               <div *ngFor="let word of post.title.split(' ')" [ngClass]="'PostCard-Title-Word--' + postDesign.palette">{{ word }}</div>
-        </mat-card-title>
-        <mat-card-subtitle [ngClass]="'PostCard-Subtitle--' + postDesign.palette">{{ elapsedTime }}</mat-card-subtitle>
         <div class="PostCard-Ribbon">
             <mat-icon [ngClass]="'PostCard-Ribbon-Icon--' + postDesign.palette" [inline]="true">{{ postDesign.icon }}</mat-icon>
             <svg width="100" height="100"><polygon [ngClass]="'PostCard-Ribbon-Svg--' + postDesign.palette" points="0,0 50,0 100,50 100,100" /></svg>
         </div>
+        <mat-card-title class="PostCard-Title">
+            <div *ngFor="let word of post.title.split(' ')" [ngClass]="'PostCard-Title-Word--' + postDesign.palette">{{ word }}</div>
+            <div class="PostCard-Title-MoreButtonContainer">
+                <mat-spinner *ngIf="inDeletionState == 'LOADING'; else moreButton" [diameter]="20" [color]="postDesign.palette"></mat-spinner>
+                <ng-template #moreButton>
+                    <button [matMenuTriggerFor]="menu" color="foreground" mat-icon-button><mat-icon>more_vert</mat-icon></button>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="deletePost()">
+                        <mat-icon>delete</mat-icon>
+                        Delete this post
+                        </button>
+                    </mat-menu>
+                </ng-template>
+            </div>
+        </mat-card-title>
+        <mat-card-subtitle [ngClass]="'PostCard-Subtitle--' + postDesign.palette">{{ elapsedTime }}</mat-card-subtitle>
     </mat-card-header>
 
     <mat-card-content>

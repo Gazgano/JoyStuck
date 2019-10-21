@@ -48,4 +48,14 @@ export class PostEffects {
       );
     })
   ));
+
+  deletePost$ = createEffect(() => this.actions$.pipe(
+    ofType(postActions.deletePost),
+    mergeMap(action => {
+      return this.postsService.deletePost(action.post.id).pipe(
+        map(() => postActions.deletePostSuccess({ post: action.post })),
+        catchError(error => of(postActions.deletePostFailure({ error, post: action.post })))
+      );
+    })
+  ));
 }

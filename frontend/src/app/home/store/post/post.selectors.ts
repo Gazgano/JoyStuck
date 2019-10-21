@@ -31,3 +31,8 @@ export const selectSendPostState = createSelector(
   selectPost,
   (state: PostState) => state.sendPostState
 );
+
+export const selectDeletePostState = (postId: string) => createSelector(
+  selectPost,
+  (state: PostState) => state.deletePostsStates[postId] || null
+);

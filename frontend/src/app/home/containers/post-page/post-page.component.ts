@@ -64,6 +64,10 @@ export class PostPageComponent implements OnInit {
     return this.store.pipe(select(commentsSelectors.selectCommentsCountByPostId(postId)));
   }
 
+  getDeletePostState$(postId: string): Observable<CallState> {
+    return this.store.pipe(select(postsSelectors.selectDeletePostState(postId)));
+  }
+
   onPostAction(postAction: PostAction | PostEditorAction) {
     switch (postAction.action) {
       case 'like':
@@ -77,6 +81,9 @@ export class PostPageComponent implements OnInit {
         break;
       case 'sendPost':
         this.store.dispatch(postsActions.sendPost({ pendingPost: postAction.post }));
+        break;
+      case 'delete':
+        this.store.dispatch(postsActions.deletePost({ post: postAction.post }));
         break;
       case 'closeEditor':
         this.displayedEditor = null;

@@ -13,16 +13,46 @@ $ribbon-icon-size: 30px;
     margin-top: 10px;
 }
 
+.PostCard-Ribbon {
+  font-size: $ribbon-icon-size;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 1; // defining a z-index to be sure to be above. Others are auto so should be below
+}
+
+.PostCard-Ribbon-Icon {
+  // center coordinates is defined by SVG ribbon
+  left: 62.5px - $ribbon-icon-size/2;
+  position: absolute;
+  top: 37.5px - $ribbon-icon-size/2;
+  transform: rotateZ(45deg);
+}
+
 .PostCard-Title {
     display: flex;
     flex-wrap: wrap;
     text-transform: uppercase;
+    position: relative; // to positionate the "more" button in absolute
 }
 
 .PostCard-Title-Word {
   font-weight: bold;
   margin-bottom: 3px;
   padding: 0 3px;
+}
+
+.PostCard-Title-MoreButtonContainer {
+  position: absolute;
+  right: -40px;
+  top: -8px;
+  color: get-theme-color($ink-theme, foreground, hint-text, null);
+  z-index: 10; // to be above the ribbon
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 $mat-card-padding: 16px;
@@ -91,14 +121,6 @@ $maxPreviewsCount: 5;
   padding: 0;
 }
 
-.PostCard-Ribbon-Icon {
-  // center coordinates is defined by SVG ribbon
-  left: 62.5px - $ribbon-icon-size/2;
-  position: absolute;
-  top: 37.5px - $ribbon-icon-size/2;
-  transform: rotateZ(45deg);
-}
-
 // adding colors depending of the theme
 @each $name in $palettes {
   .PostCard-Title-Word--#{$name} {
@@ -124,14 +146,6 @@ $maxPreviewsCount: 5;
     @extend .PostCard-Ribbon-Icon;
     color: get-theme-color($ink-theme, $name, default-contrast, null);
   }
-}
-
-.PostCard-Ribbon {
-    font-size: $ribbon-icon-size;
-    position: absolute;
-    right: 0;
-    top: 0;
-    z-index: 1; // defining a z-index to be sure to be above. Others are auto so should be below
 }
 
 .PostCard-Comments {

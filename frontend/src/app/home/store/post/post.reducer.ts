@@ -16,6 +16,7 @@ const log = new Logger('PostReducer');
 export interface PostState extends EntityState<Post> {
   loadPostsState: CallState;
   sendPostState: CallState;
+  deletePostsStates: { [postId: string]: CallState };
 }
 
 export const postAdapter = createEntityAdapter({
@@ -25,7 +26,8 @@ export const postAdapter = createEntityAdapter({
 
 const initialState = postAdapter.getInitialState({
   loadPostsState: null,
-  sendPostState: null
+  sendPostState: null,
+  deletePostsStates: {}
 });
 
 ////////////////////////////////////////////////
@@ -90,6 +92,23 @@ const reducer = createReducer(
     const errorState: ErrorState = { errorMessage: props.error.message };
     return { ...state, sendPostState: errorState };
   }),
+
+  // delete post
+  on(postActions.deletePost, (state, props) => {
+    const deletePostsStates = { ...state.deletePostsStates };
+    deletePostsStates[props.post.id] = LoadingState.LOADING;
+    return { ...state, deletePostsStates };
+  }),
+  on(postActions.deletePostSuccess, (state, props) => {
+    const deletePostsStates = { ...state.deletePostsStates };
+    deletePostsStates[props.post.id] = LoadingState.LOADED;
+    return postAdapter.removeOne(props.post.id, { ...state, deletePostsStates });
+  }),
+  on(postActions.deletePostFailure, (state, props) => {
+    const deletePostsStates = { ...state.deletePostsStates };
+    deletePostsStates[props.post.id] = { errorMessage: props.error.message };
+    return { ...state, deletePostsStates };
+  })
 );
 
 export function postReducer(state: PostState | undefined, action: Action) {

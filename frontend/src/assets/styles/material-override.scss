@@ -5,7 +5,7 @@
 
 // PostCard
 .PostCard .mat-card-header-text {
-    max-width: calc(100% - 132px); // minus ribbon width + title margins
+    max-width: calc(100% - 160px); // minus ribbon width + title margins + space for "more" button
 }
 
 .PostCard .mat-button-wrapper > span {

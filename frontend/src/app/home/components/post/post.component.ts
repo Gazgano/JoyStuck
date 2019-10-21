@@ -13,6 +13,7 @@ import { openCloseTrigger } from './post.animation';
 import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
 import { FileService } from '@app/core/services/file.service';
 import { HtmlFormatPipe } from '@app/shared/pipes/html-format.pipe';
+import { CallState } from '@app/core/models/call-state.model';
 
 const log = new Logger('PostComponent');
 
@@ -27,6 +28,7 @@ export class PostComponent implements OnInit {
   @Input() post: Post;
   @Input() currentUser: User;
   @Input() commentsCount$: Observable<number>;
+  @Input() inDeletionState: CallState;
   @Output() action = new EventEmitter<PostAction>();
 
   public postDesign: PostDesign;
@@ -87,6 +89,10 @@ export class PostComponent implements OnInit {
       maxHeight: '90vh',
       data: { images, selectedImageIndex: index }
     });
+  }
+
+  deletePost() {
+    this.action.emit({ action: 'delete', post: this.post });
   }
 
   private loadImages() {

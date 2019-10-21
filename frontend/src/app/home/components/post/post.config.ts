@@ -7,7 +7,7 @@ export enum PostType {
 }
 
 export interface PostAction {
-  action: 'like' | 'unlike' | 'loadComments';
+  action: 'like' | 'unlike' | 'loadComments' | 'delete';
   post: Post;
 }
 

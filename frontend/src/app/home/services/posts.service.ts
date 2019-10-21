@@ -57,6 +57,15 @@ export class PostsService {
     );
   }
 
+  deletePost(id: string): Observable<any> {
+    return from(this.apiService.getReqOptions()).pipe(
+      mergeMap(options => this.http.delete(`${baseUrl}posts/${id}`, options)),
+      catchError(err => {
+        throw this.errorService.handleError(err, 'An error happened while deleting the post', true);
+      })
+    );
+  }
+
   private mapPostToAPI(obj: any): Post | null {
     if (!obj || isEmpty(obj)) {
       return null;
