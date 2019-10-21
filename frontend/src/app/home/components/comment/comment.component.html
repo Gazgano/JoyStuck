@@ -11,7 +11,7 @@
         <mat-icon [inline]="true">thumb_up</mat-icon>
         <span *ngIf="comment.likeIds?.length > 0">{{ comment.likeIds?.length }}</span>
     </button>
-    <button *ngIf="comment.status != 'PENDING'" class="PostComment-MoreButton" [matMenuTriggerFor]="menu" mat-icon-button [ngStyle]="menuOpen? {display: 'block'} : {}" (click)="menuOpen = true">
+    <button *ngIf="comment.status != 'PENDING' && comment.author.uid == currentUser.id" class="PostComment-MoreButton" [matMenuTriggerFor]="menu" mat-icon-button [ngStyle]="menuOpen? {display: 'block'} : {}" (click)="menuOpen = true">
         <mat-icon [inline]="true">more_horiz</mat-icon>
     </button>
     <mat-menu #menu="matMenu" (closed)="menuOpen = false">
