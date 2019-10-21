@@ -4,16 +4,25 @@
 
 <div [ngClass]="'PostComment-Content--' + comment.status + '--' + palette">{{ comment.content }}</div>
 
-<button *ngIf="comment.status === 'SENT'" (click)="toggleLikeComment()" [ngClass]="'PostComment-LikeButton--' + palette" [ngStyle]="comment.likeIds?.length > 0? {display: 'block'} : {}" mat-icon-button>
-    <mat-icon [inline]="true">thumb_up</mat-icon>
-    <span *ngIf="comment.likeIds?.length > 0">{{ comment.likeIds?.length }}</span>
-</button>
+<mat-spinner *ngIf="comment.status === 'DELETING'" [diameter]="20" [color]="palette"></mat-spinner>
 
-<ng-container *ngIf="comment.status === 'FAILED'">
-    <button (click)="retrySend()" mat-button color="warn" class="PostComment-RetryButton">
-        <mat-icon [inline]="true">error</mat-icon>
-        <span>Error while sending. Click to retry.</span>
+<div class="PostComment-ButtonsContainer">
+    <button *ngIf="comment.status == 'SENT'" (click)="toggleLikeComment()" [ngClass]="'PostComment-LikeButton--' + palette" [ngStyle]="comment.likeIds?.length > 0 || menuOpen? {display: 'block'} : {}" mat-icon-button>
+        <mat-icon [inline]="true">thumb_up</mat-icon>
+        <span *ngIf="comment.likeIds?.length > 0">{{ comment.likeIds?.length }}</span>
     </button>
-</ng-container>
+    <button *ngIf="comment.status != 'PENDING'" class="PostComment-MoreButton" [matMenuTriggerFor]="menu" mat-icon-button [ngStyle]="menuOpen? {display: 'block'} : {}" (click)="menuOpen = true">
+        <mat-icon [inline]="true">more_horiz</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu" (closed)="menuOpen = false">
+        <button mat-menu-item (click)="deleteComment()">
+            <mat-icon>delete</mat-icon>
+            Delete this comment
+        </button>
+    </mat-menu>
+</div>
 
-
+<button *ngIf="comment.status === 'FAILED'" (click)="retrySend()" mat-button color="warn" class="PostComment-RetryButton">
+    <mat-icon [inline]="true">error</mat-icon>
+    <span>Error while sending. Click to retry.</span>
+</button>

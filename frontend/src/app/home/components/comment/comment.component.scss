@@ -7,8 +7,8 @@
   margin-top: 5px;
 
   &:hover {
-    .PostComment-LikeButton {
-        display: block;
+    .PostComment-LikeButton, .PostComment-MoreButton {
+      display: block;
     }
   }
 }
@@ -24,8 +24,12 @@
   max-width: calc(100% - 100px); // to let space for button
 }
 
-.PostComment-LikeButton {
-    display: none;
+.PostComment-ButtonsContainer {
+  display: flex;
+}
+
+.PostComment-LikeButton, .PostComment-MoreButton {
+  display: none;
 }
 
 .PostComment-ErrorButton {
@@ -38,7 +42,7 @@
 
 // adding colors depending of the theme
 @each $name in $palettes {
-  .PostComment-Content--SENT--#{$name} {
+  .PostComment-Content--SENT--#{$name}, .PostComment-Content--DELETING--#{$name} {
     @extend .PostComment-Content;
     background-color: get-theme-color($ink-theme, $name, 50, null);
     color: get-theme-color($ink-theme, $name, contrast, 50);

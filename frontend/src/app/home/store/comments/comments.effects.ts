@@ -63,4 +63,14 @@ export class CommentsEffects {
       );
     })
   ));
+  
+  deleteComment$ = createEffect(() => this.actions$.pipe(
+    ofType(commentsActions.deleteComment),
+    mergeMap(action => {
+      return this.commentsService.deleteComment(action.comment.id).pipe(
+        map(() => commentsActions.deleteCommentSuccess({ comment: action.comment })),
+        catchError(error => of(commentsActions.deleteCommentFailure({ error, comment: action.comment })))
+      );
+    })
+  ));
 }

@@ -60,6 +60,9 @@ export class CommentPageComponent implements OnInit {
       case 'resend':
         this.store.dispatch(commentsActions.retrySendComment({ failedComment: commentAction.comment }));
         break;
+      case 'delete':
+        this.store.dispatch(commentsActions.deleteComment({ comment: commentAction.comment }));
+        break;
     }
   }
 

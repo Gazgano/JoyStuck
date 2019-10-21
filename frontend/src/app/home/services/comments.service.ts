@@ -58,6 +58,15 @@ export class CommentsService {
       })
     );
   }
+  
+  deleteComment(id: string): Observable<any> {
+    return from(this.apiService.getReqOptions()).pipe(
+      mergeMap(options => this.http.delete(`${baseUrl}comments/${id}`, options)),
+      catchError(err => {
+        throw this.errorService.handleError(err, 'An error happened while deleting the comment', true);
+      })
+    );
+  }
 
   private mapComment(obj: any): UserComment | null {
     if (!obj || isEmpty(obj)) {

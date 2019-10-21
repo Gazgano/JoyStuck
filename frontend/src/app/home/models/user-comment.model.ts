@@ -1,4 +1,4 @@
-export type CommentStatus = 'FAILED' | 'SENT' | 'PENDING';
+export type CommentStatus = 'FAILED' | 'SENT' | 'PENDING' | 'DELETING';
 
 export interface UserComment {
     id: string;

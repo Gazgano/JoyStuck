@@ -85,3 +85,22 @@ export const retrySendCommentFailure = createAction(
   '[Home] Sent retry failed',
   props<{ failedCommentId: string }>()
 );
+
+////////////////////////////////////////
+// Delete comment
+////////////////////////////////////////
+
+export const deleteComment = createAction(
+  '[Home] Delete Comment', 
+  props<{ comment: UserComment }>()
+);
+
+export const deleteCommentSuccess = createAction(
+  '[Home] Comment deleted successfully', 
+  props<{ comment: UserComment }>()
+);
+
+export const deleteCommentFailure = createAction(
+  '[Home] Delete Comment failed', 
+  props<{ error: any, comment: UserComment }>()
+);

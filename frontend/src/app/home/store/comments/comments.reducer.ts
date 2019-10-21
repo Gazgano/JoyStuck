@@ -39,7 +39,7 @@ function onLoadComments(state: CommentsState, props: any) {
 function onLoadCommentsSuccess(state: CommentsState, props: any) {
   const statesByPostId = {...state.statesByPostId};
   statesByPostId[props.postId] = LoadingState.LOADED;
-  return { ...commentsAdapter.addAll(props.comments, state), statesByPostId };
+  return { ...commentsAdapter.addMany(props.comments, state), statesByPostId };
 }
 
 function onLoadCommentsFailure(state: CommentsState, props: any) {
@@ -91,6 +91,10 @@ function replaceComment(state: CommentsState, oldCommentId: string, newComment: 
   return commentsAdapter.addOne(newComment, newState);
 }
 
+function removeComment(state: CommentsState, commentId: string) {
+  return commentsAdapter.removeOne(commentId, state);
+}
+
 ////////////////////////////////////////////////
 // Reducer
 ////////////////////////////////////////////////
@@ -109,7 +113,10 @@ const reducer = createReducer(
   on(commentsActions.sendCommentFailure, (state, props) => updateStatus(state, props.failedCommentId, 'FAILED')),
   on(commentsActions.retrySendComment, (state, props) => updateStatus(state, props.failedComment.id, 'PENDING')),
   on(commentsActions.retrySendCommentSuccess, (state, props) => replaceComment(state, props.failedComment.id, props.comment)),
-  on(commentsActions.retrySendCommentFailure, (state, props) => updateStatus(state, props.failedCommentId, 'FAILED'))
+  on(commentsActions.retrySendCommentFailure, (state, props) => updateStatus(state, props.failedCommentId, 'FAILED')),
+  on(commentsActions.deleteComment, (state, props) => updateStatus(state, props.comment.id, 'DELETING')),
+  on(commentsActions.deleteCommentSuccess, (state, props) => removeComment(state, props.comment.id)),
+  on(commentsActions.deleteCommentFailure, (state, props) => updateStatus(state, props.comment.id, 'SENT'))
 );
 
 export function commentsReducer(state: CommentsState, action: Action) {

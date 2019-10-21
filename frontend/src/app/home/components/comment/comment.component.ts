@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 
 import { Logger } from '@app/core/services/logger.service';
 import { UserComment } from '../../models/user-comment.model';
@@ -9,7 +9,7 @@ import { Palette } from '@app/core/models/palette.model';
 const log = new Logger('CommentComponent');
 
 export interface CommentAction {
-  action: 'like' | 'unlike' | 'resend';
+  action: 'like' | 'unlike' | 'resend' | 'delete';
   comment: UserComment;
 }
 
@@ -28,6 +28,7 @@ export class CommentComponent implements OnInit {
 
   public author: User;
   public timestamp: string;
+  public menuOpen = false;
 
   constructor() { }
 
@@ -46,6 +47,10 @@ export class CommentComponent implements OnInit {
     } else {
       this.action.emit({ action: 'like', comment: this.comment });
     }
+  }
+
+  deleteComment() {
+    this.action.emit({ action: 'delete', comment: this.comment });
   }
 
   retrySend() {
