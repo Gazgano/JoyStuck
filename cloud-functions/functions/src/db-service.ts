@@ -25,8 +25,50 @@ export class DbService {
   ///////////////////////////////////
   // Public functions
   ///////////////////////////////////
+
+  async getUser(currentUserId: string, userId: string): Promise<DbServiceData<DocumentData>> {
+    if (currentUserId == userId) {
+      return this.getDocument('users', currentUserId);
+    }
+
+    return this.getUserRoles(currentUserId)
+    .then(roles => {
+      if (roles.length === 0 || !roles.includes('admin')) {
+        throw new DbServiceError({ userId }, 'You do not have the right to read infos about this user.', 403);
+      }
+      return;
+    })
+    .then(() => this.getDocument('users', userId));
+  }
+
+  async getUsers(currentUserId: string) {
+    return this.getUserRoles(currentUserId)
+    .then(roles => {
+      if (roles.length === 0 || !roles.includes('admin')) {
+        throw new DbServiceError({}, 'You do not have the right to read users infos.', 403);
+      }
+      return;
+    })
+    .then(() => this.getCollection('users'));
+  }
+
+  private async getUserRoles(userId: string): Promise<string[]> {
+    return this.db.doc(`users/${userId}`).get()
+    .then((ds: DocumentSnapshot) => {
+      if (!ds.exists) {
+        return [];
+      }
+      
+      const data = ds.data();
+      if (!data || !data.roles) {
+        return [];
+      }
   
-  async getCollection(collectionPath: string, conditions: {[key: string]: string}): Promise<DbServiceData<DocumentData[]>> {
+      return data.roles;
+    });
+  }
+
+  async getCollection(collectionPath: string, conditions?: {[key: string]: string}): Promise<DbServiceData<DocumentData[]>> {
     return this.buildQuery(collectionPath, conditions).get()
     .then((qs: QuerySnapshot) => this.formatQuerySnapshot(qs, collectionPath))
     .catch(err => { throw handleError(err) })
@@ -195,10 +237,16 @@ export class DbService {
 
   private buildQuery(collectionPath: string, conditions?: {[key: string]: string}): Query {
     let query = this.db.collection(collectionPath).offset(0);
+    
     for(let key in conditions) {
       query = query.where(key, '==', conditions[key]);
     }
-    return query.orderBy('timestamp', 'desc').limit(10);
+    
+    if (['posts', 'comments'].includes(collectionPath)) {
+      query = query.orderBy('timestamp', 'desc');
+    }
+    
+    return query.limit(10);
   }
 
   private async formatQuerySnapshot(querySnapshot: QuerySnapshot, collectionPath: string): Promise<DbServiceData<DocumentData[]>> {
@@ -218,7 +266,7 @@ export class DbService {
       return this.formatDocumentData(docSnapshot, collectionPath)
       .then(docData => new DbServiceData<DocumentData>(docData));
     } else {
-      return Promise.resolve(new DbServiceData<DocumentData>({}));
+      return Promise.resolve(new DbServiceData<DocumentData>({ id: docSnapshot.id }));
     }
   };
 
