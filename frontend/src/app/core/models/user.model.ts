@@ -4,4 +4,5 @@ export interface User {
   profileImageSrcUrl: string;
   email?: string;
   emailVerified?: boolean;
+  roles?: string[];
 }

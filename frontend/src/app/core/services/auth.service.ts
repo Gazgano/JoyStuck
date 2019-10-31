@@ -9,6 +9,7 @@ import { Logger } from '@app/core/services/logger.service';
 import { User } from '@app/core/models/user.model';
 import { WINDOW } from '../providers/window.provider';
 import { ErrorService } from './error.service';
+import { UserService } from './user.service';
 
 const log = new Logger('AuthService');
 
@@ -35,7 +36,8 @@ export class AuthService {
     private router: Router, 
     @Inject(WINDOW) private window: Window,
     private errorService: ErrorService,
-    private matSnackBar: MatSnackBar
+    private matSnackBar: MatSnackBar,
+    private userService: UserService
   ) { }
 
   initializeAuth() { // called in app.component.ts
@@ -87,7 +89,8 @@ export class AuthService {
     const currentUser = firebase.auth().currentUser;
     
     return this.buildUpdateProfilePromise(profileInfos, currentUser)
-    .then(() => this.currentUserSubject$.next(this.mapUser(currentUser)))
+    .then(() => this.mapUser(currentUser))
+    .then(user => this.currentUserSubject$.next(user))
     .then(() => {
       this.matSnackBar.open(`User's infos updated successfully`, 'Dismiss', { duration: 3000 });
       log.info(`User's infos updated successfully`);
@@ -120,11 +123,13 @@ export class AuthService {
     return updateProfilePromise;
   }
   
-  private onAuthStateChanged(user: firebase.User) {
-    if (user) {
-      this.currentUserSubject$.next(this.mapUser(user));
-      this.isAuthenticatedSubject.next(true);
-      log.info(`User ${user.displayName} is now signed in`);
+  private onAuthStateChanged(firebaseUser: firebase.User) {
+    if (firebaseUser) {
+      this.mapUser(firebaseUser).then(user => {
+        this.currentUserSubject$.next(user);
+        this.isAuthenticatedSubject.next(true);
+        log.info(`User ${firebaseUser.displayName} is now signed in`);
+      });
     } else {
       this.currentUserSubject$.next({} as User);
       this.isAuthenticatedSubject.next(false);
@@ -132,13 +137,19 @@ export class AuthService {
     }
   }
 
-  private mapUser(firebaseUser: firebase.User): User {
-    return {
+  private async mapUser(firebaseUser: firebase.User): Promise<User> {
+    const result = {
       id: firebaseUser.uid,
       username: firebaseUser.displayName,
       email: firebaseUser.email,
       profileImageSrcUrl: firebaseUser.photoURL,
       emailVerified: firebaseUser.emailVerified
     };
+    
+    return this.userService.getUserInfos(firebaseUser.uid)
+    .toPromise()
+    .then(userInfos => {
+      return {...result, roles: userInfos.roles || [] };
+    });
   }
 }

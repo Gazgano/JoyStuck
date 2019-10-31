@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, from } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { mergeMap, catchError } from 'rxjs/operators';
 
 import { ApiService, baseUrl } from '@app/core/services/api.service';
 import { Logger } from './logger.service';
-import { User } from '../models/user.model';
+import { ErrorService } from './error.service';
 
 const log = new Logger('UserService');
 
@@ -14,16 +14,14 @@ const log = new Logger('UserService');
 })
 export class UserService {
 
-  constructor(private http: HttpClient, private apiService: ApiService) { }
+  constructor(private http: HttpClient, private apiService: ApiService, private errorService: ErrorService) { }
 
-  getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(baseUrl + 'users')
-  }
-
-  deleteUser(id: string): Observable<string> {
+  getUserInfos(userId: string): Observable<any> {
     return from(this.apiService.getReqOptions()).pipe(
-      mergeMap(options => this.http.delete(baseUrl + 'users/' + id, options)),
-      map(() => id)
+      mergeMap(options => this.http.get<any>(`${baseUrl}users/${userId}`, options)),
+      catchError(err => {
+        throw this.errorService.handleError(err, 'An error happened while getting user info');
+      })
     );
   }
 }

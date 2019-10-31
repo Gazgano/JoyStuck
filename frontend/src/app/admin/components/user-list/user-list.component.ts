@@ -3,8 +3,6 @@ import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 
 import { User } from '@app/core/models/user.model';
-import * as userListActions from '../../store/user-list.actions';
-import { selectUsersArray, selectLoadingUsersIds } from '../../store/user-list.reducer';
 import { buttonConfirmationTrigger } from './user-list.animation';
 
 @Component({
@@ -22,17 +20,9 @@ export class UserListComponent implements OnInit {
   constructor(private store: Store<User[]>) { }
 
   ngOnInit() {
-    this.users$ = this.store.pipe(select(selectUsersArray));
-    this.loadingUsers$ = this.store.pipe(select(selectLoadingUsersIds));
-    this.store.dispatch(userListActions.loadUserList());
   }
 
   deleteUser(id: string) {
-    if (this.deletionConfirmation === id) {
-      this.store.dispatch(userListActions.deleteUser({ id }));
-    } else {
-      this.deletionConfirmation = id;
-    }
   }
 
   trackByUser(index: number, user: User) {

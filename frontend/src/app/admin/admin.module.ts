@@ -7,20 +7,16 @@ import { AdminDashboardComponent } from './components/admin-dashboard/admin-dash
 import { AdminRoutingModule } from './admin-routing.module';
 import { SharedModule } from '@app/shared/shared.module';
 import { UserListComponent } from './components/user-list/user-list.component';
-import { UserListEffects } from './store/user-list.effects';
-import * as fromUserList from './store/user-list.reducer';
 
 @NgModule({
   declarations: [ 
     AdminComponent, 
     AdminDashboardComponent,
-    UserListComponent,
+    UserListComponent
   ],
   imports: [
     AdminRoutingModule,
-    SharedModule,
-    StoreModule.forFeature('userList', fromUserList.reducer),
-    EffectsModule.forFeature([UserListEffects])
+    SharedModule
   ]
 })
 export class AdminModule { }
