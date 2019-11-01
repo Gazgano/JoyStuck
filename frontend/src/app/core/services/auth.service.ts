@@ -1,8 +1,8 @@
 import { Injectable, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { BehaviorSubject, ReplaySubject } from 'rxjs';
-import { distinctUntilChanged } from 'rxjs/operators';
+import { BehaviorSubject, ReplaySubject, Observable } from 'rxjs';
+import { distinctUntilChanged, startWith, map } from 'rxjs/operators';
 import * as firebase from 'firebase/app';
 
 import { Logger } from '@app/core/services/logger.service';
@@ -89,7 +89,7 @@ export class AuthService {
     const currentUser = firebase.auth().currentUser;
     
     return this.buildUpdateProfilePromise(profileInfos, currentUser)
-    .then(() => this.mapUser(currentUser))
+    .then(() => this.mapUser(currentUser).toPromise())
     .then(user => this.currentUserSubject$.next(user))
     .then(() => {
       this.matSnackBar.open(`User's infos updated successfully`, 'Dismiss', { duration: 3000 });
@@ -125,7 +125,8 @@ export class AuthService {
   
   private onAuthStateChanged(firebaseUser: firebase.User) {
     if (firebaseUser) {
-      this.mapUser(firebaseUser).then(user => {
+      this.mapUser(firebaseUser)
+      .subscribe(user => {
         this.currentUserSubject$.next(user);
         this.isAuthenticatedSubject.next(true);
         log.info(`User ${firebaseUser.displayName} is now signed in`);
@@ -137,7 +138,7 @@ export class AuthService {
     }
   }
 
-  private async mapUser(firebaseUser: firebase.User): Promise<User> {
+  private mapUser(firebaseUser: firebase.User): Observable<User> {
     const result = {
       id: firebaseUser.uid,
       username: firebaseUser.displayName,
@@ -146,10 +147,9 @@ export class AuthService {
       emailVerified: firebaseUser.emailVerified
     };
     
-    return this.userService.getUserInfos(firebaseUser.uid)
-    .toPromise()
-    .then(userInfos => {
-      return {...result, roles: userInfos.roles || [] };
-    });
+    return this.userService.getUserInfos(firebaseUser.uid).pipe(
+      startWith(result),
+      map(userInfos => ({...result, roles: userInfos.roles || [] }))
+    );
   }
 }

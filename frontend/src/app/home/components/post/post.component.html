@@ -11,7 +11,7 @@
             <div class="PostCard-Title-MoreButtonContainer">
                 <mat-spinner *ngIf="inDeletionState == 'LOADING'; else moreButton" [diameter]="20" [color]="postDesign.palette"></mat-spinner>
                 <ng-template #moreButton>
-                    <button *ngIf="postAuthor.id == currentUser.id" [matMenuTriggerFor]="menu" color="foreground" mat-icon-button><mat-icon>more_vert</mat-icon></button>
+                    <button *ngIf="postAuthor.id == currentUser.id || currentUser.roles && currentUser.roles.includes('admin')" [matMenuTriggerFor]="menu" color="foreground" mat-icon-button><mat-icon>more_vert</mat-icon></button>
                     <mat-menu #menu="matMenu">
                         <button mat-menu-item (click)="deletePost()">
                         <mat-icon>delete</mat-icon>
