@@ -9,7 +9,7 @@
     <button (click)="refresh()" color="primary" mat-raised-button>Retry</button>
   </div>
 
-  <div class="PostPage-Container" *ngIf="loadingState === 'LOADED'">
+  <div class="PostPage-Container" *ngIf="loadingState === 'LOADED' && currentUser$ | async as currentUser">
     <div class="PostPage-AddPostActions">
       <button mat-fab color="primary" title="Post a message" (click)="toggleEditor('message')"><mat-icon>edit</mat-icon></button>
       <button mat-fab color="accent" title="Share an image" (click)="toggleEditor('screenshotShare')"><mat-icon>image</mat-icon></button>

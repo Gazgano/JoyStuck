@@ -31,7 +31,7 @@ export class PostPageComponent implements OnInit {
   public sendPostState$: Observable<CallState>;
   public sendPostSuccessAction$: Observable<any>;
   public displayedEditor: PostEditorType;
-  public currentUser: User;
+  public currentUser$: Observable<User>;
 
   constructor(private store: Store<Post[]>, private authService: AuthService, private actions$: Actions) { }
 
@@ -40,7 +40,7 @@ export class PostPageComponent implements OnInit {
     this.loadingState$ = this.store.pipe(select(postsSelectors.selectLoadPostsState));
     this.sendPostState$ = this.store.pipe(select(postsSelectors.selectSendPostState));
     this.sendPostSuccessAction$ = this.actions$.pipe(ofType(postsActions.sendPostSuccess));
-    this.currentUser = this.authService.getCurrentUser();
+    this.currentUser$ = this.authService.currentUser$;
     this.refresh();
   }
 
@@ -69,12 +69,14 @@ export class PostPageComponent implements OnInit {
   }
 
   onPostAction(postAction: PostAction | PostEditorAction) {
+    const currentUserId = this.authService.getCurrentUser().id;
+
     switch (postAction.action) {
       case 'like':
-        this.store.dispatch(postsActions.likePost({ post: postAction.post, currentUserId: this.currentUser.id }));
+        this.store.dispatch(postsActions.likePost({ post: postAction.post, currentUserId }));
         break;
       case 'unlike':
-        this.store.dispatch(postsActions.unlikePost({ post: postAction.post, currentUserId: this.currentUser.id }));
+        this.store.dispatch(postsActions.unlikePost({ post: postAction.post, currentUserId }));
         break;
       case 'loadComments':
         this.store.dispatch(commentsActions.loadComments({ postId: postAction.post.id }));
