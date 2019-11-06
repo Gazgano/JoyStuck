@@ -2,6 +2,7 @@
 
 <div class="ProfilePage-Checklist">
   <app-checklist-item [condition]="currentUser.emailVerified" [textIfTrue]="'Email verified'" [textIfFalse]="'Email not verified'"></app-checklist-item>
+  <app-checklist-item *ngIf="isAdmin" [condition]="isAdmin" [textIfTrue]="'Admin'" [textIfFalse]="'Admin'"></app-checklist-item>
 </div>
 
 <div *ngIf="(loadedImage$ | async) || {} as loadedImage" class="ProfilePage-UploadImage">

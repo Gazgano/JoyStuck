@@ -22,6 +22,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   public currentUser: User;
   public isSubmitting = false;
+  public isAdmin = false;
 
   private submissionSubject$ = new Subject<boolean>();
   public submission$ = this.submissionSubject$.asObservable();
@@ -39,6 +40,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUser();
+    this.isAdmin = this.currentUser.roles && this.currentUser.roles.includes('admin');
   }
 
   cleanFileInput() { // reset the file input and display current user's image
