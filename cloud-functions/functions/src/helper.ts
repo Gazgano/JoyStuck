@@ -1,5 +1,7 @@
 const moment = require('moment');
+
 import { DocumentData, Timestamp } from '@google-cloud/firestore';
+import { isEmpty } from 'lodash';
 
 import { DbServiceError } from './models/db-service-error.model';
 import { DbServiceData } from './models/db-service-data.model';
@@ -31,7 +33,7 @@ export function timestampsToISO(timestamp: Timestamp): string {
 }
 
 export function handleError(err?: any): DbServiceError {
-  if (!err) {
+  if (!err && !isEmpty(err)) {
     return new DbServiceError();
   } else if (err instanceof DbServiceError) {
     return err;
