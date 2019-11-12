@@ -41,6 +41,10 @@ export class CommentComponent implements OnInit {
     this.timestamp = moment(this.comment.timestamp).format('D MMM HH:mm');
   }
 
+  get canDelete(): boolean {
+    return this.author.id == this.currentUser.id || this.currentUser.roles && this.currentUser.roles.includes('admin');
+  }
+
   toggleLikeComment() {
     if (this.comment.likeIds && this.comment.likeIds.includes(this.currentUser.id)) {
       this.action.emit({ action: 'unlike', comment: this.comment });
