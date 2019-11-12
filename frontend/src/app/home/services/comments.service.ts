@@ -1,11 +1,10 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, from } from 'rxjs';
-import { mergeMap, map, catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 import { isEmpty } from 'lodash';
 
 import { Logger } from '@app/core/services/logger.service';
-import { ApiService } from '@app/core/services/api.service';
 import { UserComment } from '../models/user-comment.model';
 import { ErrorService } from '@app/core/services/error.service';
 import { BASE_URL } from '@app/core/providers/base-url.provider';
@@ -16,14 +15,12 @@ const log = new Logger('CommentsService');
 export class CommentsService {
   constructor(
     private http: HttpClient,
-    private apiService: ApiService,
     private errorService: ErrorService,
     @Inject(BASE_URL) private baseUrl: string
   ) {}
 
   getCommentsByPostId(postId: string): Observable<UserComment[]> {
-    return from(this.apiService.getReqOptions()).pipe(
-      mergeMap(options => this.http.get<UserComment[]>(`${this.baseUrl}comments/?post_id=${postId}`, options)),
+    return this.http.get<UserComment[]>(`${this.baseUrl}comments/?post_id=${postId}`).pipe(
       map(comments => comments.map(comment => this.mapComment(comment))),
       catchError(err => {
         throw this.errorService.handleError(err, 'An error happened while getting the comments');
@@ -32,8 +29,7 @@ export class CommentsService {
   }
 
   likeComment(id: string): Observable<UserComment | null> {
-    return from(this.apiService.getReqOptions()).pipe(
-      mergeMap(options => this.http.put<UserComment>(`${this.baseUrl}comments/${id}/like`, {}, options)),
+    return this.http.put<UserComment>(`${this.baseUrl}comments/${id}/like`, {}).pipe(
       map(comment => this.mapComment(comment)),
       catchError(err => {
         throw this.errorService.handleError(err, 'An error happened while liking the comment', true);
@@ -42,8 +38,7 @@ export class CommentsService {
   }
 
   unlikeComment(id: string): Observable<UserComment | null> {
-    return from(this.apiService.getReqOptions()).pipe(
-      mergeMap(options => this.http.put<UserComment>(`${this.baseUrl}comments/${id}/unlike`, {}, options)),
+    return this.http.put<UserComment>(`${this.baseUrl}comments/${id}/unlike`, {}).pipe(
       map(comment => this.mapComment(comment)),
       catchError(err => {
         throw this.errorService.handleError(err, 'An error happened while unliking the comment', true);
@@ -52,8 +47,7 @@ export class CommentsService {
   }
 
   postComment(pendingComment: any): Observable<UserComment | null> {
-    return from(this.apiService.getReqOptions()).pipe(
-      mergeMap(options => this.http.post<UserComment>(`${this.baseUrl}comments/`, pendingComment, options)),
+    return this.http.post<UserComment>(`${this.baseUrl}comments/`, pendingComment).pipe(
       map(comment => this.mapComment(comment)),
       catchError(err => {
         throw this.errorService.handleError(err, 'An error happened while posting the comment', true);
@@ -62,8 +56,7 @@ export class CommentsService {
   }
   
   deleteComment(id: string): Observable<any> {
-    return from(this.apiService.getReqOptions()).pipe(
-      mergeMap(options => this.http.delete(`${this.baseUrl}comments/${id}`, options)),
+    return this.http.delete(`${this.baseUrl}comments/${id}`).pipe(
       catchError(err => {
         throw this.errorService.handleError(err, 'An error happened while deleting the comment', true);
       })
