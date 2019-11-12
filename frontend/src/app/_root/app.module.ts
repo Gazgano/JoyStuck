@@ -13,6 +13,7 @@ import { SignupDialogComponent } from './containers/signup-dialog/signup-dialog.
 import { ForgottenPwdDialogComponent } from './containers/forgotten-pwd-dialog/forgotten-pwd-dialog.component';
 import { WINDOW_PROVIDERS } from '@app/core/providers/window.provider';
 import { AppErrorHandler } from '@app/core/providers/error-handler.provider';
+import { HttpBearerTokenInterceptor } from '@app/core/providers/http-bearer-token.interceptor';
 
 @ NgModule({
   declarations: [
@@ -31,6 +32,11 @@ import { AppErrorHandler } from '@app/core/providers/error-handler.provider';
   {
     provide: HTTP_INTERCEPTORS,
     useClass: HttpErrorInterceptor,
+    multi: true
+  },
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: HttpBearerTokenInterceptor,
     multi: true
   },
   FormService,
