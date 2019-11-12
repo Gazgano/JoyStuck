@@ -32,74 +32,55 @@ import { ImagesPreviewerComponent } from './components/images-previewer/images-p
 import { FileSizePipe } from './pipes/file-size.pipe';
 import { HtmlFormatPipe } from './pipes/html-format.pipe';
 
+const externalSharedModules = [
+  CommonModule,
+  FontAwesomeModule,
+  FormsModule,
+  MatButtonModule,
+  MatCardModule,
+  MatDialogModule,
+  MatDividerModule,
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule,
+  MatListModule,
+  MatMenuModule,
+  MatProgressBarModule,
+  MatProgressSpinnerModule,
+  MatRippleModule,
+  MatSidenavModule,
+  MatSnackBarModule,
+  MatToolbarModule,
+  MatTooltipModule,
+  ReactiveFormsModule
+];
+
+const internalSharedModules = [
+  ChecklistItemComponent,
+  FileSizePipe,
+  HtmlFormatPipe,
+  ImagesPreviewerComponent,
+  LoaderComponent,
+  ProfileFormComponent,
+  ProfileImageComponent,
+  ShellComponent,
+  UppercaseFirstLetterPipe
+];
+
 
 @NgModule({
   declarations: [
-    FooterComponent,
     HeaderComponent,
-    ShellComponent,
-    LoaderComponent,
-    UppercaseFirstLetterPipe,
-    ProfileFormComponent,
-    ChecklistItemComponent,
-    ProfileImageComponent,
-    ImagesPreviewerComponent,
-    FileSizePipe,
-    HtmlFormatPipe
+    FooterComponent,
+    ...internalSharedModules
   ],
   imports: [
-    CommonModule,
-    FontAwesomeModule,
-    FormsModule,
-    MatButtonModule,
-    MatCardModule,
-    MatDialogModule,
-    MatDividerModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatListModule,
-    MatMenuModule,
-    MatProgressBarModule,
-    MatProgressSpinnerModule,
-    MatRippleModule,
-    MatSidenavModule,
-    MatSnackBarModule,
-    MatToolbarModule,
-    MatTooltipModule,
-    ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    ...externalSharedModules
   ],
   exports: [
-    ChecklistItemComponent,
-    CommonModule,
-    FileSizePipe,
-    FontAwesomeModule,
-    FormsModule,
-    HtmlFormatPipe,
-    ImagesPreviewerComponent,
-    LoaderComponent,
-    MatButtonModule,
-    MatCardModule,
-    MatDialogModule,
-    MatDividerModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatListModule,
-    MatMenuModule,
-    MatProgressBarModule,
-    MatProgressSpinnerModule,
-    MatRippleModule,
-    MatSidenavModule,
-    MatSnackBarModule,
-    MatToolbarModule,
-    MatTooltipModule,
-    ProfileFormComponent,
-    ProfileImageComponent,
-    ReactiveFormsModule,
-    ShellComponent,
-    UppercaseFirstLetterPipe
+    ...internalSharedModules,
+    ...externalSharedModules
   ]
 })
 export class SharedModule { }
