@@ -1,3 +1,7 @@
-<p>
-  Error 404: page not found
-</p>
+<div class="PageNotFound">
+    <div class="PageNotFound-Icon">
+      <mat-icon color="primary" [inline]="true">sentiment_dissatisfied</mat-icon>
+    </div>
+    <h3>Error 404! The you are looking for does not exist</h3>
+    <button (click)="goBack()" color="primary" mat-raised-button>Go back</button>
+</div>
