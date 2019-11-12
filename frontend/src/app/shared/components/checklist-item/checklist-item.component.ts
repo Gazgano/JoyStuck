@@ -1,9 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-checklist-item',
   templateUrl: './checklist-item.component.html',
-  styleUrls: ['./checklist-item.component.scss']
+  styleUrls: ['./checklist-item.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChecklistItemComponent {
 

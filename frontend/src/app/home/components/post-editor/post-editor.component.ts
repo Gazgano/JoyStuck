@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { Validators, FormControl, FormGroup } from '@angular/forms';
 import { Observable, Subscription, forkJoin } from 'rxjs';
 import { tap, takeLast, map } from 'rxjs/operators';
@@ -19,7 +19,8 @@ const log = new Logger('PostEditorComponent');
 @Component({
   selector: 'app-post-editor',
   templateUrl: './post-editor.component.html',
-  styleUrls: ['./post-editor.component.scss']
+  styleUrls: ['./post-editor.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PostEditorComponent implements OnInit, OnDestroy {
 

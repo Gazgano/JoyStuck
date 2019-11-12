@@ -29,23 +29,23 @@ import { HttpBearerTokenInterceptor } from '@app/core/providers/http-bearer-toke
     SharedModule
   ],
   providers: [
-  {
-    provide: HTTP_INTERCEPTORS,
-    useClass: HttpErrorInterceptor,
-    multi: true
-  },
-  {
-    provide: HTTP_INTERCEPTORS,
-    useClass: HttpBearerTokenInterceptor,
-    multi: true
-  },
-  FormService,
-  WINDOW_PROVIDERS,
-  {
-    provide: ErrorHandler,
-    useClass: AppErrorHandler
-  }
-],
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpBearerTokenInterceptor,
+      multi: true
+    },
+    FormService,
+    WINDOW_PROVIDERS,
+    {
+      provide: ErrorHandler,
+      useClass: AppErrorHandler
+    }
+  ],
   bootstrap: [AppComponent],
   entryComponents: [SignupDialogComponent, ForgottenPwdDialogComponent]
 })

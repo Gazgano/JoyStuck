@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { User } from '@app/core/models/user.model';
 import { Logger } from '@app/core/services/logger.service';
@@ -8,7 +8,8 @@ const log = new Logger('ProfileImageComponent');
 @Component({
   selector: 'app-profile-image',
   templateUrl: './profile-image.component.html',
-  styleUrls: ['./profile-image.component.scss']
+  styleUrls: ['./profile-image.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileImageComponent implements OnInit {
 

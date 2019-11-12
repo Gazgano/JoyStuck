@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, HostListener } from '@angular/core';
+import { Component, OnInit, Inject, HostListener, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { Logger } from '@app/core/services/logger.service';
@@ -8,7 +8,8 @@ const log = new Logger('ImageViewerComponent');
 @Component({
   selector: 'app-image-viewer',
   templateUrl: './image-viewer.component.html',
-  styleUrls: ['./image-viewer.component.scss']
+  styleUrls: ['./image-viewer.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ImageViewerComponent implements OnInit {
 

@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
 import { mergeMap, map, catchError, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 import * as postActions from './post.actions';
 import { PostsService } from '../../services/posts.service';
@@ -13,7 +12,7 @@ const log = new Logger('PostEffects');
 @Injectable()
 export class PostEffects {
 
-  constructor(private actions$: Actions, private postsService: PostsService, private matSnackBar: MatSnackBar) { }
+  constructor(private actions$: Actions, private postsService: PostsService) { }
 
   loadPosts$ = createEffect(() => this.actions$.pipe(
     ofType(postActions.loadPosts),

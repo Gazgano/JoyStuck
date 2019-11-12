@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, combineLatest, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -22,6 +22,7 @@ const log = new Logger('PostComponent');
   templateUrl: './post.component.html',
   styleUrls: ['./post.component.scss'],
   animations: [openCloseTrigger],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PostComponent implements OnInit {
 
@@ -61,6 +62,10 @@ export class PostComponent implements OnInit {
 
   get htmlFormattedContent() {
     return (new HtmlFormatPipe()).transform(this.post.content);
+  }
+
+  get isInDeletion(): boolean {
+    return this.inDeletionState == 'LOADING';
   }
 
   getPreviewsCount(imagesLength: number) {

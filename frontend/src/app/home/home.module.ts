@@ -23,7 +23,8 @@ import { ImageViewerComponent } from './components/image-viewer/image-viewer.com
     PostPageComponent, 
     PostComponent, 
     CommentPageComponent, 
-    PostEditorComponent, ImageViewerComponent 
+    PostEditorComponent,
+    ImageViewerComponent 
   ],
   imports: [
     CommonModule,

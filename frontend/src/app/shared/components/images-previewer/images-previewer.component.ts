@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, ChangeDetectorRef, Input } from '@angular/core';
+import { Component, ViewChild, ElementRef, ChangeDetectorRef, Input, ChangeDetectionStrategy } from '@angular/core';
 
 import { FileService } from '@app/core/services/file.service';
 import { Logger } from '@app/core/services/logger.service';
@@ -9,7 +9,8 @@ const log = new Logger('ImagesPreviewerComponent');
 @Component({
   selector: 'app-images-previewer',
   templateUrl: './images-previewer.component.html',
-  styleUrls: ['./images-previewer.component.scss']
+  styleUrls: ['./images-previewer.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ImagesPreviewerComponent {
 
