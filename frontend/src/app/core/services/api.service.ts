@@ -2,12 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
 import * as firebase from 'firebase/app';
 
-import { environment } from 'src/environments/environment';
-
-export const baseUrl = environment.production?
-  'https://us-central1-joystuck.cloudfunctions.net/api/':
-  'http://localhost:5000/joystuck/us-central1/api/';
-
 @Injectable({
   providedIn: 'root'
 })
