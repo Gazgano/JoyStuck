@@ -75,7 +75,7 @@ export class PostsService {
       },
       timestamp: obj.timestamp,
       content: obj.content,
-      likeIds: obj.likeIds || [],
+      likes: obj.likes || [],
       commentsCount: obj.commentsCount || 0,
       title: obj.title,
       type: obj.type,

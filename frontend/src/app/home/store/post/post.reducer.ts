@@ -6,6 +6,7 @@ import { Post } from '../../models/post.model';
 import * as postActions from './post.actions';
 import { CallState, LoadingState, ErrorState } from '@app/core/models/call-state.model';
 import { Logger } from '@app/core/services/logger.service';
+import { FirebaseUser } from '@app/home/models/firebase-user.model';
 
 const log = new Logger('PostReducer');
 
@@ -35,27 +36,29 @@ const initialState = postAdapter.getInitialState({
 ////////////////////////////////////////////////
 
 function addLike(state: PostState, props: any) {
-  let likeIds = props.post.likeIds || [];
-  likeIds = likeIds.includes(props.currentUserId)?
-    props.post.likeIds:
-    [...props.post.likeIds, props.currentUserId];
+  let likes = props.post.likes || [];
+
+  if (!likes.some(l => l.uid === props.currentUser.id)) {
+    likes = [
+      ...likes,
+      { uid: props.currentUser.id, displayName: props.currentUser.username, photoURL: props.currentUser.profileImageSrcUrl }
+    ]
+  }
 
   const update: Update<Post> = {
     id: props.post.id,
-    changes: { likeIds }
+    changes: { likes }
   };
   return postAdapter.updateOne(update, state);
 }
 
 function removeLike(state: PostState, props: any) {
-  let likeIds = props.post.likeIds || [];
-  likeIds = likeIds.includes(props.currentUserId)?
-    props.post.likeIds.filter((e: string) => e !== props.currentUserId):
-    props.post.likeIds;
+  let likes = props.post.likes || [];
+  likes = likes.filter((l: FirebaseUser) => l.uid !== props.currentUser.id);
 
   const update: Update<Post> = {
     id: props.post.id,
-    changes: { likeIds }
+    changes: { likes }
   };
   return postAdapter.updateOne(update, state);
 }

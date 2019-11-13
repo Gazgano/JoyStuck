@@ -133,7 +133,7 @@ export class PostEditorComponent implements OnInit, OnDestroy {
         photoURL: this.currentUser.profileImageSrcUrl
       },
       title,
-      likeIds: [],
+      likes: [],
       commentsCount: 0,
       content: message,
       imagesStorageURLs

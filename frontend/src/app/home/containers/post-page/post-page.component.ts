@@ -68,14 +68,14 @@ export class PostPageComponent implements OnInit {
   }
 
   onPostAction(postAction: PostAction | PostEditorAction) {
-    const currentUserId = this.authService.getCurrentUser().id;
+    const currentUser = this.authService.getCurrentUser();
 
     switch (postAction.action) {
       case 'like':
-        this.store.dispatch(postsActions.likePost({ post: postAction.post, currentUserId }));
+        this.store.dispatch(postsActions.likePost({ post: postAction.post, currentUser }));
         break;
       case 'unlike':
-        this.store.dispatch(postsActions.unlikePost({ post: postAction.post, currentUserId }));
+        this.store.dispatch(postsActions.unlikePost({ post: postAction.post, currentUser }));
         break;
       case 'loadComments':
         this.store.dispatch(commentsActions.loadComments({ postId: postAction.post.id }));

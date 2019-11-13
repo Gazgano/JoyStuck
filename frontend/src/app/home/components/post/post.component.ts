@@ -4,6 +4,7 @@ import { Observable, combineLatest, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import * as moment from 'moment';
 import { faBullhorn } from '@fortawesome/free-solid-svg-icons';
+import { isArray } from 'lodash';
 
 import { Logger } from '@app/core/services/logger.service';
 import { Post } from '../../models/post.model';
@@ -68,12 +69,43 @@ export class PostComponent implements OnInit {
     return this.inDeletionState == 'LOADING';
   }
 
+  get isLikesCountDisplayed(): boolean {
+    return this.post.likes && isArray(this.post.likes) && this.post.likes.length > 0;
+  }
+  
+  get likesText(): string {
+    if (!this.post.likes || !isArray(this.post.likes) || this.post.likes.length === 0) {
+      return '';
+    }
+    const names = this.post.likes.map(l => l.displayName);
+    
+    let namesConcat: string;
+    const maxNamesDisplayed = 3;
+    if (names.length > maxNamesDisplayed) {
+      namesConcat = `${names.slice(0, maxNamesDisplayed).join(', ')} and ${names.length - maxNamesDisplayed} other people`;
+    }
+    else if (names.length > 1) {
+      namesConcat = names.slice(0, -1).join(', ') + ' and ' + names[names.length-1];
+    } else {
+      namesConcat = names[0];
+    }
+    
+    return namesConcat + ' liked that.';
+  }
+
+  didCurrentUserLike(): boolean {
+    if (!this.post.likes || !isArray(this.post.likes) || this.post.likes.length === 0) {
+      return false;
+    }
+    return this.post.likes.map(l => l.uid).includes(this.currentUser.id);
+  }
+
   getPreviewsCount(imagesLength: number) {
     return Math.min(imagesLength, this.maxPreviewsCount);
   }
 
   toggleLikePost() {
-    if (this.post.likeIds && this.post.likeIds.includes(this.currentUser.id)) {
+    if (this.didCurrentUserLike()) {
       this.action.emit({ action: 'unlike', post: this.post });
     } else {
       this.action.emit({ action: 'like', post: this.post });

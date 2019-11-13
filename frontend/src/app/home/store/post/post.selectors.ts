@@ -22,9 +22,9 @@ export const selectLoadPostsState = createSelector(
   (state: PostState) => state.loadPostsState
 );
 
-export const selectLikeIds = (postId: string) => createSelector(
+export const selectLikes = (postId: string) => createSelector(
   selectPostsEntities,
-  posts => posts[postId].likeIds || []
+  posts => posts[postId].likes || []
 );
 
 export const selectSendPostState = createSelector(

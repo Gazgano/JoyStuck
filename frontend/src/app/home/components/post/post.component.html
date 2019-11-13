@@ -37,10 +37,10 @@
     </mat-card-content>
 
     <mat-card-actions [ngClass]="'PostCard-Actions--' + postDesign.palette">
-        <button (click)="toggleLikePost()" mat-button>
-            <mat-icon *ngIf="!post.likeIds?.includes(currentUser.id)" fontSet="material-icons-outlined">thumb_up</mat-icon>
-            <mat-icon *ngIf="post.likeIds?.includes(currentUser.id)">thumb_up</mat-icon>
-            <span *ngIf="post.likeIds && post.likeIds.length > 0">{{ post.likeIds.length }}</span>
+        <button (click)="toggleLikePost()" mat-button [matTooltip]="likesText">
+            <mat-icon *ngIf="!didCurrentUserLike()" fontSet="material-icons-outlined">thumb_up</mat-icon>
+            <mat-icon *ngIf="didCurrentUserLike()">thumb_up</mat-icon>
+            <span *ngIf="isLikesCountDisplayed">{{ post.likes.length }}</span>
         </button>
         <button mat-button (click)="toggleComments()">
             <ng-container *ngIf="commentsCount$ | async as commentsCount; else postCommentsCount">
@@ -73,10 +73,10 @@
     <div class="PostCardLight-Title">{{ post.title }}</div>
 
     <mat-card-actions [ngClass]="'PostCardLight-Actions--' + postDesign.palette">
-        <button (click)="toggleLikePost()" mat-button>
-            <mat-icon *ngIf="!post.likeIds?.includes(currentUser.id)" fontSet="material-icons-outlined">thumb_up</mat-icon>
-            <mat-icon *ngIf="post.likeIds?.includes(currentUser.id)">thumb_up</mat-icon>
-            <span *ngIf="post.likeIds && post.likeIds.length > 0">{{ post.likeIds.length }}</span>
+        <button (click)="toggleLikePost()" mat-button [matTooltip]="likesText">
+            <mat-icon *ngIf="!didCurrentUserLike()" fontSet="material-icons-outlined">thumb_up</mat-icon>
+            <mat-icon *ngIf="didCurrentUserLike()">thumb_up</mat-icon>
+            <span *ngIf="isLikesCountDisplayed">{{ post.likes.length }}</span>
         </button>
         <button mat-button (click)="toggleComments()">
             <mat-icon fontSet="material-icons-outlined">chat_bubble_outline</mat-icon>
