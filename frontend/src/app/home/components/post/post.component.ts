@@ -15,6 +15,7 @@ import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
 import { FileService } from '@app/core/services/file.service';
 import { HtmlFormatPipe } from '@app/shared/pipes/html-format.pipe';
 import { CallState } from '@app/core/models/call-state.model';
+import { LikeTextPipe } from '@app/shared/pipes/like-text.pipe';
 
 const log = new Logger('PostComponent');
 
@@ -71,26 +72,6 @@ export class PostComponent implements OnInit {
 
   get isLikesCountDisplayed(): boolean {
     return this.post.likes && isArray(this.post.likes) && this.post.likes.length > 0;
-  }
-  
-  get likesText(): string {
-    if (!this.post.likes || !isArray(this.post.likes) || this.post.likes.length === 0) {
-      return '';
-    }
-    const names = this.post.likes.map(l => l.displayName);
-    
-    let namesConcat: string;
-    const maxNamesDisplayed = 3;
-    if (names.length > maxNamesDisplayed) {
-      namesConcat = `${names.slice(0, maxNamesDisplayed).join(', ')} and ${names.length - maxNamesDisplayed} other people`;
-    }
-    else if (names.length > 1) {
-      namesConcat = names.slice(0, -1).join(', ') + ' and ' + names[names.length-1];
-    } else {
-      namesConcat = names[0];
-    }
-    
-    return namesConcat + ' liked that.';
   }
 
   didCurrentUserLike(): boolean {

@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { isArray } from 'lodash';
 
 import { Logger } from '@app/core/services/logger.service';
 import { UserComment } from '../../models/user-comment.model';
@@ -46,8 +47,19 @@ export class CommentComponent implements OnInit {
     return this.author.id == this.currentUser.id || this.currentUser.roles && this.currentUser.roles.includes('admin');
   }
 
+  get isLikesCountDisplayed(): boolean {
+    return this.comment.likes && isArray(this.comment.likes) && this.comment.likes.length > 0;
+  }
+
+  didCurrentUserLike(): boolean {
+    if (!this.comment.likes || !isArray(this.comment.likes) || this.comment.likes.length === 0) {
+      return false;
+    }
+    return this.comment.likes.map(l => l.uid).includes(this.currentUser.id);
+  }
+
   toggleLikeComment() {
-    if (this.comment.likeIds && this.comment.likeIds.includes(this.currentUser.id)) {
+    if (this.didCurrentUserLike()) {
       this.action.emit({ action: 'unlike', comment: this.comment });
     } else {
       this.action.emit({ action: 'like', comment: this.comment });

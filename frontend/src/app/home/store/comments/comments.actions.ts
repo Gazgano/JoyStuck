@@ -1,5 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { UserComment } from '../../models/user-comment.model';
+import { User } from '@app/core/models/user.model';
 
 ////////////////////////////////////////
 // Load comments
@@ -26,7 +27,7 @@ export const loadCommentsFailure = createAction(
 
 export const likeComment = createAction(
   '[Home] Like Comment',
-  props<{ comment: UserComment, currentUserId: string }>()
+  props<{ comment: UserComment, currentUser: User }>()
 );
 
 export const likeCommentSuccess = createAction(
@@ -35,12 +36,12 @@ export const likeCommentSuccess = createAction(
 
 export const likeCommentFailure = createAction(
   '[Home] Like Comment failed',
-  props<{ comment: UserComment, currentUserId: string }>()
+  props<{ comment: UserComment, currentUser: User }>()
 );
 
 export const unlikeComment = createAction(
   '[Home] Unlike Comment',
-  props<{ comment: UserComment, currentUserId: string }>()
+  props<{ comment: UserComment, currentUser: User }>()
 );
 
 export const unlikeCommentSuccess = createAction(
@@ -49,7 +50,7 @@ export const unlikeCommentSuccess = createAction(
 
 export const unlikeCommentFailure = createAction(
   '[Home] Unlike Comment failed',
-  props<{ comment: UserComment, currentUserId: string }>()
+  props<{ comment: UserComment, currentUser: User }>()
 );
 
 ////////////////////////////////////////

@@ -78,7 +78,7 @@ export class CommentsService {
       },
       timestamp: obj.timestamp,
       content: obj.content,
-      likeIds: obj.likeIds || [],
+      likes: obj.likes || [],
       status: 'SENT'
     };
   }

@@ -8,6 +8,6 @@ export interface UserComment {
     author: FirebaseUser;
     timestamp: string;
     content: string;
-    likeIds: string[];
+    likes: FirebaseUser[];
     status: CommentStatus;
 }

@@ -6,6 +6,7 @@ import { UserComment, CommentStatus } from '../../models/user-comment.model';
 import * as commentsActions from './comments.actions';
 import { Logger } from '@app/core/services/logger.service';
 import { CallState, LoadingState } from '@app/core/models/call-state.model';
+import { FirebaseUser } from '@app/home/models/firebase-user.model';
 
 const log = new Logger('CommentsReducer');
 
@@ -53,27 +54,29 @@ function addComment(state: CommentsState, props: any) {
 }
 
 function addLike(state: CommentsState, props: any) {
-  let likeIds = props.comment.likeIds || [];
-  likeIds = likeIds.includes(props.currentUserId)?
-    likeIds:
-    [...likeIds, props.currentUserId];
+  let likes = props.comment.likes || [];
+
+  if (!likes.some(l => l.uid === props.currentUser.id)) {
+    likes = [
+      ...likes,
+      { uid: props.currentUser.id, displayName: props.currentUser.username, photoURL: props.currentUser.profileImageSrcUrl }
+    ]
+  }
 
   const update: Update<UserComment> = {
     id: props.comment.id,
-    changes: { likeIds }
+    changes: { likes }
   };
   return commentsAdapter.updateOne(update, state);
 }
 
 function removeLike(state: CommentsState, props: any) {
-  let likeIds = props.comment.likeIds || [];
-  likeIds = likeIds.includes(props.currentUserId)?
-    likeIds.filter((e: string) => e !== props.currentUserId):
-    likeIds;
+  let likes = props.comment.likes || [];
+  likes = likes.filter((l: FirebaseUser) => l.uid !== props.currentUser.id);
 
   const update: Update<UserComment> = {
     id: props.comment.id,
-    changes: { likeIds }
+    changes: { likes }
   };
   return commentsAdapter.updateOne(update, state);
 }

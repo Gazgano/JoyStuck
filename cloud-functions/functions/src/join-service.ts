@@ -17,7 +17,8 @@ export class JoinService {
                 return this.applyUserJoin(docData, 'author_id', 'author')
                 .then(joinedAuthorData => this.applyUserJoin(joinedAuthorData, 'likeIds', 'likes'));
             case 'comments':
-                return this.applyUserJoin(docData, 'author_id', 'author');
+                return this.applyUserJoin(docData, 'author_id', 'author')
+                .then(joinedAuthorData => this.applyUserJoin(joinedAuthorData, 'likeIds', 'likes'));
             default: 
                 return new Promise(resolve => resolve(docData));
         }

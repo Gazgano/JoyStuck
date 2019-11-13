@@ -7,9 +7,9 @@
 <mat-spinner *ngIf="comment.status === 'DELETING'" [diameter]="20" [color]="palette"></mat-spinner>
 
 <div class="PostComment-ButtonsContainer">
-    <button *ngIf="comment.status == 'SENT'" (click)="toggleLikeComment()" [ngClass]="'PostComment-LikeButton--' + palette" [ngStyle]="comment.likeIds?.length > 0 || menuOpen? {display: 'block'} : {}" mat-icon-button>
+    <button *ngIf="comment.status == 'SENT'" (click)="toggleLikeComment()" [ngClass]="'PostComment-LikeButton--' + palette" [ngStyle]="isLikesCountDisplayed || menuOpen? {display: 'block'} : {}" mat-icon-button [matTooltip]="comment.likes | likeText">
         <mat-icon [inline]="true">thumb_up</mat-icon>
-        <span *ngIf="comment.likeIds?.length > 0">{{ comment.likeIds?.length }}</span>
+        <span *ngIf="isLikesCountDisplayed">{{ comment.likes?.length }}</span>
     </button>
     <button *ngIf="comment.status != 'PENDING' && canDelete" class="PostComment-MoreButton" [matMenuTriggerFor]="menu" mat-icon-button [ngStyle]="menuOpen? {display: 'block'} : {}" (click)="menuOpen = true">
         <mat-icon [inline]="true">more_horiz</mat-icon>

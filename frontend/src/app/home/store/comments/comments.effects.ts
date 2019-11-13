@@ -32,7 +32,7 @@ export class CommentsEffects {
     ofType(commentsActions.likeComment),
     switchMap(action => this.commentsService.likeComment(action.comment.id).pipe(
       map(comment => commentsActions.likeCommentSuccess()),
-      catchError(err => of(commentsActions.likeCommentFailure({ comment: action.comment, currentUserId: action.currentUserId })))
+      catchError(err => of(commentsActions.likeCommentFailure({ comment: action.comment, currentUser: action.currentUser })))
     ))
   ));
 
@@ -40,7 +40,7 @@ export class CommentsEffects {
     ofType(commentsActions.unlikeComment),
     switchMap(action => this.commentsService.unlikeComment(action.comment.id).pipe(
       map(comment => commentsActions.unlikeCommentSuccess()),
-      catchError(err => of(commentsActions.unlikeCommentFailure({ comment: action.comment, currentUserId: action.currentUserId })))
+      catchError(err => of(commentsActions.unlikeCommentFailure({ comment: action.comment, currentUser: action.currentUser })))
     ))
   ));
 

@@ -37,7 +37,7 @@
     </mat-card-content>
 
     <mat-card-actions [ngClass]="'PostCard-Actions--' + postDesign.palette">
-        <button (click)="toggleLikePost()" mat-button [matTooltip]="likesText">
+        <button (click)="toggleLikePost()" mat-button [matTooltip]="post.likes | likeText">
             <mat-icon *ngIf="!didCurrentUserLike()" fontSet="material-icons-outlined">thumb_up</mat-icon>
             <mat-icon *ngIf="didCurrentUserLike()">thumb_up</mat-icon>
             <span *ngIf="isLikesCountDisplayed">{{ post.likes.length }}</span>

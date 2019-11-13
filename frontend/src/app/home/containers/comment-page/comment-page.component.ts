@@ -52,10 +52,10 @@ export class CommentPageComponent implements OnInit {
   onCommentAction(commentAction: CommentAction) {
     switch (commentAction.action) {
       case 'like':
-        this.store.dispatch(commentsActions.likeComment({ comment: commentAction.comment, currentUserId: this.currentUser.id }));
+        this.store.dispatch(commentsActions.likeComment({ comment: commentAction.comment, currentUser: this.currentUser }));
         break;
       case 'unlike':
-        this.store.dispatch(commentsActions.unlikeComment({ comment: commentAction.comment, currentUserId: this.currentUser.id }));
+        this.store.dispatch(commentsActions.unlikeComment({ comment: commentAction.comment, currentUser: this.currentUser }));
         break;
       case 'resend':
         this.store.dispatch(commentsActions.retrySendComment({ failedComment: commentAction.comment }));
@@ -78,7 +78,7 @@ export class CommentPageComponent implements OnInit {
       },
       timestamp: moment().format(),
       content: text,
-      likeIds: [],
+      likes: [],
       status: 'PENDING'
     };
   }

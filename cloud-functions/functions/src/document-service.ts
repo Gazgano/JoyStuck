@@ -13,7 +13,7 @@ export function createComment(obj: any, userId: string): DocumentData {
       author_id: userId,
       timestamp: Timestamp.now(),
       content: obj.content,
-      likesCount: 0
+      likeIds: []
     };
   }
 }

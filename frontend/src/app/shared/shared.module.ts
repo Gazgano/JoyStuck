@@ -31,6 +31,7 @@ import { ProfileImageComponent } from './components/profile-image/profile-image.
 import { ImagesPreviewerComponent } from './components/images-previewer/images-previewer.component';
 import { FileSizePipe } from './pipes/file-size.pipe';
 import { HtmlFormatPipe } from './pipes/html-format.pipe';
+import { LikeTextPipe } from './pipes/like-text.pipe';
 
 const externalSharedModules = [
   CommonModule,
@@ -60,6 +61,7 @@ const internalSharedModules = [
   FileSizePipe,
   HtmlFormatPipe,
   ImagesPreviewerComponent,
+  LikeTextPipe,
   LoaderComponent,
   ProfileFormComponent,
   ProfileImageComponent,
