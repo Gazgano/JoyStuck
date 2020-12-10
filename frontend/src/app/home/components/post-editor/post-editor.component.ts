@@ -30,7 +30,7 @@ export class PostEditorComponent implements OnInit, OnDestroy {
 
   @Output() action = new EventEmitter<PostEditorAction>();
 
-  @ViewChild('imagesPreviewer', { static: false }) imagesPreviewer: ImagesPreviewerComponent;
+  @ViewChild('imagesPreviewer') imagesPreviewer: ImagesPreviewerComponent;
 
   private sendPostSuccessActionSubscription: Subscription;
 

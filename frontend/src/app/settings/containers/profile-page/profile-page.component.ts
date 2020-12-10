@@ -18,7 +18,7 @@ const log = new Logger('ProfilePage');
 })
 export class ProfilePageComponent implements OnInit, OnDestroy {
 
-  @ViewChild('file', { static: false }) fileInput: ElementRef;
+  @ViewChild('file') fileInput: ElementRef;
 
   public currentUser: User;
   public isSubmitting = false;

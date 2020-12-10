@@ -2,9 +2,11 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import { Logger } from '../services/logger.service';
+import { Injectable } from "@angular/core";
 
 const log = new Logger('HttpErrorInterceptor');
 
+@Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
